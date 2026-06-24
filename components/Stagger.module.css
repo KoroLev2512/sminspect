@@ -1,0 +1,30 @@
+.stagger {
+  display: contents;
+}
+
+.item {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: staggerIn var(--motion-stagger) var(--ease-out-expo) both;
+  animation-delay: calc(var(--stagger-index, 0) * var(--motion-stagger-step));
+}
+
+@keyframes staggerIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SiteShell } from "@/components/SiteShell";
 import { PageHero } from "@/components/PageHero";
+import { Reveal } from "@/components/Reveal";
 import { createPageMetadata } from "@/lib/metadata";
 import { newsArticles } from "@/lib/news";
 import styles from "./page.module.css";
@@ -14,7 +14,7 @@ export const metadata: Metadata = createPageMetadata({
 
 export default function NewsPage() {
   return (
-    <SiteShell>
+    <>
       <PageHero
         eyebrow="Новости"
         title="Истории с дорог"
@@ -24,20 +24,22 @@ export default function NewsPage() {
       <section className="section">
         <div className="container">
           <div className={styles.grid}>
-            {newsArticles.map((article) => (
-              <Link key={article.slug} href={`/news/${article.slug}`} className={styles.card}>
-                <div className={styles.meta}>
-                  <span className={styles.tag}>{article.tag}</span>
-                  <time>{article.date}</time>
-                </div>
-                <h2 className={styles.title}>{article.title}</h2>
-                <p className={styles.excerpt}>{article.excerpt}</p>
-                <span className={styles.link}>Читать →</span>
-              </Link>
+            {newsArticles.map((article, i) => (
+              <Reveal key={article.slug} delay={i * 80}>
+                <Link href={`/news/${article.slug}`} className={styles.card}>
+                  <div className={styles.meta}>
+                    <span className={styles.tag}>{article.tag}</span>
+                    <time>{article.date}</time>
+                  </div>
+                  <h2 className={styles.title}>{article.title}</h2>
+                  <p className={styles.excerpt}>{article.excerpt}</p>
+                  <span className={styles.link}>Читать →</span>
+                </Link>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
-    </SiteShell>
+    </>
   );
 }

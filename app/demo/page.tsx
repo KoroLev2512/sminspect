@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { SiteShell } from "@/components/SiteShell";
 import { PageHero } from "@/components/PageHero";
 import { DemoForm } from "@/components/DemoForm";
+import { Reveal } from "@/components/Reveal";
 import { createPageMetadata } from "@/lib/metadata";
 import { siteConfig } from "@/lib/site";
 import styles from "./page.module.css";
@@ -15,7 +15,7 @@ export const metadata: Metadata = createPageMetadata({
 
 export default function DemoPage() {
   return (
-    <SiteShell>
+    <>
       <PageHero
         eyebrow="Демонстрация"
         title="Запросить демо платформы"
@@ -24,8 +24,9 @@ export default function DemoPage() {
       <section className={`section ${styles.section}`}>
         <div className="container">
           <div className={styles.grid}>
-            <div className={styles.info}>
-              <h2 className="headingSm">Что вы получите</h2>
+            <Reveal>
+              <div>
+                <h2 className="headingSm">Что вы получите</h2>
               <ul className={styles.list}>
                 <li>
                   Персональную демонстрацию модулей «Зрение ИИ», «Прогноз», «Карта» и «Оповещения»
@@ -39,11 +40,14 @@ export default function DemoPage() {
                 <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>. Данные защищены
                 и используются только для связи по вашей заявке.
               </p>
-            </div>
-            <DemoForm />
+              </div>
+            </Reveal>
+            <Reveal delay={120}>
+              <DemoForm />
+            </Reveal>
           </div>
         </div>
       </section>
-    </SiteShell>
+    </>
   );
 }

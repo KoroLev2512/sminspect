@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { SiteShell } from "@/components/SiteShell";
+import { Reveal } from "@/components/Reveal";
+import { Stagger } from "@/components/Stagger";
 import { createPageMetadata } from "@/lib/metadata";
 import { getNewsArticle, newsArticles } from "@/lib/news";
 import styles from "./page.module.css";
@@ -32,24 +33,26 @@ export default async function NewsArticlePage({ params }: Props) {
   if (!article) notFound();
 
   return (
-    <SiteShell>
-      <article className={styles.article}>
-        <div className="container">
+    <article className={styles.article}>
+      <div className="container">
+        <Reveal>
           <Link href="/news" className={styles.back}>
             ← Все новости
           </Link>
+        </Reveal>
+        <Stagger>
           <div className={styles.meta}>
             <span className={styles.tag}>{article.tag}</span>
             <time>{article.date}</time>
           </div>
           <h1 className={styles.title}>{article.title}</h1>
-          {article.paragraphs.map((paragraph) => (
-            <p key={paragraph.slice(0, 40)} className={styles.paragraph}>
-              {paragraph}
-            </p>
-          ))}
-        </div>
-      </article>
-    </SiteShell>
+        </Stagger>
+        {article.paragraphs.map((paragraph, i) => (
+          <Reveal key={paragraph.slice(0, 40)} delay={i * 60}>
+            <p className={styles.paragraph}>{paragraph}</p>
+          </Reveal>
+        ))}
+      </div>
+    </article>
   );
 }

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SiteShell } from "@/components/SiteShell";
 import { PageHero } from "@/components/PageHero";
+import { Reveal } from "@/components/Reveal";
 import { createPageMetadata } from "@/lib/metadata";
 import { privacyPolicyMeta, privacyPolicySections } from "@/lib/privacy-policy";
 import { siteConfig } from "@/lib/site";
@@ -16,7 +16,7 @@ export const metadata: Metadata = createPageMetadata({
 
 export default function PrivacyPage() {
   return (
-    <SiteShell>
+    <>
       <PageHero
         eyebrow="Документы"
         title={privacyPolicyMeta.title}
@@ -26,60 +26,64 @@ export default function PrivacyPage() {
       <section className={`section ${styles.section}`}>
         <div className="container">
           <article className={styles.document}>
-            {privacyPolicySections.map((section) => (
-              <section key={section.id} id={section.id} className={styles.block}>
-                <h2 className={styles.blockTitle}>{section.title}</h2>
+            {privacyPolicySections.map((section, i) => (
+              <Reveal key={section.id} delay={i * 40}>
+                <section id={section.id} className={styles.block}>
+                  <h2 className={styles.blockTitle}>{section.title}</h2>
 
-                {"paragraphs" in section &&
-                  section.paragraphs?.map((paragraph) => (
-                    <p key={paragraph.slice(0, 40)} className={styles.paragraph}>
-                      {paragraph}
-                    </p>
-                  ))}
+                  {"paragraphs" in section &&
+                    section.paragraphs?.map((paragraph) => (
+                      <p key={paragraph.slice(0, 40)} className={styles.paragraph}>
+                        {paragraph}
+                      </p>
+                    ))}
 
-                {"list" in section &&
-                  section.list?.map((item) => (
-                    <p key={item.slice(0, 40)} className={styles.paragraph}>
-                      {item}
-                    </p>
-                  ))}
+                  {"list" in section &&
+                    section.list?.map((item) => (
+                      <p key={item.slice(0, 40)} className={styles.paragraph}>
+                        {item}
+                      </p>
+                    ))}
 
-                {"subsections" in section &&
-                  section.subsections?.map((subsection) => (
-                    <div key={subsection.title} className={styles.subsection}>
-                      <h3 className={styles.subsectionTitle}>{subsection.title}</h3>
-                      <ul className={styles.list}>
-                        {subsection.list.map((item) => (
-                          <li key={item.slice(0, 40)}>{item}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-
-                {"table" in section && section.table && (
-                  <dl className={styles.table}>
-                    {section.table.map((row) => (
-                      <div key={row.label} className={styles.tableRow}>
-                        <dt>{row.label}</dt>
-                        <dd>{row.value}</dd>
+                  {"subsections" in section &&
+                    section.subsections?.map((subsection) => (
+                      <div key={subsection.title} className={styles.subsection}>
+                        <h3 className={styles.subsectionTitle}>{subsection.title}</h3>
+                        <ul className={styles.list}>
+                          {subsection.list.map((item) => (
+                            <li key={item.slice(0, 40)}>{item}</li>
+                          ))}
+                        </ul>
                       </div>
                     ))}
-                  </dl>
-                )}
-              </section>
+
+                  {"table" in section && section.table && (
+                    <dl className={styles.table}>
+                      {section.table.map((row) => (
+                        <div key={row.label} className={styles.tableRow}>
+                          <dt>{row.label}</dt>
+                          <dd>{row.value}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  )}
+                </section>
+              </Reveal>
             ))}
 
-            <p className={styles.contact}>
-              По вопросам обработки персональных данных:{" "}
-              <a href={`mailto:${siteConfig.privacyEmail}`}>{siteConfig.privacyEmail}</a>
-            </p>
+            <Reveal>
+              <p className={styles.contact}>
+                По вопросам обработки персональных данных:{" "}
+                <a href={`mailto:${siteConfig.privacyEmail}`}>{siteConfig.privacyEmail}</a>
+              </p>
 
-            <Link href="/" className={styles.back}>
-              ← На главную
-            </Link>
+              <Link href="/" className={styles.back}>
+                ← На главную
+              </Link>
+            </Reveal>
           </article>
         </div>
       </section>
-    </SiteShell>
+    </>
   );
 }

@@ -1,4 +1,3 @@
-import { SiteShell } from "@/components/SiteShell";
 import { Hero } from "@/components/Hero";
 import { TextReveal } from "@/components/TextReveal";
 import { MeetProduct } from "@/components/MeetProduct";
@@ -8,19 +7,36 @@ import { UseCases } from "@/components/UseCases";
 import { Integration } from "@/components/Integration";
 import { News } from "@/components/News";
 import { FinalCTA } from "@/components/FinalCTA";
+import { Reveal } from "@/components/Reveal";
 
 export default function Home() {
   return (
-    <SiteShell>
+    <>
       <Hero />
-      <TextReveal />
-      <MeetProduct />
-      <Capabilities />
-      <Comparison />
-      <UseCases />
-      <Integration />
-      <News />
-      <FinalCTA />
-    </SiteShell>
+      <Reveal>
+        <TextReveal />
+      </Reveal>
+      <Reveal>
+        <MeetProduct />
+      </Reveal>
+      <Reveal>
+        <Capabilities />
+      </Reveal>
+      <Reveal>
+        <Comparison />
+      </Reveal>
+      <Reveal>
+        <UseCases />
+      </Reveal>
+      <Reveal>
+        <Integration />
+      </Reveal>
+      <Reveal>
+        <News />
+      </Reveal>
+      <Reveal>
+        <FinalCTA />
+      </Reveal>
+    </>
   );
 }

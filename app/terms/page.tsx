@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SiteShell } from "@/components/SiteShell";
 import { PageHero } from "@/components/PageHero";
+import { Reveal } from "@/components/Reveal";
 import { createPageMetadata } from "@/lib/metadata";
 import { siteConfig } from "@/lib/site";
 import { termsMeta, termsSections } from "@/lib/terms";
@@ -15,7 +15,7 @@ export const metadata: Metadata = createPageMetadata({
 
 export default function TermsPage() {
   return (
-    <SiteShell>
+    <>
       <PageHero
         eyebrow="Документы"
         title={termsMeta.title}
@@ -25,28 +25,32 @@ export default function TermsPage() {
       <section className={`section ${styles.section}`}>
         <div className="container">
           <article className={styles.document}>
-            {termsSections.map((section) => (
-              <section key={section.id} id={section.id} className={styles.block}>
-                <h2 className={styles.blockTitle}>{section.title}</h2>
-                {section.paragraphs.map((paragraph) => (
-                  <p key={paragraph.slice(0, 40)} className={styles.paragraph}>
-                    {paragraph}
-                  </p>
-                ))}
-              </section>
+            {termsSections.map((section, i) => (
+              <Reveal key={section.id} delay={i * 40}>
+                <section id={section.id} className={styles.block}>
+                  <h2 className={styles.blockTitle}>{section.title}</h2>
+                  {section.paragraphs.map((paragraph) => (
+                    <p key={paragraph.slice(0, 40)} className={styles.paragraph}>
+                      {paragraph}
+                    </p>
+                  ))}
+                </section>
+              </Reveal>
             ))}
 
-            <p className={styles.contact}>
-              По вопросам использования сайта:{" "}
-              <a href={`mailto:${siteConfig.privacyEmail}`}>{siteConfig.privacyEmail}</a>
-            </p>
+            <Reveal>
+              <p className={styles.contact}>
+                По вопросам использования сайта:{" "}
+                <a href={`mailto:${siteConfig.privacyEmail}`}>{siteConfig.privacyEmail}</a>
+              </p>
 
-            <Link href="/" className={styles.back}>
-              ← На главную
-            </Link>
+              <Link href="/" className={styles.back}>
+                ← На главную
+              </Link>
+            </Reveal>
           </article>
         </div>
       </section>
-    </SiteShell>
+    </>
   );
 }

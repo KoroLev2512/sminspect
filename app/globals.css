@@ -76,6 +76,14 @@
   --radius-cards: 8px;
   --radius-buttons: 8px;
   --radius-iconbuttons: 9999px;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-page: 650ms;
+  --motion-progress: 700ms;
+  --motion-reveal: 800ms;
+  --motion-stagger: 700ms;
+  --motion-stagger-step: 90ms;
+  --motion-hero: 900ms;
 }
 
 *,
@@ -184,11 +192,18 @@ article[id] {
   font-size: var(--text-body-sm);
   font-weight: var(--font-weight-medium);
   border-radius: var(--radius-buttons);
-  transition: opacity 0.2s;
+  transition:
+    opacity 0.25s ease,
+    transform 0.35s var(--ease-out-expo);
 }
 
 .btnPrimary:hover {
   opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btnPrimary:active {
+  transform: translateY(0);
 }
 
 .btnGhost {

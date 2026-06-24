@@ -7,7 +7,8 @@
   border-top: 1px solid var(--color-mist);
 }
 
-.module:first-child {
+.module:first-child,
+.container > :first-child .module {
   border-top: none;
 }
 

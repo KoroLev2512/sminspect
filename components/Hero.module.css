@@ -16,6 +16,17 @@
 .heroImage,
 .image {
   object-fit: cover;
+  animation: heroMedia var(--motion-hero) var(--ease-out-expo) both;
+}
+
+@keyframes heroMedia {
+  from {
+    transform: scale(1.06);
+  }
+
+  to {
+    transform: scale(1);
+  }
 }
 
 .overlay {
@@ -38,6 +49,7 @@
 .copy {
   align-self: end;
   max-width: 720px;
+  animation: heroEnter var(--motion-hero) var(--ease-out-expo) 120ms both;
 }
 
 .title {
@@ -65,6 +77,31 @@
   align-self: end;
   justify-self: end;
   margin-left: auto;
+  animation: heroCardEnter var(--motion-hero) var(--ease-out-expo) 260ms both;
+}
+
+@keyframes heroEnter {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroCardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .cardImage {
@@ -100,6 +137,7 @@
   background: color-mix(in srgb, var(--color-paper-white) 92%, transparent);
   backdrop-filter: blur(8px);
   border-top: 1px solid var(--color-mist);
+  animation: heroEnter var(--motion-hero) var(--ease-out-expo) 420ms both;
 }
 
 .statsInner {
@@ -138,6 +176,16 @@
   margin-top: var(--spacing-4);
   font-size: var(--text-body-sm);
   color: var(--color-horizon-navy);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroImage,
+  .image,
+  .copy,
+  .card,
+  .statsBar {
+    animation: none;
+  }
 }
 
 @media (max-width: 1024px) {

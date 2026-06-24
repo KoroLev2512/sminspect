@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SiteShell } from "@/components/SiteShell";
 import { PageHero } from "@/components/PageHero";
 import { FinalCTA } from "@/components/FinalCTA";
+import { Reveal } from "@/components/Reveal";
 import { createPageMetadata } from "@/lib/metadata";
 import { solutions } from "@/lib/solutions";
 import styles from "./page.module.css";
@@ -15,7 +15,7 @@ export const metadata: Metadata = createPageMetadata({
 
 export default function SolutionsPage() {
   return (
-    <SiteShell>
+    <>
       <PageHero
         eyebrow="Решения"
         title="Для каждого сегмента инфраструктуры"
@@ -25,19 +25,23 @@ export default function SolutionsPage() {
       <section className="section">
         <div className="container">
           <div className={styles.grid}>
-            {solutions.map((item) => (
-              <Link key={item.slug} href={`/solutions/${item.slug}`} className={styles.card}>
-                <p className="eyebrow">{item.segment}</p>
-                <h2 className={styles.cardTitle}>{item.title}</h2>
-                <p className={styles.cardPain}>{item.pain}</p>
-                <span className={styles.cardLink}>Подробнее →</span>
-              </Link>
+            {solutions.map((item, i) => (
+              <Reveal key={item.slug} delay={i * 80}>
+                <Link href={`/solutions/${item.slug}`} className={styles.card}>
+                  <p className="eyebrow">{item.segment}</p>
+                  <h2 className={styles.cardTitle}>{item.title}</h2>
+                  <p className={styles.cardPain}>{item.pain}</p>
+                  <span className={styles.cardLink}>Подробнее →</span>
+                </Link>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      <FinalCTA />
-    </SiteShell>
+      <Reveal>
+        <FinalCTA />
+      </Reveal>
+    </>
   );
 }
