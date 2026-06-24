@@ -14,8 +14,8 @@ const links = [
 ];
 
 function isActive(pathname: string, href: string) {
-  if (href.startsWith("/#")) {
-    return pathname === "/";
+  if (href.includes("#")) {
+    return false;
   }
 
   return pathname === href || pathname.startsWith(`${href}/`);
