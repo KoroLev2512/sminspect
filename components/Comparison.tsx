@@ -40,7 +40,7 @@ export function Comparison() {
             <div className={styles.panelImage}>
               <Image
                 src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=900&q=80"
-                alt="AI-анализ дефектов инфраструктуры"
+                alt="ИИ-анализ дефектов инфраструктуры"
                 fill
                 className={styles.image}
                 sizes="(max-width: 768px) 100vw, 50vw"

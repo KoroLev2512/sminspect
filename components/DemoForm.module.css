@@ -83,6 +83,22 @@
   cursor: not-allowed;
 }
 
+.consent {
+  margin: 0;
+  font-size: var(--text-caption);
+  line-height: var(--leading-body-sm);
+  color: var(--color-slate-whisper);
+}
+
+.consent a {
+  color: var(--color-signal-blue);
+  font-weight: var(--font-weight-medium);
+}
+
+.consent a:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 768px) {
   .form,
   .success {

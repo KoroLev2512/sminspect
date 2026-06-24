@@ -14,7 +14,7 @@ export function UseCases() {
       <hr className="sectionDivider" />
       <div className="container">
         <p className="eyebrow">Решения</p>
-        <h2 className="headingLg">Вы в надёжной компании</h2>
+        <h2 className="headingLg">Решения, которым доверяют лидеры отрасли</h2>
 
         <div className={styles.layout}>
           <div className={styles.tabs}>

@@ -12,7 +12,7 @@ import styles from "./page.module.css";
 export const metadata: Metadata = createPageMetadata({
   title: "Платформа",
   description:
-    "Модули Vision AI, Predict, Map и Alert для автоматизированной диагностики дорог и мостов.",
+    "Модули «Зрение ИИ», «Прогноз», «Карта» и «Оповещения» для автоматизированной диагностики дорог и мостов.",
   path: "/platform",
 });
 

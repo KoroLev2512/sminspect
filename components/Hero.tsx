@@ -42,8 +42,8 @@ export function Hero() {
         <article className={styles.card}>
           <div className={styles.cardImage}>
             <Image
-              src="/hero.png"
-              alt="Инспекция дорожной инфраструктуры"
+              src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?auto=format&fit=crop&w=800&q=80"
+              alt="Дрон над дорожной инфраструктурой"
               fill
               className={styles.image}
               sizes="360px"
@@ -51,16 +51,18 @@ export function Hero() {
           </div>
           <div className={styles.cardBody}>
             <p className="eyebrow">Инспекция</p>
-            <Link href="/platform" className={styles.cardLink}>
-              Посмотреть платформу
-            </Link>
-            <Link
-              href="/platform"
-              className="btnCircle"
-              aria-label="Посмотреть платформу"
-            >
-              →
-            </Link>
+            <div className={styles.cardFooter}>
+              <Link href="/platform" className={styles.cardLink}>
+                Посмотреть платформу
+              </Link>
+              <Link
+                href="/platform"
+                className="btnCircle"
+                aria-label="Посмотреть платформу"
+              >
+                →
+              </Link>
+            </div>
           </div>
         </article>
       </div>

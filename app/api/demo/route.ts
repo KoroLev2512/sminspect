@@ -26,13 +26,13 @@ export async function POST(request: Request) {
 
   if (!name?.trim() || !email?.trim() || !company?.trim() || !segment?.trim()) {
     return NextResponse.json(
-      { error: "Заполните обязательные поля: имя, email, компания, сегмент" },
+      { error: "Заполните обязательные поля: имя, эл. почта, компания, сегмент" },
       { status: 400 },
     );
   }
 
   if (!isValidEmail(email)) {
-    return NextResponse.json({ error: "Укажите корректный email" }, { status: 400 });
+    return NextResponse.json({ error: "Укажите корректный адрес электронной почты" }, { status: 400 });
   }
 
   // TODO: integrate CRM / email notification

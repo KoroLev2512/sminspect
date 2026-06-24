@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
+import { platformModules } from "@/lib/platform";
 import styles from "./Footer.module.css";
 
 const columns = [
@@ -7,10 +8,10 @@ const columns = [
     title: "Платформа",
     links: [
       { label: "Обзор", href: "/platform" },
-      { label: "Vision AI", href: "/platform#vision" },
-      { label: "Predict", href: "/platform#predict" },
-      { label: "Map", href: "/platform#map" },
-      { label: "Alert", href: "/platform#alert" },
+      ...platformModules.map((mod) => ({
+        label: mod.name,
+        href: `/platform#${mod.id}`,
+      })),
     ],
   },
   {
@@ -27,6 +28,7 @@ const columns = [
     links: [
       { label: "О нас", href: "/#company" },
       { label: "Безопасность", href: "/#safety" },
+      { label: "Новости", href: "/news" },
       { label: "Демо", href: "/demo" },
       { label: "Контакты", href: "/demo" },
     ],
@@ -60,7 +62,7 @@ export function Footer() {
           <p>© {new Date().getFullYear()} SmartInspect. Все права защищены.</p>
           <div className={styles.legalLinks}>
             <Link href="/privacy">Политика конфиденциальности</Link>
-            <a href="#">Условия использования</a>
+            <Link href="/terms">Условия использования</Link>
           </div>
         </div>
       </div>

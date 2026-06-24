@@ -52,11 +52,13 @@
   transition: background 0.2s, color 0.2s;
 }
 
-.moduleTab:hover {
+.moduleTab:hover:not(.moduleTabActive) {
   color: var(--color-horizon-navy);
+  background: var(--color-mist);
 }
 
-.moduleTabActive {
+.moduleTabActive,
+.moduleTabActive:hover {
   background: var(--color-horizon-navy);
   color: var(--color-paper-white);
 }

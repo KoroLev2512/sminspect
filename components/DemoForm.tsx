@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, type FormEvent } from "react";
 import styles from "./DemoForm.module.css";
 
@@ -92,7 +93,7 @@ export function DemoForm() {
           />
         </label>
         <label className={styles.field}>
-          <span>Email *</span>
+          <span>Эл. почта *</span>
           <input
             type="email"
             required
@@ -159,6 +160,11 @@ export function DemoForm() {
       <button type="submit" className="btnPrimary" disabled={status === "loading"}>
         {status === "loading" ? "Отправка…" : "Запросить демо"}
       </button>
+
+      <p className={styles.consent}>
+        Отправляя форму, вы соглашаетесь с{" "}
+        <Link href="/privacy">политикой обработки персональных данных</Link>.
+      </p>
     </form>
   );
 }

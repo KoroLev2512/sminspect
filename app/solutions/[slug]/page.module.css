@@ -71,7 +71,7 @@
 }
 
 .others {
-  padding-top: 0;
+  padding-top: var(--spacing-48);
   border-top: 1px solid var(--color-mist);
 }
 

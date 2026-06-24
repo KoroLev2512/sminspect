@@ -7,7 +7,7 @@ const links = [
   { href: "/solutions", label: "Решения" },
   { href: "/#safety", label: "Безопасность" },
   { href: "/#company", label: "Компания" },
-  { href: "/#news", label: "Новости" },
+  { href: "/news", label: "Новости" },
 ];
 
 export function Nav() {

@@ -27,7 +27,9 @@ export default function DemoPage() {
             <div className={styles.info}>
               <h2 className="headingSm">Что вы получите</h2>
               <ul className={styles.list}>
-                <li>Персональную демонстрацию модулей Vision AI, Predict, Map и Alert</li>
+                <li>
+                  Персональную демонстрацию модулей «Зрение ИИ», «Прогноз», «Карта» и «Оповещения»
+                </li>
                 <li>Обзор интеграций с дронами, камерами и ГИС</li>
                 <li>Оценку применимости для вашего масштаба инфраструктуры</li>
                 <li>Рекомендации по пилотному внедрению</li>
