@@ -1,0 +1,121 @@
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: var(--spacing-80);
+  align-items: start;
+}
+
+.text {
+  margin: var(--spacing-24) 0 0;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--color-graphite-dim);
+  max-width: 560px;
+}
+
+.headingGap {
+  margin-top: var(--spacing-48);
+}
+
+.benefits {
+  margin: var(--spacing-24) 0 0;
+  padding: 0;
+  list-style: none;
+  max-width: 560px;
+}
+
+.benefits li {
+  position: relative;
+  padding-left: var(--spacing-24);
+  margin-bottom: var(--spacing-12);
+  color: var(--color-graphite-dim);
+}
+
+.benefits li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--color-signal-blue);
+}
+
+.quote {
+  margin: 0;
+  padding: var(--spacing-48);
+  background: var(--color-hailstone);
+  border-radius: var(--radius-cards);
+}
+
+.quote p {
+  margin: 0;
+  font-size: var(--text-subheading);
+  line-height: 1.45;
+}
+
+.quote footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  margin-top: var(--spacing-24);
+  font-style: normal;
+}
+
+.quote cite {
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-semibold);
+  font-style: normal;
+}
+
+.quote footer span {
+  font-size: var(--text-body-sm);
+  color: var(--color-slate-whisper);
+}
+
+.others {
+  padding-top: 0;
+  border-top: 1px solid var(--color-mist);
+}
+
+.otherGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-16);
+  margin-top: var(--spacing-32);
+}
+
+.otherCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+  padding: var(--spacing-24);
+  border: 1px solid var(--color-mist);
+  border-radius: var(--radius-cards);
+  transition: border-color 0.2s;
+}
+
+.otherCard:hover {
+  border-color: var(--color-signal-blue);
+}
+
+.otherSegment {
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-slate-whisper);
+}
+
+.otherTitle {
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-horizon-navy);
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .otherGrid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,41 @@
+.section {
+  padding-top: var(--spacing-128);
+  padding-bottom: var(--spacing-128);
+}
+
+.inner {
+  margin-left: auto;
+  max-width: 540px;
+}
+
+.paragraph {
+  margin: 0 0 var(--spacing-48);
+  font-size: var(--text-subheading-lg);
+  line-height: 1.45;
+  font-weight: var(--font-weight-regular);
+  color: var(--color-horizon-navy);
+}
+
+.paragraph:last-child {
+  margin-bottom: 0;
+}
+
+.word {
+  color: var(--color-fog);
+  transition: color 0.3s ease;
+}
+
+.word.visible {
+  color: var(--color-horizon-navy);
+}
+
+@media (max-width: 768px) {
+  .inner {
+    margin-left: 0;
+    max-width: none;
+  }
+
+  .paragraph {
+    font-size: var(--text-subheading);
+  }
+}

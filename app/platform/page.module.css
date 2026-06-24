@@ -1,0 +1,81 @@
+.module {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-80);
+  align-items: center;
+  padding: var(--spacing-48) 0;
+  border-top: 1px solid var(--color-mist);
+}
+
+.module:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.moduleReverse {
+  direction: rtl;
+}
+
+.moduleReverse > * {
+  direction: ltr;
+}
+
+.moduleImage {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-cards);
+  overflow: hidden;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.features {
+  margin: var(--spacing-32) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.features li {
+  position: relative;
+  padding-left: var(--spacing-24);
+  margin-bottom: var(--spacing-12);
+  font-size: var(--text-body-sm);
+  color: var(--color-graphite-dim);
+}
+
+.features li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--color-signal-blue);
+}
+
+.ctaBand {
+  padding-top: 0;
+}
+
+.ctaInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-24);
+  padding: var(--spacing-48);
+  background: var(--color-hailstone);
+  border-radius: var(--radius-cards);
+}
+
+@media (max-width: 900px) {
+  .module,
+  .moduleReverse {
+    grid-template-columns: 1fr;
+    direction: ltr;
+    gap: var(--spacing-32);
+  }
+
+  .ctaInner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
