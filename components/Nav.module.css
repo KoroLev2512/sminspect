@@ -16,23 +16,6 @@
   gap: var(--spacing-32);
 }
 
-.logo {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-12);
-  font-size: var(--text-body-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-horizon-navy);
-  white-space: nowrap;
-}
-
-.logoMark {
-  width: 24px;
-  height: 24px;
-  border-radius: var(--radius-md);
-  background: var(--gradient-signal-blue);
-}
-
 .nav {
   display: flex;
   align-items: center;

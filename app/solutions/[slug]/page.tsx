@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { SiteShell } from "@/components/SiteShell";
 import { PageHero } from "@/components/PageHero";
 import { FinalCTA } from "@/components/FinalCTA";
+import { createPageMetadata } from "@/lib/metadata";
 import { getSolution, solutions } from "@/lib/solutions";
 import styles from "./page.module.css";
 
@@ -20,10 +21,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const solution = getSolution(slug);
   if (!solution) return { title: "Решение не найдено" };
 
-  return {
-    title: `${solution.segment} — SmartInspect`,
+  return createPageMetadata({
+    title: solution.segment,
     description: solution.solution,
-  };
+    path: `/solutions/${solution.slug}`,
+  });
 }
 
 export default async function SolutionDetailPage({ params }: Props) {

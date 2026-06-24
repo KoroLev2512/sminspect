@@ -17,7 +17,7 @@ export function FinalCTA() {
           </p>
           <div className={styles.actions}>
             <Link href="/demo" className="btnPrimary">
-              Запросить демо →
+              Запросить демо
             </Link>
             <Link href="/platform" className="btnGhost">
               Смотреть платформу

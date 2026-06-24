@@ -37,6 +37,15 @@
   line-height: var(--leading-body-sm);
 }
 
+.note a {
+  color: var(--color-signal-blue);
+  font-weight: var(--font-weight-medium);
+}
+
+.note a:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 900px) {
   .grid {
     grid-template-columns: 1fr;

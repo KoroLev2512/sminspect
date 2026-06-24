@@ -5,14 +5,16 @@ import { SiteShell } from "@/components/SiteShell";
 import { PageHero } from "@/components/PageHero";
 import { Integration } from "@/components/Integration";
 import { FinalCTA } from "@/components/FinalCTA";
+import { createPageMetadata } from "@/lib/metadata";
 import { platformModules } from "@/lib/platform";
 import styles from "./page.module.css";
 
-export const metadata: Metadata = {
-  title: "Платформа — SmartInspect",
+export const metadata: Metadata = createPageMetadata({
+  title: "Платформа",
   description:
     "Модули Vision AI, Predict, Map и Alert для автоматизированной диагностики дорог и мостов.",
-};
+  path: "/platform",
+});
 
 export default function PlatformPage() {
   return (
@@ -62,7 +64,7 @@ export default function PlatformPage() {
           <div className={styles.ctaInner}>
             <h2 className="headingSm">Готовы увидеть платформу в действии?</h2>
             <Link href="/demo" className="btnPrimary">
-              Запросить демо →
+              Запросить демо
             </Link>
           </div>
         </div>

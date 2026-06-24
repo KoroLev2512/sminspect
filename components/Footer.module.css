@@ -39,20 +39,8 @@
   text-align: right;
 }
 
-.logo {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-12);
-  font-size: var(--text-body-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-horizon-navy);
-}
-
-.logoMark {
-  width: 20px;
-  height: 20px;
-  border-radius: var(--radius-md);
-  background: var(--gradient-signal-blue);
+.brandLogo {
+  justify-content: flex-end;
 }
 
 .tagline {
@@ -91,6 +79,10 @@
   .brand {
     grid-column: 1 / -1;
     text-align: left;
+  }
+
+  .brandLogo {
+    justify-content: flex-start;
   }
 }
 

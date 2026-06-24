@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Logo } from "@/components/Logo";
 import styles from "./Nav.module.css";
 
 const links = [
@@ -13,10 +14,7 @@ export function Nav() {
   return (
     <header className={styles.header}>
       <div className={`container ${styles.inner}`}>
-        <Link href="/" className={styles.logo}>
-          <span className={styles.logoMark} aria-hidden />
-          SmartInspect
-        </Link>
+        <Logo size={32} />
         <nav className={styles.nav} aria-label="Основная навигация">
           {links.map((link) => (
             <Link key={link.href} href={link.href} className={styles.link}>
@@ -25,7 +23,7 @@ export function Nav() {
           ))}
         </nav>
         <Link href="/demo" className="btnPrimary">
-          Запросить демо →
+          Запросить демо
         </Link>
       </div>
     </header>

@@ -1,13 +1,6 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./Hero.module.css";
-
-const HERO_VIDEO =
-  "https://videos.pexels.com/video-files/2809983/2809983-sd_960_540_24fps.mp4";
-const HERO_POSTER =
-  "https://images.unsplash.com/photo-1545558014-8692077e9b5c?auto=format&fit=crop&w=2400&q=80";
 
 const stats = [
   { label: "Точность детекции", value: "до 95%" },
@@ -20,25 +13,13 @@ export function Hero() {
   return (
     <section className={styles.hero} aria-label="Главный экран">
       <div className={styles.media}>
-        <video
-          className={styles.video}
-          autoPlay
-          muted
-          loop
-          playsInline
-          poster={HERO_POSTER}
-          aria-label="Видео: инспекция дорожной инфраструктуры с воздуха"
-        >
-          <source src={HERO_VIDEO} type="video/mp4" />
-        </video>
         <Image
-          src={HERO_POSTER}
-          alt=""
+          src="/hero.png"
+          alt="Дорога и мост — инфраструктура под контролем SmartInspect"
           fill
           priority
-          className={styles.poster}
+          className={styles.heroImage}
           sizes="100vw"
-          aria-hidden
         />
         <div className={styles.overlay} />
       </div>
@@ -61,8 +42,8 @@ export function Hero() {
         <article className={styles.card}>
           <div className={styles.cardImage}>
             <Image
-              src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?auto=format&fit=crop&w=800&q=80"
-              alt="Дрон над дорожной инфраструктурой"
+              src="/hero.png"
+              alt="Инспекция дорожной инфраструктуры"
               fill
               className={styles.image}
               sizes="360px"

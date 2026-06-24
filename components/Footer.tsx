@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Logo } from "@/components/Logo";
 import styles from "./Footer.module.css";
 
 const columns = [
@@ -50,10 +51,7 @@ export function Footer() {
             </div>
           ))}
           <div className={styles.brand}>
-            <Link href="/" className={styles.logo}>
-              <span className={styles.logoMark} aria-hidden />
-              SmartInspect
-            </Link>
+            <Logo size={28} className={styles.brandLogo} />
             <p className={styles.tagline}>Инфраструктура под контролем.</p>
           </div>
         </div>
@@ -61,7 +59,7 @@ export function Footer() {
         <div className={styles.legal}>
           <p>© {new Date().getFullYear()} SmartInspect. Все права защищены.</p>
           <div className={styles.legalLinks}>
-            <a href="#">Политика конфиденциальности</a>
+            <Link href="/privacy">Политика конфиденциальности</Link>
             <a href="#">Условия использования</a>
           </div>
         </div>

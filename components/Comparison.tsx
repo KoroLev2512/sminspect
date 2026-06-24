@@ -39,7 +39,7 @@ export function Comparison() {
             <span className={styles.panelLabel}>SmartInspect</span>
             <div className={styles.panelImage}>
               <Image
-                src="https://images.unsplash.com/photo-1581094794359-1f3e5b9dcb2e?auto=format&fit=crop&w=900&q=80"
+                src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=900&q=80"
                 alt="AI-анализ дефектов инфраструктуры"
                 fill
                 className={styles.image}

@@ -157,7 +157,7 @@ export function DemoForm() {
       )}
 
       <button type="submit" className="btnPrimary" disabled={status === "loading"}>
-        {status === "loading" ? "Отправка…" : "Запросить демо →"}
+        {status === "loading" ? "Отправка…" : "Запросить демо"}
       </button>
     </form>
   );

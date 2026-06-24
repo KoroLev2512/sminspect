@@ -22,7 +22,7 @@ export const platformModules: PlatformModule[] = [
       "Работа в сложных погодных условиях",
     ],
     image:
-      "https://images.unsplash.com/photo-1581094794359-1f3e5b9dcb2e?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80",
     alt: "AI-анализ дефектов дорожного покрытия",
   },
   {

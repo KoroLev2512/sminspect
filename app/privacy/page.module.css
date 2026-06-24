@@ -1,0 +1,115 @@
+.section {
+  padding-top: 0;
+}
+
+.document {
+  max-width: 760px;
+}
+
+.block + .block {
+  margin-top: var(--spacing-48);
+  padding-top: var(--spacing-48);
+  border-top: 1px solid var(--color-mist);
+}
+
+.blockTitle {
+  margin: 0 0 var(--spacing-24);
+  font-size: var(--text-subheading-lg);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.3;
+  color: var(--color-horizon-navy);
+}
+
+.subsection {
+  margin-top: var(--spacing-24);
+}
+
+.subsectionTitle {
+  margin: 0 0 var(--spacing-12);
+  font-size: var(--text-body);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-horizon-navy);
+}
+
+.paragraph {
+  margin: 0 0 var(--spacing-16);
+  font-size: var(--text-body-sm);
+  line-height: 1.6;
+  color: var(--color-graphite-dim);
+}
+
+.list {
+  margin: 0;
+  padding-left: var(--spacing-24);
+}
+
+.list li {
+  margin-bottom: var(--spacing-12);
+  font-size: var(--text-body-sm);
+  line-height: 1.6;
+  color: var(--color-graphite-dim);
+}
+
+.table {
+  margin: 0;
+  border: 1px solid var(--color-mist);
+  border-radius: var(--radius-cards);
+  overflow: hidden;
+}
+
+.tableRow {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  border-top: 1px solid var(--color-mist);
+}
+
+.tableRow:first-child {
+  border-top: none;
+}
+
+.tableRow dt,
+.tableRow dd {
+  margin: 0;
+  padding: var(--spacing-16) var(--spacing-20);
+  font-size: var(--text-body-sm);
+  line-height: 1.5;
+}
+
+.tableRow dt {
+  background: var(--color-hailstone);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-horizon-navy);
+}
+
+.tableRow dd {
+  color: var(--color-graphite-dim);
+}
+
+.contact {
+  margin: var(--spacing-80) 0 0;
+  font-size: var(--text-body-sm);
+  color: var(--color-slate-whisper);
+}
+
+.contact a {
+  color: var(--color-signal-blue);
+  font-weight: var(--font-weight-medium);
+}
+
+.back {
+  display: inline-block;
+  margin-top: var(--spacing-24);
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-horizon-navy);
+}
+
+.back:hover {
+  color: var(--color-signal-blue);
+}
+
+@media (max-width: 768px) {
+  .tableRow {
+    grid-template-columns: 1fr;
+  }
+}

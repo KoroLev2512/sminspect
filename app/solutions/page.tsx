@@ -3,14 +3,15 @@ import Link from "next/link";
 import { SiteShell } from "@/components/SiteShell";
 import { PageHero } from "@/components/PageHero";
 import { FinalCTA } from "@/components/FinalCTA";
+import { createPageMetadata } from "@/lib/metadata";
 import { solutions } from "@/lib/solutions";
 import styles from "./page.module.css";
 
-export const metadata: Metadata = {
-  title: "Решения — SmartInspect",
-  description:
-    "SmartInspect для муниципалитетов, дорожных компаний, логистики и страхования.",
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "Решения",
+  description: "SmartInspect для муниципалитетов, дорожных компаний, логистики и страхования.",
+  path: "/solutions",
+});
 
 export default function SolutionsPage() {
   return (
