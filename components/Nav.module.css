@@ -4,7 +4,8 @@
   left: 0;
   right: 0;
   z-index: 100;
-  height: var(--nav-height);
+  height: calc(var(--nav-height) + env(safe-area-inset-top, 0px));
+  padding-top: env(safe-area-inset-top, 0px);
   background: color-mix(in srgb, var(--color-paper-white) 92%, transparent);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-mist);
@@ -15,7 +16,12 @@
   align-items: center;
   justify-content: space-between;
   height: var(--nav-height);
-  gap: var(--spacing-32);
+  gap: var(--spacing-16);
+}
+
+.logo {
+  flex-shrink: 0;
+  min-width: 0;
 }
 
 .nav {
@@ -59,15 +65,223 @@
   color: var(--color-horizon-navy);
 }
 
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-12);
+  flex-shrink: 0;
+}
+
+.menuBtn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-buttons);
+  color: var(--color-horizon-navy);
+  transition: background 0.2s ease;
+}
+
+.menuBtn:hover {
+  background: var(--color-hailstone);
+}
+
+.menuIcon,
+.menuIcon::before,
+.menuIcon::after {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 1px;
+  transition:
+    transform 0.3s var(--ease-out-expo),
+    opacity 0.2s ease;
+}
+
+.menuIcon {
+  position: relative;
+}
+
+.menuIcon::before,
+.menuIcon::after {
+  content: "";
+  position: absolute;
+  left: 0;
+}
+
+.menuIcon::before {
+  top: -6px;
+}
+
+.menuIcon::after {
+  top: 6px;
+}
+
+.menuIcon[data-open="true"] {
+  background: transparent;
+}
+
+.menuIcon[data-open="true"]::before {
+  top: 0;
+  transform: rotate(45deg);
+}
+
+.menuIcon[data-open="true"]::after {
+  top: 0;
+  transform: rotate(-45deg);
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  border: none;
+  padding: 0;
+  background: color-mix(in srgb, var(--color-horizon-navy) 40%, transparent);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.3s var(--ease-out-expo),
+    visibility 0.3s;
+  cursor: pointer;
+}
+
+.overlayOpen {
+  opacity: 1;
+  visibility: visible;
+}
+
+.mobileNav {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 95;
+  display: flex;
+  flex-direction: column;
+  width: min(360px, 100vw);
+  height: 100%;
+  height: 100dvh;
+  padding:
+    calc(env(safe-area-inset-top, 0px) + var(--spacing-8))
+    var(--spacing-24)
+    calc(var(--spacing-24) + env(safe-area-inset-bottom, 0px));
+  background: var(--color-paper-white);
+  border-left: 1px solid var(--color-mist);
+  transform: translateX(100%);
+  transition: transform 0.35s var(--ease-out-expo);
+  visibility: hidden;
+}
+
+.mobileNavHeader {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-height: var(--nav-height);
+  flex-shrink: 0;
+}
+
+.closeBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-buttons);
+  color: var(--color-horizon-navy);
+  transition: background 0.2s ease;
+}
+
+.closeBtn:hover {
+  background: var(--color-hailstone);
+}
+
+.closeIcon {
+  position: relative;
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+.closeIcon::before,
+.closeIcon::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 20px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 1px;
+}
+
+.closeIcon::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.closeIcon::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.mobileNavOpen {
+  transform: translateX(0);
+  visibility: visible;
+}
+
+.mobileLinks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  flex: 1;
+}
+
+.mobileLink {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 var(--spacing-12);
+  font-size: var(--text-body);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-horizon-navy);
+  border-radius: var(--radius-buttons);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.mobileLink:hover,
+.mobileLinkActive {
+  background: var(--color-hailstone);
+  color: var(--color-signal-blue);
+}
+
+.mobileCta {
+  width: 100%;
+  justify-content: center;
+  margin-top: var(--spacing-24);
+}
+
 @media (max-width: 1024px) {
   .nav {
     display: none;
   }
+
+  .menuBtn {
+    display: inline-flex;
+  }
 }
 
-@media (max-width: 480px) {
-  .inner > .btnPrimary {
-    font-size: 12px;
-    padding: 10px 12px;
+@media (max-width: 768px) {
+  .desktopCta {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobileNav,
+  .overlay,
+  .menuIcon,
+  .menuIcon::before,
+  .menuIcon::after {
+    transition: none;
   }
 }

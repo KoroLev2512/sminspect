@@ -39,8 +39,21 @@
 }
 
 @media (max-width: 768px) {
+  .hero {
+    padding:
+      calc(var(--nav-height) + env(safe-area-inset-top, 0px) + var(--spacing-48))
+      0
+      var(--spacing-48);
+  }
+
   .title {
     font-size: var(--text-heading-lg);
     letter-spacing: var(--tracking-heading-lg);
+  }
+
+  .desc {
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+    max-width: none;
   }
 }

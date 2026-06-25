@@ -97,5 +97,7 @@
 @media (max-width: 768px) {
   .compare {
     grid-template-columns: 1fr;
+    margin-top: var(--spacing-32);
+    gap: var(--spacing-16);
   }
 }

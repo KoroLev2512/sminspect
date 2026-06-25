@@ -109,6 +109,23 @@
 }
 
 @media (max-width: 768px) {
+  .section {
+    padding-top: var(--spacing-48);
+  }
+
+  .block + .block {
+    margin-top: var(--spacing-32);
+    padding-top: var(--spacing-32);
+  }
+
+  .blockTitle {
+    font-size: var(--text-subheading);
+  }
+
+  .contact {
+    margin-top: var(--spacing-48);
+  }
+
   .tableRow {
     grid-template-columns: 1fr;
   }

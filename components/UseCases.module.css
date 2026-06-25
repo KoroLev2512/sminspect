@@ -130,19 +130,34 @@
   color: var(--color-paper-white);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .layout {
     grid-template-columns: 1fr;
+    gap: var(--spacing-32);
+    margin-top: var(--spacing-32);
   }
 
   .tabs {
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    gap: var(--spacing-8);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin-inline: calc(-1 * var(--spacing-16));
+    padding-inline: var(--spacing-16);
+  }
+
+  .tabs::-webkit-scrollbar {
+    display: none;
   }
 
   .tab {
+    flex-shrink: 0;
+    white-space: nowrap;
     border-left: none;
     border-bottom: 2px solid transparent;
+    border-radius: var(--radius-buttons) var(--radius-buttons) 0 0;
   }
 
   .tabActive {
@@ -152,5 +167,21 @@
 
   .card {
     padding: var(--card-padding);
+  }
+}
+
+@media (max-width: 768px) {
+  .segment {
+    font-size: var(--text-subheading-lg);
+    line-height: var(--leading-subheading-lg);
+  }
+
+  .quote {
+    margin-top: var(--spacing-32);
+    padding-top: var(--spacing-24);
+  }
+
+  .quote p {
+    font-size: var(--text-body);
   }
 }

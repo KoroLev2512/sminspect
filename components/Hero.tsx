@@ -37,6 +37,9 @@ export function Hero() {
             Облачная платформа для автоматизированной диагностики дефектов с
             компьютерным зрением и прогнозированием износа.
           </p>
+          <Link href="/platform" className={`btnPrimary ${styles.mobileCta}`}>
+            Посмотреть платформу
+          </Link>
         </div>
 
         <article className={styles.card}>

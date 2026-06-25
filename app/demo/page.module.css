@@ -46,9 +46,19 @@
   text-decoration: underline;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .grid {
     grid-template-columns: 1fr;
     gap: var(--spacing-48);
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding-top: var(--spacing-48);
+  }
+
+  .note {
+    margin-top: var(--spacing-32);
   }
 }

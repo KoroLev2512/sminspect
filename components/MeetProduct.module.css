@@ -94,6 +94,20 @@
 @media (max-width: 1024px) {
   .grid {
     grid-template-columns: 1fr;
-    gap: var(--spacing-48);
+    gap: var(--spacing-32);
+  }
+
+  .thumbs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .modules {
+    margin-top: var(--spacing-32);
+  }
+
+  .moduleContent {
+    margin-top: var(--spacing-24);
   }
 }

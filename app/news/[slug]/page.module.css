@@ -48,6 +48,13 @@
 }
 
 @media (max-width: 768px) {
+  .article {
+    padding:
+      calc(var(--nav-height) + env(safe-area-inset-top, 0px) + var(--spacing-48))
+      0
+      var(--section-gap);
+  }
+
   .title {
     font-size: var(--text-heading-sm);
     letter-spacing: var(--tracking-heading-sm);

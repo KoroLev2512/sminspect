@@ -71,7 +71,7 @@
   color: var(--color-horizon-navy);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -86,8 +86,24 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+  .footer {
+    padding: var(--spacing-48) 0 calc(var(--spacing-32) + env(safe-area-inset-bottom, 0px));
+  }
+
   .grid {
     grid-template-columns: 1fr;
+    gap: var(--spacing-32);
+  }
+
+  .legal {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: var(--spacing-48);
+  }
+
+  .legalLinks {
+    flex-direction: column;
+    gap: var(--spacing-12);
   }
 }

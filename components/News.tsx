@@ -32,7 +32,7 @@ export function News() {
               </h3>
               <Link
                 href={`/news/${article.slug}`}
-                className="btnCircle"
+                className={`btnCircle ${styles.cardAction}`}
                 aria-label={`Читать: ${article.title}`}
               >
                 →

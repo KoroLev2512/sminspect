@@ -54,23 +54,35 @@
   color: var(--color-slate-whisper);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 600px) {
-  .grid {
-    grid-template-columns: 1fr;
   }
 
   .flow {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    gap: var(--spacing-12);
+    padding: var(--spacing-20);
+  }
+
+  .flowItem {
+    width: 100%;
+  }
+
+  .flowStep {
+    display: block;
+    width: 100%;
+    text-align: center;
   }
 
   .flowArrow {
     display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
   }
 }

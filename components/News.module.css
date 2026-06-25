@@ -13,9 +13,9 @@
 }
 
 .card {
-  position: relative;
+  display: flex;
+  flex-direction: column;
   padding: var(--card-padding);
-  padding-right: 72px;
   background: var(--color-hailstone);
   border-radius: var(--radius-cards);
   min-height: 160px;
@@ -38,6 +38,7 @@
 
 .cardTitle {
   margin: 0;
+  flex: 1;
   font-size: var(--text-subheading);
   font-weight: var(--font-weight-medium);
   line-height: 1.35;
@@ -47,19 +48,28 @@
   color: var(--color-signal-blue);
 }
 
-.card .btnCircle {
-  position: absolute;
-  right: var(--spacing-24);
-  bottom: var(--spacing-24);
+.cardAction {
+  align-self: flex-end;
+  margin-top: var(--spacing-16);
 }
 
 @media (max-width: 768px) {
   .header {
     flex-direction: column;
     align-items: flex-start;
+    gap: var(--spacing-16);
+    margin-bottom: var(--spacing-32);
   }
 
   .grid {
     grid-template-columns: 1fr;
+  }
+
+  .card {
+    min-height: auto;
+  }
+
+  .cardTitle {
+    font-size: var(--text-body);
   }
 }

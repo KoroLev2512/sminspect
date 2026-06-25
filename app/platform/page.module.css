@@ -66,16 +66,23 @@
   border-radius: var(--radius-cards);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .module,
   .moduleReverse {
     grid-template-columns: 1fr;
     direction: ltr;
     gap: var(--spacing-32);
+    padding: var(--spacing-32) 0;
   }
 
   .ctaInner {
     flex-direction: column;
     align-items: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .ctaInner {
+    padding: var(--spacing-24);
   }
 }

@@ -110,12 +110,27 @@
   color: var(--color-horizon-navy);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .layout {
     grid-template-columns: 1fr;
+    gap: var(--spacing-48);
   }
 
   .otherGrid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .quote {
+    padding: var(--spacing-24);
+  }
+
+  .quote p {
+    font-size: var(--text-body);
+  }
+
+  .headingGap {
+    margin-top: var(--spacing-32);
   }
 }
