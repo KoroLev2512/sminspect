@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
 import { Integration } from "@/components/Integration";
 import { FinalCTA } from "@/components/FinalCTA";
 import { Reveal } from "@/components/Reveal";
 import { createPageMetadata } from "@/lib/metadata";
+import { softwareApplicationSchema } from "@/lib/schema";
 import { platformModules } from "@/lib/platform";
 import styles from "./page.module.css";
 
@@ -19,6 +21,7 @@ export const metadata: Metadata = createPageMetadata({
 export default function PlatformPage() {
   return (
     <>
+      <JsonLd data={softwareApplicationSchema()} />
       <PageHero
         eyebrow="Платформа"
         title="SmartInspect — интеллектуальная диагностика инфраструктуры"

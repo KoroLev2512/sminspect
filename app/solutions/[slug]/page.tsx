@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
 import { FinalCTA } from "@/components/FinalCTA";
 import { Reveal } from "@/components/Reveal";
 import { createPageMetadata } from "@/lib/metadata";
+import { breadcrumbSchema } from "@/lib/schema";
 import { getSolution, solutions } from "@/lib/solutions";
 import styles from "./page.module.css";
 
@@ -22,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!solution) return { title: "Решение не найдено" };
 
   return createPageMetadata({
-    title: solution.segment,
+    title: solution.title,
     description: solution.solution,
     path: `/solutions/${solution.slug}`,
   });
@@ -37,6 +39,13 @@ export default async function SolutionDetailPage({ params }: Props) {
 
   return (
     <>
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Главная", path: "/" },
+          { name: "Решения", path: "/solutions" },
+          { name: solution.title, path: `/solutions/${solution.slug}` },
+        ])}
+      />
       <PageHero
         eyebrow={solution.segment}
         title={solution.title}

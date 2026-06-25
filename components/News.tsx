@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { newsArticles } from "@/lib/news";
+import { formatNewsDate, newsArticles } from "@/lib/news";
 import styles from "./News.module.css";
 
 export function News() {
@@ -25,7 +25,7 @@ export function News() {
             <article key={article.slug} className={styles.card}>
               <div className={styles.cardMeta}>
                 <span className={styles.tag}>{article.tag}</span>
-                <time>{article.date}</time>
+                <time dateTime={article.publishedAt}>{formatNewsDate(article.publishedAt)}</time>
               </div>
               <h3 className={styles.cardTitle}>
                 <Link href={`/news/${article.slug}`}>{article.title}</Link>

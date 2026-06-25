@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { JsonLd } from "@/components/JsonLd";
 import { Reveal } from "@/components/Reveal";
 import { Stagger } from "@/components/Stagger";
 import { createPageMetadata } from "@/lib/metadata";
-import { getNewsArticle, newsArticles } from "@/lib/news";
+import { formatNewsDate, getNewsArticle, newsArticles } from "@/lib/news";
+import { articleSchema, breadcrumbSchema } from "@/lib/schema";
 import styles from "./page.module.css";
 
 interface Props {
@@ -24,6 +26,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: article.title,
     description: article.excerpt,
     path: `/news/${article.slug}`,
+    type: "article",
+    publishedTime: article.publishedAt,
   });
 }
 
@@ -34,6 +38,16 @@ export default async function NewsArticlePage({ params }: Props) {
 
   return (
     <article className={styles.article}>
+      <JsonLd
+        data={[
+          articleSchema(article),
+          breadcrumbSchema([
+            { name: "Главная", path: "/" },
+            { name: "Новости", path: "/news" },
+            { name: article.title, path: `/news/${article.slug}` },
+          ]),
+        ]}
+      />
       <div className="container">
         <Reveal>
           <Link href="/news" className={styles.back}>
@@ -43,7 +57,7 @@ export default async function NewsArticlePage({ params }: Props) {
         <Stagger>
           <div className={styles.meta}>
             <span className={styles.tag}>{article.tag}</span>
-            <time>{article.date}</time>
+            <time dateTime={article.publishedAt}>{formatNewsDate(article.publishedAt)}</time>
           </div>
           <h1 className={styles.title}>{article.title}</h1>
         </Stagger>

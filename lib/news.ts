@@ -7,17 +7,26 @@ export type NewsSlug =
 export interface NewsArticle {
   slug: NewsSlug;
   tag: string;
-  date: string;
+  publishedAt: string;
   title: string;
   excerpt: string;
   paragraphs: string[];
+}
+
+export function formatNewsDate(publishedAt: string): string {
+  const formatted = new Intl.DateTimeFormat("ru-RU", {
+    month: "long",
+    year: "numeric",
+  }).format(new Date(publishedAt));
+
+  return formatted.charAt(0).toUpperCase() + formatted.slice(1);
 }
 
 export const newsArticles: NewsArticle[] = [
   {
     slug: "pilot-leningrad-region",
     tag: "Прогресс",
-    date: "Март 2026",
+    publishedAt: "2026-03-01",
     title: "Пилот SmartInspect: автоматическая диагностика мостов в Ленобласти",
     excerpt:
       "Запущен пилотный проект по автоматизированному обследованию мостовых сооружений с применением компьютерного зрения.",
@@ -30,7 +39,7 @@ export const newsArticles: NewsArticle[] = [
   {
     slug: "ai-corrosion-detection",
     tag: "Новости компании",
-    date: "Февраль 2026",
+    publishedAt: "2026-02-01",
     title: "Как ИИ находит коррозию опор быстрее ручного осмотра",
     excerpt:
       "Алгоритмы SmartInspect сокращают время анализа и повышают воспроизводимость результатов инспекции.",
@@ -43,7 +52,7 @@ export const newsArticles: NewsArticle[] = [
   {
     slug: "digital-road-management-2026",
     tag: "Прогресс",
-    date: "Январь 2026",
+    publishedAt: "2026-01-01",
     title: "Цифровизация дорожного хозяйства: тренды 2026 года",
     excerpt:
       "Обзор ключевых направлений: предиктивная аналитика, облачный мониторинг и интеграция с ГИС.",
@@ -56,7 +65,7 @@ export const newsArticles: NewsArticle[] = [
   {
     slug: "itmo-cv-partnership",
     tag: "Новости компании",
-    date: "Декабрь 2024",
+    publishedAt: "2024-12-01",
     title: "SmartInspect и ИТМО: совместная разработка алгоритмов компьютерного зрения",
     excerpt:
       "Партнёрство направлено на повышение точности распознавания дефектов инфраструктуры.",

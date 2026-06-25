@@ -3,7 +3,7 @@ import Link from "next/link";
 import { PageHero } from "@/components/PageHero";
 import { Reveal } from "@/components/Reveal";
 import { createPageMetadata } from "@/lib/metadata";
-import { newsArticles } from "@/lib/news";
+import { formatNewsDate, newsArticles } from "@/lib/news";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = createPageMetadata({
@@ -29,7 +29,7 @@ export default function NewsPage() {
                 <Link href={`/news/${article.slug}`} className={styles.card}>
                   <div className={styles.meta}>
                     <span className={styles.tag}>{article.tag}</span>
-                    <time>{article.date}</time>
+                    <time dateTime={article.publishedAt}>{formatNewsDate(article.publishedAt)}</time>
                   </div>
                   <h2 className={styles.title}>{article.title}</h2>
                   <p className={styles.excerpt}>{article.excerpt}</p>
