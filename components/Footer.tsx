@@ -54,7 +54,7 @@ export function Footer() {
           ))}
           <div className={styles.brand}>
             <Logo size={28} className={styles.brandLogo} />
-            <p className={styles.tagline}>Инфраструктура под контролем.</p>
+            <p className={styles.tagline}>Инфраструктура под контролем</p>
             <p className={styles.credit}>
               Дизайн и разработка{" "}
               <a
