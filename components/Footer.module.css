@@ -49,6 +49,21 @@
   color: var(--color-slate-whisper);
 }
 
+.credit {
+  margin: var(--spacing-8) 0 0;
+  font-size: var(--text-caption);
+  color: var(--color-slate-whisper);
+}
+
+.credit a {
+  color: var(--color-horizon-navy);
+  font-weight: var(--font-weight-medium);
+}
+
+.credit a:hover {
+  color: var(--color-signal-blue);
+}
+
 .legal {
   display: flex;
   align-items: center;

@@ -55,6 +55,16 @@ export function Footer() {
           <div className={styles.brand}>
             <Logo size={28} className={styles.brandLogo} />
             <p className={styles.tagline}>Инфраструктура под контролем.</p>
+            <p className={styles.credit}>
+              Дизайн и разработка{" "}
+              <a
+                href="https://dev-by-yurii.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                dev-by-yurii
+              </a>
+            </p>
           </div>
         </div>
 
