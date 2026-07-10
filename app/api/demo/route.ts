@@ -27,7 +27,7 @@ export async function POST(request: Request) {
 
   if (!name?.trim() || !email?.trim() || !company?.trim() || !segment?.trim()) {
     return NextResponse.json(
-      { error: "Заполните обязательные поля: имя, эл. почта, компания, сегмент" },
+      { error: "Заполните обязательные поля: имя, электронная почта, компания, сегмент" },
       { status: 400 },
     );
   }

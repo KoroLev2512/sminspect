@@ -135,7 +135,7 @@ export function AuthScreen({ mode }: { mode: "login" | "register" }) {
           <form className={styles.form} onSubmit={handleSubmit} noValidate>
             {mode === "register" && (
               <label className={styles.field}>
-                <span>Имя и фамилия *</span>
+                <span>Имя и фамилия <i className={styles.req}>*</i></span>
                 <input
                   type="text"
                   required
@@ -151,7 +151,7 @@ export function AuthScreen({ mode }: { mode: "login" | "register" }) {
             )}
 
             <label className={styles.field}>
-              <span>Эл. почта *</span>
+              <span>Почта <i className={styles.req}>*</i></span>
               <input
                 type="email"
                 required
@@ -167,7 +167,7 @@ export function AuthScreen({ mode }: { mode: "login" | "register" }) {
             </label>
 
             <label className={styles.field}>
-              <span>Пароль *</span>
+              <span>Пароль <i className={styles.req}>*</i></span>
               <input
                 type="password"
                 required

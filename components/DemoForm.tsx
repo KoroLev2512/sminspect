@@ -124,7 +124,7 @@ export function DemoForm() {
           {errors.name && <small className={styles.hint}>{errors.name}</small>}
         </label>
         <label className={styles.field}>
-          <span>Эл. почта <i className={styles.req}>*</i></span>
+          <span>Почта <i className={styles.req}>*</i></span>
           <input
             type="email"
             required

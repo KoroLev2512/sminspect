@@ -88,7 +88,7 @@ export default function SettingsPage() {
                 />
               </label>
               <label className={styles.field}>
-                <span>Эл. почта</span>
+                <span>Почта</span>
                 <input type="email" value={user.email} disabled />
               </label>
               <label className={styles.field}>

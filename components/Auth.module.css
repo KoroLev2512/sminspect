@@ -164,6 +164,12 @@
   font-weight: var(--font-weight-medium);
 }
 
+.req {
+  color: #c0392b;
+  font-style: normal;
+  font-weight: var(--font-weight-semibold);
+}
+
 .field input,
 .field select {
   padding: 12px var(--spacing-16);
