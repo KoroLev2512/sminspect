@@ -71,6 +71,9 @@ export function Nav() {
         </nav>
 
         <div className={styles.actions}>
+          <Link href="/login" className={`btnGhost ${styles.desktopCta}`}>
+            Войти
+          </Link>
           <Link href="/demo" className={`btnPrimary ${styles.desktopCta}`}>
             Запросить демо
           </Link>
@@ -125,6 +128,14 @@ export function Nav() {
             </Link>
           ))}
         </div>
+        <Link
+          href="/login"
+          className={`${styles.mobileLink}`}
+          onClick={closeMenu}
+          tabIndex={menuOpen ? 0 : -1}
+        >
+          Войти в кабинет
+        </Link>
         <Link
           href="/demo"
           className={`btnPrimary ${styles.mobileCta}`}

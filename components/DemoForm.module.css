@@ -25,6 +25,12 @@
   color: var(--color-horizon-navy);
 }
 
+.req {
+  color: #c0392b;
+  font-style: normal;
+  font-weight: var(--font-weight-semibold);
+}
+
 .field input,
 .field select,
 .field textarea {
@@ -43,6 +49,16 @@
 .field select:focus,
 .field textarea:focus {
   border-color: var(--color-signal-blue);
+}
+
+.field input[aria-invalid="true"],
+.field select[aria-invalid="true"] {
+  border-color: #c0392b;
+}
+
+.field .hint {
+  font-size: var(--text-caption);
+  color: #c0392b;
 }
 
 .field textarea {

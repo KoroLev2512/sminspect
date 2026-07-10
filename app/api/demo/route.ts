@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { addLead } from "@/lib/leads";
 
 interface DemoPayload {
   name?: string;
@@ -35,16 +36,22 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Укажите корректный адрес электронной почты" }, { status: 400 });
   }
 
-  // TODO: integrate CRM / email notification
-  console.info("[demo-request]", {
-    name: name.trim(),
-    email: email.trim(),
-    company: company.trim(),
-    role: body.role?.trim() ?? "",
-    segment: segment.trim(),
-    message: body.message?.trim() ?? "",
-    at: new Date().toISOString(),
-  });
+  try {
+    await addLead({
+      name,
+      email,
+      company,
+      role: body.role ?? "",
+      segment,
+      message: body.message ?? "",
+    });
+  } catch (err) {
+    console.error("[demo-request] failed to store lead", err);
+    return NextResponse.json(
+      { error: "Не удалось сохранить заявку. Попробуйте позже." },
+      { status: 500 },
+    );
+  }
 
   return NextResponse.json({ ok: true });
 }

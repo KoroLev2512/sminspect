@@ -1,4 +1,5 @@
 /tmp
+/.data
 /out-tsc
 /.next
 /out
@@ -9,6 +10,10 @@ yarn-error.log*
 /.pnp
 .pnp.js
 next-env.d.ts
+
+# env files (secrets — Neon connection string etc.)
+.env
+.env*.local
 .vscode/*
 .idea/
 .DS_Store

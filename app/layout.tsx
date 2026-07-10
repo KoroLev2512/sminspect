@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { Nav } from "@/components/Nav";
-import { Footer } from "@/components/Footer";
+import { AuthProvider } from "@/components/AuthProvider";
+import { SiteChrome } from "@/components/SiteChrome";
 import { JsonLd } from "@/components/JsonLd";
 import "./globals.css";
 import { rootMetadata } from "@/lib/metadata";
@@ -24,9 +24,9 @@ export default function RootLayout({
     <html lang="ru">
       <body>
         <JsonLd data={[organizationSchema(), websiteSchema()]} />
-        <Nav />
-        <main>{children}</main>
-        <Footer />
+        <AuthProvider>
+          <SiteChrome>{children}</SiteChrome>
+        </AuthProvider>
       </body>
     </html>
   );
