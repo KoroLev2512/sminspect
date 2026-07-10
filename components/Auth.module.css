@@ -208,20 +208,6 @@
   margin-top: var(--spacing-8);
 }
 
-.demoHint {
-  margin: 0;
-  padding: var(--spacing-12) var(--spacing-16);
-  border-radius: var(--radius-buttons);
-  background: var(--color-hailstone);
-  font-size: var(--text-caption);
-  line-height: 1.5;
-  color: var(--color-graphite-dim);
-}
-
-.demoHint b {
-  color: var(--color-horizon-navy);
-}
-
 .switch {
   margin: var(--spacing-24) 0 0;
   font-size: var(--text-body-sm);

@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import styles from "./Dashboard.module.css";
 import { Icon, type IconName } from "./dash-icons";
 import {
@@ -9,6 +9,46 @@ import {
   type ObjectStatus,
   type Severity,
 } from "@/lib/dashboard";
+
+export function Spinner({ size = 20 }: { size?: number }) {
+  return (
+    <svg
+      className={styles.spinner}
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeOpacity="0.25" strokeWidth="3" />
+      <path
+        d="M12 3a9 9 0 0 1 9 9"
+        stroke="currentColor"
+        strokeWidth="3"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+export function Skeleton({
+  height = 16,
+  width = "100%",
+  radius,
+  style,
+}: {
+  height?: number | string;
+  width?: number | string;
+  radius?: number | string;
+  style?: CSSProperties;
+}) {
+  return (
+    <span
+      className={styles.skeleton}
+      style={{ height, width, borderRadius: radius, ...style }}
+    />
+  );
+}
 
 export function conditionColor(value: number) {
   if (value >= 75) return "#1e874b";

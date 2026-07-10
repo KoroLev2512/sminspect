@@ -235,13 +235,6 @@ export function AuthScreen({ mode }: { mode: "login" | "register" }) {
             </button>
           </form>
 
-          {mode === "login" && (
-            <p className={styles.demoHint}>
-              Демо-доступ: <b>{DEMO_CREDENTIALS.email}</b> / пароль{" "}
-              <b>{DEMO_CREDENTIALS.password}</b> — поля уже заполнены.
-            </p>
-          )}
-
           <p className={styles.switch}>
             {mode === "login" ? (
               <>

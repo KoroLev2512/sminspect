@@ -66,7 +66,22 @@ export function DashboardShell({ children }: { children: ReactNode }) {
   }, [status, user, router]);
 
   if (status === "loading" || !user) {
-    return <div className={styles.loader}>Загрузка личного кабинета…</div>;
+    return (
+      <div className={styles.loader}>
+        <span className={styles.loaderBadge}>
+          <span className={styles.loaderRing} />
+          <Image
+            src="/logo.png"
+            alt=""
+            width={36}
+            height={36}
+            className={styles.loaderLogo}
+            priority
+          />
+        </span>
+        <p className={styles.loaderText}>Загрузка личного кабинета…</p>
+      </div>
+    );
   }
 
   const title =
@@ -138,7 +153,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
               {stats.unreadAlerts > 0 && <span className={styles.iconBtnDot} />}
             </Link>
             <Link href="/" className={styles.iconBtn} aria-label="На сайт">
-              <Icon name="logout" size={20} />
+              <Icon name="home" size={20} />
             </Link>
           </div>
         </header>

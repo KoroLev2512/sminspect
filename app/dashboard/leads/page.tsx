@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
 import { Icon } from "@/components/dash-icons";
-import { StatCard } from "@/components/dash-ui";
+import { Skeleton, Spinner, StatCard } from "@/components/dash-ui";
 import { formatDateTime } from "@/lib/dashboard";
 import { leadStatusLabels, type Lead, type LeadStatus } from "@/lib/leads-types";
 import styles from "@/components/Dashboard.module.css";
@@ -101,8 +101,40 @@ export default function LeadsPage() {
   if (phase === "loading") {
     return (
       <div className={styles.page}>
-        <div className={styles.card}>
-          <p className={styles.empty}>Загрузка…</p>
+        <div className={styles.pageHead}>
+          <h2 className={styles.pageTitle}>Заявки на демо</h2>
+          <p className={styles.pageSubtitle}>
+            Заявки с формы «Запросить демо» на сайте. Управляйте статусами обработки.
+          </p>
+        </div>
+
+        <div className={styles.statGrid}>
+          {[0, 1, 2, 3].map((i) => (
+            <div key={i} className={styles.stat}>
+              <Skeleton width="55%" height={13} />
+              <Skeleton width="35%" height={30} style={{ marginTop: 18 }} />
+            </div>
+          ))}
+        </div>
+
+        <div className={styles.card} style={{ marginTop: 20 }}>
+          {[0, 1, 2, 3, 4].map((i) => (
+            <div
+              key={i}
+              style={{
+                display: "flex",
+                gap: 16,
+                alignItems: "center",
+                padding: "14px 0",
+                borderTop: i ? "1px solid var(--color-mist)" : "none",
+              }}
+            >
+              <Skeleton width={180} height={16} />
+              <Skeleton width={140} height={16} />
+              <Skeleton width={120} height={16} style={{ marginLeft: "auto" }} />
+              <Skeleton width={80} height={24} radius={9999} />
+            </div>
+          ))}
         </div>
       </div>
     );
@@ -144,9 +176,16 @@ export default function LeadsPage() {
               type="submit"
               className="btnPrimary"
               disabled={unlocking}
-              style={{ justifyContent: "center" }}
+              style={{ justifyContent: "center", gap: 8 }}
             >
-              {unlocking ? "Проверяем…" : "Войти"}
+              {unlocking ? (
+                <>
+                  <Spinner size={16} />
+                  Проверяем…
+                </>
+              ) : (
+                "Войти"
+              )}
             </button>
           </form>
         </div>
