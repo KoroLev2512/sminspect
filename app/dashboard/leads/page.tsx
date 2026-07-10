@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
 import { Icon } from "@/components/dash-icons";
 import { StatCard } from "@/components/dash-ui";
 import { formatDateTime } from "@/lib/dashboard";
@@ -15,24 +15,55 @@ const statusClass: Record<LeadStatus, string> = {
 
 export default function LeadsPage() {
   const [leads, setLeads] = useState<Lead[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [phase, setPhase] = useState<"loading" | "locked" | "ready">("loading");
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState<LeadStatus | "all">("all");
+  const [token, setToken] = useState("");
+  const [unlockError, setUnlockError] = useState("");
+  const [unlocking, setUnlocking] = useState(false);
+
+  const load = useCallback(async () => {
+    try {
+      const res = await fetch("/api/leads", { cache: "no-store" });
+      if (res.status === 401) {
+        setPhase("locked");
+        return;
+      }
+      const data: { leads: Lead[] } = await res.json();
+      setLeads(data.leads ?? []);
+      setPhase("ready");
+    } catch {
+      setPhase("locked");
+    }
+  }, []);
 
   useEffect(() => {
-    let active = true;
-    fetch("/api/leads", { cache: "no-store" })
-      .then((r) => r.json())
-      .then((data: { leads: Lead[] }) => {
-        if (!active) return;
-        setLeads(data.leads ?? []);
-        setLoading(false);
-      })
-      .catch(() => active && setLoading(false));
-    return () => {
-      active = false;
-    };
-  }, []);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- initial async data load
+    load();
+  }, [load]);
+
+  async function unlock(e: FormEvent) {
+    e.preventDefault();
+    setUnlockError("");
+    setUnlocking(true);
+    try {
+      const res = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setUnlockError(data.error ?? "Не удалось войти");
+        return;
+      }
+      setToken("");
+      setPhase("loading");
+      await load();
+    } finally {
+      setUnlocking(false);
+    }
+  }
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -66,6 +97,62 @@ export default function LeadsPage() {
     in_progress: leads.filter((l) => l.status === "in_progress").length,
     done: leads.filter((l) => l.status === "done").length,
   };
+
+  if (phase === "loading") {
+    return (
+      <div className={styles.page}>
+        <div className={styles.card}>
+          <p className={styles.empty}>Загрузка…</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (phase === "locked") {
+    return (
+      <div className={styles.page}>
+        <div
+          className={styles.card}
+          style={{ maxWidth: 440, margin: "0 auto", textAlign: "center" }}
+        >
+          <span className={styles.statIcon} style={{ margin: "0 auto 16px" }}>
+            <Icon name="shield" size={22} />
+          </span>
+          <h3 className={styles.cardTitle} style={{ marginBottom: 8 }}>
+            Раздел защищён
+          </h3>
+          <p className={styles.pageSubtitle} style={{ margin: "0 auto 20px" }}>
+            Введите ключ администратора для доступа к заявкам.
+          </p>
+          <form
+            onSubmit={unlock}
+            style={{ display: "flex", flexDirection: "column", gap: 12, textAlign: "left" }}
+          >
+            <label className={styles.field}>
+              <span>Ключ доступа</span>
+              <input
+                type="password"
+                value={token}
+                onChange={(e) => setToken(e.target.value)}
+                placeholder="••••••••"
+                autoFocus
+                aria-invalid={!!unlockError}
+              />
+            </label>
+            {unlockError && <small className={styles.hint}>{unlockError}</small>}
+            <button
+              type="submit"
+              className="btnPrimary"
+              disabled={unlocking}
+              style={{ justifyContent: "center" }}
+            >
+              {unlocking ? "Проверяем…" : "Войти"}
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.page}>
@@ -114,9 +201,7 @@ export default function LeadsPage() {
       </div>
 
       <div className={styles.card}>
-        {loading ? (
-          <p className={styles.empty}>Загрузка заявок…</p>
-        ) : filtered.length === 0 ? (
+        {filtered.length === 0 ? (
           <p className={styles.empty}>Заявок пока нет</p>
         ) : (
           <div className={styles.tableWrap}>

@@ -1041,6 +1041,16 @@
   border-color: var(--color-signal-blue);
 }
 
+.field input[aria-invalid="true"],
+.field select[aria-invalid="true"] {
+  border-color: #c0392b;
+}
+
+.hint {
+  font-size: var(--text-caption);
+  color: #c0392b;
+}
+
 .saved {
   display: inline-flex;
   align-items: center;

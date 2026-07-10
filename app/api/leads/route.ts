@@ -1,14 +1,22 @@
 import { NextResponse } from "next/server";
 import { listLeads, setLeadStatus, type LeadStatus } from "@/lib/leads";
+import { isAdminAuthed } from "@/lib/admin-auth";
 
 const statuses: LeadStatus[] = ["new", "in_progress", "done"];
 
+const unauthorized = () =>
+  NextResponse.json({ error: "Требуется авторизация" }, { status: 401 });
+
 export async function GET() {
+  if (!(await isAdminAuthed())) return unauthorized();
+
   const leads = await listLeads();
   return NextResponse.json({ leads });
 }
 
 export async function PATCH(request: Request) {
+  if (!(await isAdminAuthed())) return unauthorized();
+
   let body: { id?: string; status?: string };
 
   try {
