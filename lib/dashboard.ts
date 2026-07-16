@@ -237,7 +237,7 @@ export const objects: InfraObject[] = [
     criticalDefects: 0,
     forecastMonths: 24,
     image:
-      "https://images.unsplash.com/photo-1573030889348-c6b0f8b8a5b7?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1470224114660-3f6686c562eb?auto=format&fit=crop&w=1200&q=80",
   },
 ];
 
