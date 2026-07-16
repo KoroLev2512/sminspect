@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState, type FormEvent } from "react";
 import { useAuth } from "./AuthProvider";
 import { Icon } from "./dash-icons";
-import { DEMO_CREDENTIALS, isValidEmail, segments } from "@/lib/auth";
+import { isValidEmail, segments } from "@/lib/auth";
 import styles from "./Auth.module.css";
 
 type FieldErrors = { name?: string; email?: string; password?: string };
@@ -27,8 +27,8 @@ export function AuthScreen({ mode }: { mode: "login" | "register" }) {
 
   const [form, setForm] = useState({
     name: "",
-    email: mode === "login" ? DEMO_CREDENTIALS.email : "",
-    password: mode === "login" ? DEMO_CREDENTIALS.password : "",
+    email: "",
+    password: "",
     company: "",
     role: "",
     segment: segments[0],

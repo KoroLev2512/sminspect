@@ -646,71 +646,86 @@
 
 /* ---- Map ------------------------------------------------------------------ */
 
-.map {
+.mapLayout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: var(--spacing-20);
+  height: calc(100dvh - 230px);
+  min-height: 520px;
+}
+
+.mapWrap {
   position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 10;
+  border: 1px solid var(--color-mist);
   border-radius: var(--radius-cards);
   overflow: hidden;
-  background:
-    radial-gradient(circle at 30% 20%, color-mix(in srgb, var(--color-signal-blue) 8%, transparent), transparent 45%),
-    linear-gradient(160deg, #0a2a54, var(--color-horizon-navy));
-  border: 1px solid var(--color-mist);
+  background: var(--color-mist);
 }
 
-.mapGrid {
+.mapCanvas {
   position: absolute;
   inset: 0;
-  background-image:
-    linear-gradient(color-mix(in srgb, var(--color-paper-white) 6%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--color-paper-white) 6%, transparent) 1px, transparent 1px);
-  background-size: 48px 48px;
+  width: 100%;
+  height: 100%;
 }
 
-.mapMarker {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  width: 20px;
-  height: 20px;
+.mapMissing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: var(--spacing-32);
+  text-align: center;
+  color: var(--color-slate-whisper);
+  font-size: var(--text-body-sm);
+  line-height: 1.6;
+}
+
+.mapMissing code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: var(--text-caption);
+  color: var(--color-horizon-navy);
+  background: var(--color-hailstone);
+  padding: 2px 6px;
+  border-radius: var(--radius-md);
+}
+
+/* imperatively-created maplibre marker element */
+.mapPin {
+  width: 18px;
+  height: 18px;
   border-radius: 9999px;
   border: 3px solid var(--color-paper-white);
   cursor: pointer;
-  transition: transform 0.2s var(--ease-out-expo);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+  transition: transform 0.15s ease;
+  padding: 0;
 }
 
-.mapMarker:hover,
-.mapMarkerActive {
-  transform: translate(-50%, -50%) scale(1.35);
-  z-index: 5;
+.mapPin:hover {
+  transform: scale(1.25);
 }
 
-.mapMarkerActive {
-  box-shadow: 0 0 0 6px color-mix(in srgb, var(--color-paper-white) 30%, transparent);
+.mapPinActive {
+  transform: scale(1.4);
+  box-shadow:
+    0 0 0 6px color-mix(in srgb, var(--color-signal-blue) 28%, transparent),
+    0 1px 6px rgba(0, 0, 0, 0.35);
 }
 
-.mapMarkerCritical {
-  background: #ff5a4d;
-}
-.mapMarkerWarning {
-  background: #f5a623;
-}
-.mapMarkerGood {
-  background: #2ec171;
-}
-
-.mapLegend {
+.mapLegendCard {
   position: absolute;
   left: var(--spacing-16);
   bottom: var(--spacing-16);
+  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 6px;
   padding: var(--spacing-12) var(--spacing-16);
   border-radius: var(--radius-buttons);
-  background: color-mix(in srgb, var(--color-horizon-navy) 70%, transparent);
-  backdrop-filter: blur(6px);
-  color: var(--color-paper-white);
+  background: color-mix(in srgb, var(--color-paper-white) 92%, transparent);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 10px rgba(0, 23, 51, 0.12);
   font-size: var(--text-caption);
 }
 
@@ -718,6 +733,77 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-8);
+  color: var(--color-graphite-dim);
+}
+
+.mapPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+  height: 100%;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.mapDetail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+  padding: var(--spacing-20);
+  border: 1px solid var(--color-signal-blue);
+  border-radius: var(--radius-cards);
+  background: var(--color-paper-white);
+  box-shadow: 0 0 0 1px var(--color-signal-blue);
+}
+
+.mapListHead {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  padding-top: var(--spacing-4);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-slate-whisper);
+}
+
+.mapListHead span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 9999px;
+  background: var(--color-hailstone);
+  color: var(--color-graphite-dim);
+}
+
+.mapObjectCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  padding: var(--spacing-16);
+  border: 1px solid var(--color-mist);
+  border-radius: var(--radius-cards);
+  background: var(--color-paper-white);
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.mapObjectCard:hover {
+  border-color: var(--color-fog);
+}
+
+.mapObjectActive,
+.mapObjectActive:hover {
+  border-color: var(--color-signal-blue);
+  box-shadow: 0 0 0 1px var(--color-signal-blue);
 }
 
 /* ---- Details / definition lists ------------------------------------------- */
@@ -1195,6 +1281,9 @@
   .cols3 {
     grid-template-columns: 1fr;
   }
+  .mapLayout {
+    grid-template-columns: 1fr 320px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -1238,5 +1327,17 @@
     flex-direction: column;
     align-items: flex-start;
     gap: var(--spacing-20);
+  }
+  .mapLayout {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: 0;
+  }
+  .mapWrap {
+    height: 380px;
+  }
+  .mapPanel {
+    height: auto;
+    max-height: 520px;
   }
 }

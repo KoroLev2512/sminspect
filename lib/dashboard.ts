@@ -12,9 +12,9 @@ export interface InfraObject {
   name: string;
   type: ObjectType;
   region: string;
-  /** Normalized position on the stylized map, 0–100 (%) */
-  x: number;
-  y: number;
+  /** Географические координаты объекта (в пределах РФ) */
+  lat: number;
+  lng: number;
   /** Условный индекс состояния, 0–100 (выше — лучше) */
   condition: number;
   status: ObjectStatus;
@@ -108,8 +108,8 @@ export const objects: InfraObject[] = [
     name: "Мост через р. Волга, М-7 «Волга»",
     type: "bridge",
     region: "Нижегородская обл.",
-    x: 46,
-    y: 38,
+    lat: 56.3,
+    lng: 44.0,
     condition: 41,
     status: "critical",
     length: "1 240 м",
@@ -125,8 +125,8 @@ export const objects: InfraObject[] = [
     name: "Автодорога М-4 «Дон», км 320–360",
     type: "road",
     region: "Воронежская обл.",
-    x: 44,
-    y: 58,
+    lat: 51.66,
+    lng: 39.2,
     condition: 63,
     status: "warning",
     length: "40 км",
@@ -142,8 +142,8 @@ export const objects: InfraObject[] = [
     name: "Путепровод на ул. Профсоюзная",
     type: "bridge",
     region: "Москва",
-    x: 40,
-    y: 34,
+    lat: 55.65,
+    lng: 37.55,
     condition: 78,
     status: "good",
     length: "320 м",
@@ -159,8 +159,8 @@ export const objects: InfraObject[] = [
     name: "Западный скоростной диаметр (ЗСД)",
     type: "road",
     region: "Санкт-Петербург",
-    x: 38,
-    y: 22,
+    lat: 59.95,
+    lng: 30.23,
     condition: 71,
     status: "warning",
     length: "46,6 км",
@@ -176,8 +176,8 @@ export const objects: InfraObject[] = [
     name: "Мост через р. Кама, трасса Р-239",
     type: "bridge",
     region: "Респ. Татарстан",
-    x: 54,
-    y: 44,
+    lat: 55.74,
+    lng: 52.4,
     condition: 52,
     status: "warning",
     length: "980 м",
@@ -193,8 +193,8 @@ export const objects: InfraObject[] = [
     name: "Автодорога А-121 «Сортавала»",
     type: "road",
     region: "Ленинградская обл.",
-    x: 40,
-    y: 16,
+    lat: 60.7,
+    lng: 30.6,
     condition: 84,
     status: "good",
     length: "62 км",
@@ -210,8 +210,8 @@ export const objects: InfraObject[] = [
     name: "Эстакада «Южный обход»",
     type: "bridge",
     region: "Краснодарский край",
-    x: 36,
-    y: 72,
+    lat: 45.04,
+    lng: 38.98,
     condition: 58,
     status: "warning",
     length: "540 м",
@@ -227,8 +227,8 @@ export const objects: InfraObject[] = [
     name: "Городская магистраль, пр. Ленина",
     type: "road",
     region: "Екатеринбург",
-    x: 62,
-    y: 30,
+    lat: 56.84,
+    lng: 60.61,
     condition: 88,
     status: "good",
     length: "12 км",
