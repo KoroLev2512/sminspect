@@ -20,7 +20,7 @@ export default function PrivacyPage() {
       <PageHero
         eyebrow="Документы"
         title={privacyPolicyMeta.title}
-        description={`Оператор: ${siteConfig.operator}. Сайт: ${siteConfig.url}`}
+        description={`Оператор: ${siteConfig.operatorDetails.shortName} | Сайт: ${siteConfig.url} | Дата редакции: ${privacyPolicyMeta.lastUpdated}`}
       />
 
       <section className={`section ${styles.section}`}>

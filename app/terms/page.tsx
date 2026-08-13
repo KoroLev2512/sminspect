@@ -19,7 +19,7 @@ export default function TermsPage() {
       <PageHero
         eyebrow="Документы"
         title={termsMeta.title}
-        description={`Оператор: ${siteConfig.operator}. Сайт: ${siteConfig.url}`}
+        description={`Оператор: ${siteConfig.operatorDetails.shortName} | Сайт: ${siteConfig.url} | Дата редакции: ${termsMeta.lastUpdated}`}
       />
 
       <section className={`section ${styles.section}`}>
