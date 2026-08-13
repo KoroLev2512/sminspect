@@ -198,6 +198,43 @@
   color: #c0392b;
 }
 
+.hint {
+  font-size: var(--text-caption);
+  color: #c0392b;
+}
+
+.consentCheckbox {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-12);
+  margin-top: var(--spacing-8);
+  cursor: pointer;
+  user-select: none;
+}
+
+.consentCheckbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: var(--color-signal-blue);
+  cursor: pointer;
+}
+
+.consentCheckbox span {
+  font-size: var(--text-caption);
+  line-height: var(--leading-body-sm);
+  color: var(--color-horizon-navy);
+}
+
+.consentCheckbox a {
+  color: var(--color-signal-blue);
+  font-weight: var(--font-weight-medium);
+}
+
+.consentCheckbox a:hover {
+  text-decoration: underline;
+}
+
 .error {
   margin: 0;
   padding: var(--spacing-12) var(--spacing-16);

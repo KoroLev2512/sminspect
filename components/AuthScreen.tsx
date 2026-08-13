@@ -9,7 +9,7 @@ import { Icon } from "./dash-icons";
 import { isValidEmail, segments } from "@/lib/auth";
 import styles from "./Auth.module.css";
 
-type FieldErrors = { name?: string; email?: string; password?: string };
+type FieldErrors = { name?: string; email?: string; password?: string; consent?: string };
 
 const features = [
   "Автоматический анализ снимков с дронов, камер и сенсоров",
@@ -32,6 +32,7 @@ export function AuthScreen({ mode }: { mode: "login" | "register" }) {
     company: "",
     role: "",
     segment: segments[0],
+    consent: false,
   });
 
   useEffect(() => {
@@ -46,10 +47,12 @@ export function AuthScreen({ mode }: { mode: "login" | "register" }) {
     if (!f.password) e.password = "Введите пароль";
     else if (mode === "register" && f.password.length < 6)
       e.password = "Пароль должен быть не короче 6 символов";
+    if (mode === "register" && !f.consent)
+      e.consent = "Необходимо дать согласие на обработку персональных данных";
     return e;
   }
 
-  function update<K extends keyof typeof form>(key: K, value: string) {
+  function update<K extends keyof typeof form>(key: K, value: (typeof form)[K]) {
     const next = { ...form, [key]: value };
     setForm(next);
     if (submitted) setFieldErrors(validate(next));
@@ -217,6 +220,23 @@ export function AuthScreen({ mode }: { mode: "login" | "register" }) {
                     ))}
                   </select>
                 </label>
+
+                <label className={styles.consentCheckbox}>
+                  <input
+                    type="checkbox"
+                    checked={form.consent}
+                    onChange={(e) => update("consent", e.target.checked)}
+                    aria-invalid={!!fieldErrors.consent}
+                  />
+                  <span>
+                    Я даю согласие на обработку персональных данных в соответствии с{" "}
+                    <Link href="/privacy" target="_blank">Политикой конфиденциальности</Link>{" "}
+                    <i className={styles.req}>*</i>
+                  </span>
+                </label>
+                {fieldErrors.consent && (
+                  <small className={styles.hint}>{fieldErrors.consent}</small>
+                )}
               </>
             )}
 

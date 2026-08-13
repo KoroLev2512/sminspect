@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
 import { platformModules } from "@/lib/platform";
+import { siteConfig } from "@/lib/site";
 import styles from "./Footer.module.css";
 
 const columns = [
@@ -66,6 +67,16 @@ export function Footer() {
               </a>
             </p>
           </div>
+        </div>
+
+        <div className={styles.requisites}>
+          <p className={styles.requisitesTitle}>Реквизиты владельца сайта и Оператора:</p>
+          <p>
+            {siteConfig.operatorDetails.fullName} | ИНН: {siteConfig.operatorDetails.inn} | КПП: {siteConfig.operatorDetails.kpp} | ОГРН: {siteConfig.operatorDetails.ogrn}
+          </p>
+          <p>
+            Адрес местонахождения: {siteConfig.operatorDetails.legalAddress}
+          </p>
         </div>
 
         <div className={styles.legal}>

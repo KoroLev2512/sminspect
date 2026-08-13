@@ -40,6 +40,35 @@ export default function DemoPage() {
                 <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>. Данные защищены
                 и используются только для связи по вашей заявке.
               </p>
+
+              <div className={styles.requisitesCard}>
+                <h3 className={styles.requisitesTitle}>Реквизиты организации:</h3>
+                <dl className={styles.requisitesList}>
+                  <div>
+                    <dt>Владелец / Оператор:</dt>
+                    <dd>{siteConfig.operatorDetails.fullName}</dd>
+                  </div>
+                  <div>
+                    <dt>ИНН / КПП:</dt>
+                    <dd>{siteConfig.operatorDetails.inn} / {siteConfig.operatorDetails.kpp}</dd>
+                  </div>
+                  <div>
+                    <dt>ОГРН:</dt>
+                    <dd>{siteConfig.operatorDetails.ogrn}</dd>
+                  </div>
+                  <div>
+                    <dt>Адрес местонахождения:</dt>
+                    <dd>{siteConfig.operatorDetails.legalAddress}</dd>
+                  </div>
+                  <div>
+                    <dt>Телефон / Email:</dt>
+                    <dd>
+                      {siteConfig.operatorDetails.phone} |{" "}
+                      <a href={`mailto:${siteConfig.operatorDetails.email}`}>{siteConfig.operatorDetails.email}</a>
+                    </dd>
+                  </div>
+                </dl>
+              </div>
               </div>
             </Reveal>
             <Reveal delay={120}>

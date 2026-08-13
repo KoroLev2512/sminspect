@@ -20,6 +20,7 @@ interface FormState {
   role: string;
   segment: string;
   message: string;
+  consent: boolean;
 }
 
 const initial: FormState = {
@@ -29,6 +30,7 @@ const initial: FormState = {
   role: "",
   segment: segments[0],
   message: "",
+  consent: false,
 };
 
 type Errors = Partial<Record<keyof FormState, string>>;
@@ -40,6 +42,7 @@ function validate(f: FormState): Errors {
   else if (!isValidEmail(f.email.trim())) e.email = "Некорректный адрес почты";
   if (!f.company.trim()) e.company = "Укажите компанию";
   if (!f.segment.trim()) e.segment = "Выберите сегмент";
+  if (!f.consent) e.consent = "Необходимо дать согласие на обработку персональных данных";
   return e;
 }
 
@@ -50,7 +53,7 @@ export function DemoForm() {
   const [errors, setErrors] = useState<Errors>({});
   const [submitted, setSubmitted] = useState(false);
 
-  function change<K extends keyof FormState>(key: K, value: string) {
+  function change<K extends keyof FormState>(key: K, value: FormState[K]) {
     const next = { ...form, [key]: value };
     setForm(next);
     if (submitted) setErrors(validate(next));
@@ -194,14 +197,24 @@ export function DemoForm() {
         </p>
       )}
 
+      <label className={styles.consentCheckbox}>
+        <input
+          type="checkbox"
+          checked={form.consent}
+          onChange={(e) => change("consent", e.target.checked)}
+          aria-invalid={!!errors.consent}
+        />
+        <span>
+          Я даю согласие на обработку персональных данных в соответствии с{" "}
+          <Link href="/privacy" target="_blank">Политикой конфиденциальности</Link>{" "}
+          <i className={styles.req}>*</i>
+        </span>
+      </label>
+      {errors.consent && <small className={styles.hint}>{errors.consent}</small>}
+
       <button type="submit" className="btnPrimary" disabled={status === "loading"}>
         {status === "loading" ? "Отправка…" : "Запросить демо"}
       </button>
-
-      <p className={styles.consent}>
-        Отправляя форму, вы соглашаетесь с{" "}
-        <Link href="/privacy">политикой обработки персональных данных</Link>.
-      </p>
     </form>
   );
 }

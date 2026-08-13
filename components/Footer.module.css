@@ -65,14 +65,32 @@
   color: var(--color-signal-blue);
 }
 
+.requisites {
+  margin-top: var(--spacing-48);
+  padding-top: var(--spacing-24);
+  border-top: 1px dashed var(--color-mist);
+  font-size: var(--text-caption);
+  line-height: var(--leading-body-sm);
+  color: var(--color-slate-whisper);
+}
+
+.requisites p {
+  margin: var(--spacing-4) 0;
+}
+
+.requisitesTitle {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-horizon-navy);
+}
+
 .legal {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: var(--spacing-16);
-  margin-top: var(--spacing-80);
-  padding-top: var(--spacing-32);
+  margin-top: var(--spacing-24);
+  padding-top: var(--spacing-24);
   border-top: 1px solid var(--color-mist);
   font-size: var(--text-body-sm);
   color: var(--color-slate-whisper);

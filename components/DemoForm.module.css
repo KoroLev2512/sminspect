@@ -99,19 +99,34 @@
   cursor: not-allowed;
 }
 
-.consent {
-  margin: 0;
-  font-size: var(--text-caption);
-  line-height: var(--leading-body-sm);
-  color: var(--color-slate-whisper);
+.consentCheckbox {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-12);
+  cursor: pointer;
+  user-select: none;
 }
 
-.consent a {
+.consentCheckbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: var(--color-signal-blue);
+  cursor: pointer;
+}
+
+.consentCheckbox span {
+  font-size: var(--text-caption);
+  line-height: var(--leading-body-sm);
+  color: var(--color-horizon-navy);
+}
+
+.consentCheckbox a {
   color: var(--color-signal-blue);
   font-weight: var(--font-weight-medium);
 }
 
-.consent a:hover {
+.consentCheckbox a:hover {
   text-decoration: underline;
 }
 

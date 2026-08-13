@@ -1,0 +1,127 @@
+.banner {
+  position: fixed;
+  bottom: var(--spacing-24);
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - var(--spacing-48));
+  max-width: 960px;
+  z-index: 9999;
+  background: color-mix(in srgb, var(--color-horizon-navy) 94%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid color-mix(in srgb, var(--color-paper-white) 15%, transparent);
+  border-radius: var(--radius-cards);
+  padding: var(--spacing-24) var(--spacing-32);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+  animation: slideUp 0.4s ease-out forwards;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 30px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-32);
+}
+
+.content {
+  flex: 1;
+}
+
+.title {
+  margin: 0 0 var(--spacing-4);
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-paper-white);
+}
+
+.desc {
+  margin: 0;
+  font-size: var(--text-caption);
+  line-height: var(--leading-body-sm);
+  color: color-mix(in srgb, var(--color-paper-white) 80%, transparent);
+}
+
+.link {
+  color: var(--color-cyan-dawn);
+  text-decoration: underline;
+}
+
+.link:hover {
+  color: var(--color-paper-white);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-12);
+  flex-shrink: 0;
+}
+
+.btnPrimary {
+  padding: 10px var(--spacing-20);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-paper-white);
+  background: var(--color-signal-blue);
+  border: none;
+  border-radius: var(--radius-buttons);
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btnPrimary:hover {
+  opacity: 0.9;
+}
+
+.btnSecondary {
+  padding: 10px var(--spacing-20);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-medium);
+  color: color-mix(in srgb, var(--color-paper-white) 90%, transparent);
+  background: color-mix(in srgb, var(--color-paper-white) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-paper-white) 20%, transparent);
+  border-radius: var(--radius-buttons);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.btnSecondary:hover {
+  background: color-mix(in srgb, var(--color-paper-white) 20%, transparent);
+  color: var(--color-paper-white);
+}
+
+@media (max-width: 768px) {
+  .banner {
+    bottom: var(--spacing-16);
+    width: calc(100% - var(--spacing-32));
+    padding: var(--spacing-20);
+  }
+
+  .container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-16);
+  }
+
+  .actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btnPrimary,
+  .btnSecondary {
+    width: 100%;
+    text-align: center;
+  }
+}

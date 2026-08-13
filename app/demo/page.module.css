@@ -46,6 +46,49 @@
   text-decoration: underline;
 }
 
+.requisitesCard {
+  margin-top: var(--spacing-32);
+  padding: var(--spacing-24);
+  background: var(--color-hailstone);
+  border: 1px solid var(--color-mist);
+  border-radius: var(--radius-cards);
+}
+
+.requisitesTitle {
+  margin: 0 0 var(--spacing-16);
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-horizon-navy);
+}
+
+.requisitesList {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+  font-size: var(--text-caption);
+}
+
+.requisitesList div {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: var(--spacing-8);
+}
+
+.requisitesList dt {
+  color: var(--color-slate-whisper);
+  font-weight: var(--font-weight-medium);
+}
+
+.requisitesList dd {
+  margin: 0;
+  color: var(--color-horizon-navy);
+}
+
+.requisitesList a {
+  color: var(--color-signal-blue);
+}
+
 @media (max-width: 1024px) {
   .grid {
     grid-template-columns: 1fr;
