@@ -29,37 +29,23 @@ export default function TermsPage() {
               <Reveal key={section.id} delay={i * 40}>
                 <section id={section.id} className={styles.block}>
                   <h2 className={styles.blockTitle}>{section.title}</h2>
+
                   {"paragraphs" in section &&
-                    Array.isArray(
-                      (section as { paragraphs?: readonly string[] }).paragraphs
-                    ) &&
-                    (
-                      section as { paragraphs: readonly string[] }
-                    ).paragraphs.map((paragraph) => (
+                    section.paragraphs?.map((paragraph) => (
                       <p key={paragraph.slice(0, 40)} className={styles.paragraph}>
                         {paragraph}
                       </p>
                     ))}
 
+                  {"list" in section &&
+                    section.list?.map((item) => (
+                      <p key={item.slice(0, 40)} className={styles.paragraph}>
+                        {item}
+                      </p>
+                    ))}
+
                   {"subsections" in section &&
-                    Array.isArray(
-                      (
-                        section as {
-                          subsections?: readonly {
-                            title: string;
-                            list: readonly string[];
-                          }[];
-                        }
-                      ).subsections
-                    ) &&
-                    (
-                      section as {
-                        subsections: readonly {
-                          title: string;
-                          list: readonly string[];
-                        }[];
-                      }
-                    ).subsections.map((subsection) => (
+                    section.subsections?.map((subsection) => (
                       <div key={subsection.title} className={styles.subsection}>
                         <h3 className={styles.subsectionTitle}>{subsection.title}</h3>
                         <ul className={styles.list}>
@@ -70,27 +56,16 @@ export default function TermsPage() {
                       </div>
                     ))}
 
-                  {"table" in section &&
-                    Array.isArray(
-                      (
-                        section as {
-                          table?: readonly { label: string; value: string }[];
-                        }
-                      ).table
-                    ) && (
-                      <dl className={styles.table}>
-                        {(
-                          section as {
-                            table: readonly { label: string; value: string }[];
-                          }
-                        ).table.map((row) => (
-                          <div key={row.label} className={styles.tableRow}>
-                            <dt>{row.label}</dt>
-                            <dd>{row.value}</dd>
-                          </div>
-                        ))}
-                      </dl>
-                    )}
+                  {"table" in section && section.table && (
+                    <dl className={styles.table}>
+                      {section.table.map((row) => (
+                        <div key={row.label} className={styles.tableRow}>
+                          <dt>{row.label}</dt>
+                          <dd>{row.value}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  )}
                 </section>
               </Reveal>
             ))}
