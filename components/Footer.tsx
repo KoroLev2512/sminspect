@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
 import { platformModules } from "@/lib/platform";
@@ -69,10 +70,37 @@ export function Footer() {
           </div>
         </div>
 
+        <div className={styles.grantSection}>
+          <div className={styles.grantLogos}>
+            <Image
+              src="/icons/footer/fasie.svg"
+              alt="Фонд содействия инновациям"
+              width={93}
+              height={48}
+              className={styles.grantLogo}
+              priority={false}
+            />
+            <Image
+              src="/icons/footer/univertechpred.svg"
+              alt="Платформа университетского технологического предпринимательства"
+              width={64}
+              height={48}
+              className={styles.grantLogo}
+              priority={false}
+            />
+          </div>
+          <p className={styles.grantText}>
+            {siteConfig.grantSupport}
+          </p>
+        </div>
+
         <div className={styles.requisites}>
           <p className={styles.requisitesTitle}>Реквизиты владельца сайта и Оператора:</p>
           <p>
-            {siteConfig.operatorDetails.fullName} | ИНН: {siteConfig.operatorDetails.inn} | КПП: {siteConfig.operatorDetails.kpp} | ОГРН: {siteConfig.operatorDetails.ogrn}
+            {siteConfig.operatorDetails.fullName} | ИНН: {siteConfig.operatorDetails.inn} | КПП: {siteConfig.operatorDetails.kpp} | ОГРН: {siteConfig.operatorDetails.ogrn} | ОКПО: {siteConfig.operatorDetails.okpo}
+          </p>
+          <p>
+            {siteConfig.operatorDetails.ceoTitle}: {siteConfig.operatorDetails.ceo}
           </p>
           <p>
             Адрес местонахождения: {siteConfig.operatorDetails.legalAddress}

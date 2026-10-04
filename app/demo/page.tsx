@@ -49,12 +49,16 @@ export default function DemoPage() {
                     <dd>{siteConfig.operatorDetails.fullName}</dd>
                   </div>
                   <div>
+                    <dt>{siteConfig.operatorDetails.ceoTitle}:</dt>
+                    <dd>{siteConfig.operatorDetails.ceo}</dd>
+                  </div>
+                  <div>
                     <dt>ИНН / КПП:</dt>
                     <dd>{siteConfig.operatorDetails.inn} / {siteConfig.operatorDetails.kpp}</dd>
                   </div>
                   <div>
-                    <dt>ОГРН:</dt>
-                    <dd>{siteConfig.operatorDetails.ogrn}</dd>
+                    <dt>ОГРН / ОКПО:</dt>
+                    <dd>{siteConfig.operatorDetails.ogrn} / {siteConfig.operatorDetails.okpo}</dd>
                   </div>
                   <div>
                     <dt>Адрес местонахождения:</dt>

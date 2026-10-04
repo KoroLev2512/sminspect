@@ -213,8 +213,11 @@ export const privacyPolicySections = [
     table: [
       { label: "Полное наименование", value: siteConfig.operatorDetails.fullName },
       { label: "Сокращенное наименование", value: siteConfig.operatorDetails.shortName },
+      { label: "Генеральный директор", value: siteConfig.operatorDetails.ceo },
       { label: "ИНН / КПП", value: `${siteConfig.operatorDetails.inn} / ${siteConfig.operatorDetails.kpp}` },
       { label: "ОГРН", value: siteConfig.operatorDetails.ogrn },
+      { label: "ОКПО", value: siteConfig.operatorDetails.okpo },
+      { label: "Основной вид деятельности (ОКВЭД)", value: siteConfig.operatorDetails.okved },
       { label: "Юридический адрес", value: siteConfig.operatorDetails.legalAddress },
       { label: "Почтовый адрес", value: siteConfig.operatorDetails.postalAddress },
       { label: "Контактный телефон", value: siteConfig.operatorDetails.phone },
