@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
 import { AnalyticsProvider } from "@/components/AnalyticsProvider";
 import { AuthProvider } from "@/components/AuthProvider";
 import { CookieBanner } from "@/components/CookieBanner";
@@ -8,12 +7,6 @@ import { SiteChrome } from "@/components/SiteChrome";
 import "./globals.css";
 import { rootMetadata } from "@/lib/metadata";
 import { organizationSchema, websiteSchema } from "@/lib/schema";
-
-const inter = Inter({
-  subsets: ["latin", "cyrillic"],
-  display: "swap",
-  variable: "--font-inter",
-});
 
 export const metadata: Metadata = rootMetadata;
 
@@ -30,8 +23,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ru" className={inter.variable}>
-      <body className={inter.className}>
+    <html lang="ru">
+      <body>
         <JsonLd data={[organizationSchema(), websiteSchema()]} />
         <AnalyticsProvider>
           <AuthProvider>
