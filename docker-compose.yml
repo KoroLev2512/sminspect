@@ -1,0 +1,18 @@
+services:
+  smart-inspect:
+    container_name: smart-inspect
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_MAPTILER_KEY=${NEXT_PUBLIC_MAPTILER_KEY}
+    restart: always
+    ports:
+      # Проброс строго на localhost (127.0.0.1), недоступен извне без Nginx
+      # Порты 3001 и 3002 уже заняты другими проектами, используем 3003 (или 3000)
+      - "127.0.0.1:3003:3000"
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
