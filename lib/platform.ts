@@ -21,8 +21,7 @@ export const platformModules: PlatformModule[] = [
       "Обработка фото и видеопотока",
       "Работа в сложных погодных условиях",
     ],
-    image:
-      "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80",
+    image: "/images/platform-vision.jpg",
     alt: "ИИ-анализ дефектов дорожного покрытия",
   },
   {
@@ -37,8 +36,7 @@ export const platformModules: PlatformModule[] = [
       "Рекомендации по срокам ремонта",
       "Оценка вероятности критических дефектов",
     ],
-    image:
-      "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1200&q=80",
+    image: "/images/platform-predict.jpg",
     alt: "Аналитика и прогнозирование износа",
   },
   {
@@ -53,8 +51,7 @@ export const platformModules: PlatformModule[] = [
       "Привязка к координатам и участкам",
       "Экспорт данных для ГИС",
     ],
-    image:
-      "https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=1200&q=80",
+    image: "/images/platform-map.jpg",
     alt: "Карта состояния инфраструктуры",
   },
   {
@@ -69,8 +66,7 @@ export const platformModules: PlatformModule[] = [
       "Интеграция с УДС и корпоративными системами",
       "Журнал событий и эскалация",
     ],
-    image:
-      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1200&q=80",
+    image: "/images/platform-alert.jpg",
     alt: "Система оповещений о дефектах",
   },
 ];

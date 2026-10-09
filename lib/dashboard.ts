@@ -117,8 +117,7 @@ export const objects: InfraObject[] = [
     defects: 14,
     criticalDefects: 3,
     forecastMonths: 2,
-    image:
-      "https://images.unsplash.com/photo-1545459720-aac8509eb02c?auto=format&fit=crop&w=1200&q=80",
+    image: "/images/dashboard-obj-1.jpg",
   },
   {
     id: "obj-2",
@@ -134,8 +133,7 @@ export const objects: InfraObject[] = [
     defects: 22,
     criticalDefects: 1,
     forecastMonths: 7,
-    image:
-      "https://images.unsplash.com/photo-1516216628859-9bccecab13ca?auto=format&fit=crop&w=1200&q=80",
+    image: "/images/dashboard-obj-2.jpg",
   },
   {
     id: "obj-3",
@@ -151,8 +149,7 @@ export const objects: InfraObject[] = [
     defects: 6,
     criticalDefects: 0,
     forecastMonths: 16,
-    image:
-      "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=1200&q=80",
+    image: "/images/dashboard-obj-3.jpg",
   },
   {
     id: "obj-4",
@@ -168,8 +165,7 @@ export const objects: InfraObject[] = [
     defects: 18,
     criticalDefects: 1,
     forecastMonths: 9,
-    image:
-      "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?auto=format&fit=crop&w=1200&q=80",
+    image: "/images/dashboard-obj-4.jpg",
   },
   {
     id: "obj-5",
@@ -185,8 +181,7 @@ export const objects: InfraObject[] = [
     defects: 11,
     criticalDefects: 2,
     forecastMonths: 4,
-    image:
-      "https://images.unsplash.com/photo-1520962880247-cfaf541c8724?auto=format&fit=crop&w=1200&q=80",
+    image: "/images/dashboard-obj-5.jpg",
   },
   {
     id: "obj-6",
@@ -202,8 +197,7 @@ export const objects: InfraObject[] = [
     defects: 4,
     criticalDefects: 0,
     forecastMonths: 21,
-    image:
-      "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=1200&q=80",
+    image: "/images/dashboard-obj-6.jpg",
   },
   {
     id: "obj-7",
@@ -219,8 +213,7 @@ export const objects: InfraObject[] = [
     defects: 9,
     criticalDefects: 1,
     forecastMonths: 6,
-    image:
-      "https://images.unsplash.com/photo-1470004914212-05527e49370b?auto=format&fit=crop&w=1200&q=80",
+    image: "/images/dashboard-obj-7.jpg",
   },
   {
     id: "obj-8",
@@ -236,13 +229,11 @@ export const objects: InfraObject[] = [
     defects: 3,
     criticalDefects: 0,
     forecastMonths: 24,
-    image:
-      "https://images.unsplash.com/photo-1470224114660-3f6686c562eb?auto=format&fit=crop&w=1200&q=80",
+    image: "/images/dashboard-obj-8.jpg",
   },
 ];
 
-const defectImage =
-  "https://images.unsplash.com/photo-1601158935942-52255782d322?auto=format&fit=crop&w=600&q=80";
+const defectImage = "/images/defect-default.jpg";
 
 export const defects: Defect[] = [
   {

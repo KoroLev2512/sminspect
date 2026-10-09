@@ -555,7 +555,7 @@ Production-домен: **sminspect.ru** (настроен в `lib/site.ts` ка�
 - [ ] Интеграция формы дemo с CRM / email-уведомлениями
 - [ ] Подключение Яндекс.Метрики и Google Analytics
 - [ ] Верификация в Google Search Console и Яндекс Вебмастер
-- [ ] Self-hosted изображения вместо Unsplash
+- [x] Self-hosted изображения вместо Unsplash
 - [ ] RSS-лента для `/news`
 - [ ] Мультиязычность (hreflang)
 - [ ] Блог / CMS-интеграция для новостей

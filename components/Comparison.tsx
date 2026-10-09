@@ -20,7 +20,7 @@ export function Comparison() {
             <span className={styles.panelLabel}>Ручной осмотр</span>
             <div className={styles.panelImage}>
               <Image
-                src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=900&q=80"
+                src="/images/compare-manual.jpg"
                 alt="Ручной осмотр дорожного покрытия"
                 fill
                 className={styles.image}
@@ -39,7 +39,7 @@ export function Comparison() {
             <span className={styles.panelLabel}>SmartInspect</span>
             <div className={styles.panelImage}>
               <Image
-                src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=900&q=80"
+                src="/images/compare-ai.jpg"
                 alt="ИИ-анализ дефектов инфраструктуры"
                 fill
                 className={styles.image}

@@ -45,7 +45,7 @@ export function Hero() {
         <article className={styles.card}>
           <div className={styles.cardImage}>
             <Image
-              src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?auto=format&fit=crop&w=800&q=80"
+              src="/images/hero-drone.jpg"
               alt="Дрон над дорожной инфраструктурой"
               fill
               className={styles.image}

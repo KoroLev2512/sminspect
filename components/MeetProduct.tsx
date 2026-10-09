@@ -7,9 +7,9 @@ import { platformModules } from "@/lib/platform";
 import styles from "./MeetProduct.module.css";
 
 const gallery = [
-  "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80",
-  "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&w=600&q=80",
-  "https://images.unsplash.com/photo-1513828583688-c52646db42da?auto=format&fit=crop&w=600&q=80",
+  "/images/compare-ai.jpg",
+  "/images/meet-product-2.jpg",
+  "/images/meet-product-3.jpg",
 ];
 
 export function MeetProduct() {
