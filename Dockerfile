@@ -39,9 +39,7 @@ ENV NEXT_TELEMETRY_DISABLED=1 \
 ARG NEXT_PUBLIC_MAPTILER_KEY
 ENV NEXT_PUBLIC_MAPTILER_KEY=$NEXT_PUBLIC_MAPTILER_KEY
 
-# Инкрементальный кэш компилятора Next.js (.next/cache) через BuildKit
-RUN --mount=type=cache,target=/app/.next/cache \
-    npm run build
+RUN npm run build
 
 # -----------------------------------------------------------------------------
 # 4. Финальный продакшен-образ (runner)
