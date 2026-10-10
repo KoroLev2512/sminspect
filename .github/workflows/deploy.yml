@@ -1,0 +1,33 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - master
+
+# Предотвращает одновременный запуск двух деплоев
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT || 22 }}
+          script_stop: true
+          script: |
+            set -e
+            echo "🚀 Starting deploy for smart-inspect..."
+            cd /root/sminspect
+            git pull origin master
+            docker compose up -d --build
+            docker image prune -f
+            echo "✅ Deployment completed successfully!"
