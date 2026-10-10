@@ -16,6 +16,7 @@ export function Logo({ size = 32, showText = true, className }: LogoProps) {
         alt="SmartInspect"
         width={size}
         height={size}
+        style={{ width: `${size}px`, height: `${size}px`, objectFit: "contain" }}
         className={styles.mark}
         priority
       />

@@ -95,7 +95,14 @@ export function AuthScreen({ mode }: { mode: "login" | "register" }) {
         <div className={styles.asideGrid} aria-hidden />
         <Link href="/" className={styles.brand}>
           <span className={styles.brandMark}>
-            <Image src="/logo.png" alt="" width={28} height={28} priority />
+            <Image
+              src="/logo.png"
+              alt=""
+              width={28}
+              height={28}
+              style={{ width: "28px", height: "28px", objectFit: "contain" }}
+              priority
+            />
           </span>
           SmartInspect
         </Link>

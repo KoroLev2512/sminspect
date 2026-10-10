@@ -75,6 +75,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
             alt=""
             width={36}
             height={36}
+            style={{ width: "36px", height: "36px", objectFit: "contain" }}
             className={styles.loaderLogo}
             priority
           />
@@ -93,7 +94,14 @@ export function DashboardShell({ children }: { children: ReactNode }) {
       <aside className={`${styles.sidebar} ${menuOpen ? styles.sidebarOpen : ""}`}>
         <Link href="/dashboard" className={styles.sidebarBrand}>
           <span className={styles.brandMark}>
-            <Image src="/logo.png" alt="" width={28} height={28} priority />
+            <Image
+              src="/logo.png"
+              alt=""
+              width={28}
+              height={28}
+              style={{ width: "28px", height: "28px", objectFit: "contain" }}
+              priority
+            />
           </span>
           SmartInspect
         </Link>
