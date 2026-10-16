@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------------------
 # 1. Базовый образ: системные пакеты ставятся один раз для всех стадий
 # -----------------------------------------------------------------------------
-FROM node:20-alpine AS base
+FROM node:22-alpine AS base
 RUN apk add --no-cache libc6-compat dumb-init
 WORKDIR /app
 
@@ -74,5 +74,4 @@ EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
   CMD wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/ || exit 1
 
-ENTRYPOINT ["dumb-init", "--"]
-CMD ["node", "server.js"]
+ENTRYPOINT ["dumb-init", "node", "server.js"]

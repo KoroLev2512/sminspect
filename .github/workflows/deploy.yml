@@ -1,33 +1,84 @@
-name: Deploy to Production
+name: Production CI/CD (Build & Deploy)
 
 on:
   push:
     branches:
       - master
+      - main
 
-# Предотвращает одновременный запуск двух деплоев
 concurrency:
   group: production-deploy
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.2.0
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🛠️ Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: 📦 Build Docker image (linux/amd64) with Buildx cache
+        uses: docker/build-push-action@v6
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.PORT || 22 }}
-          script_stop: true
-          script: |
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64
+          tags: smart-inspect:latest
+          build-args: |
+            NEXT_PUBLIC_MAPTILER_KEY=${{ secrets.NEXT_PUBLIC_MAPTILER_KEY || 'RUNxFy5DYh1RYPQHDzWi' }}
+          outputs: type=docker,dest=/tmp/smart-inspect.tar
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: 🗜️ Compress Docker image
+        run: |
+          echo "Compressing Docker image archive..."
+          gzip -f /tmp/smart-inspect.tar
+          ls -lh /tmp/smart-inspect.tar.gz
+
+      - name: 🚀 Transfer and Deploy to FirstVDS Server via SSH
+        env:
+          HOST: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          PORT: ${{ secrets.PORT || 22 }}
+          SERVER_DIR: /var/www/smart-inspect
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_KEY" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          ssh-keyscan -p "$PORT" "$HOST" >> ~/.ssh/known_hosts 2>/dev/null
+
+          echo "📁 Ensuring target directory exists on server: $SERVER_DIR..."
+          ssh -i ~/.ssh/id_deploy -p "$PORT" "$USERNAME@$HOST" "mkdir -p $SERVER_DIR"
+
+          echo "📄 Syncing docker-compose.yml to server..."
+          scp -i ~/.ssh/id_deploy -P "$PORT" docker-compose.yml "$USERNAME@$HOST:$SERVER_DIR/docker-compose.yml"
+
+          echo "🚚 Transferring and loading pre-built Docker image into server dockerd..."
+          cat /tmp/smart-inspect.tar.gz | ssh -i ~/.ssh/id_deploy -p "$PORT" "$USERNAME@$HOST" "gunzip -c | docker load"
+
+          echo "🔄 Restarting container and cleaning up old images..."
+          ssh -i ~/.ssh/id_deploy -p "$PORT" "$USERNAME@$HOST" "
             set -e
-            echo "🚀 Starting deploy for smart-inspect..."
-            cd /root/sminspect
-            git pull origin master
-            docker compose up -d --build
+            cd $SERVER_DIR
+            if [ ! -f .env ]; then
+              if [ -f /root/sminspect/.env ]; then
+                echo 'Copying existing .env from /root/sminspect/.env...'
+                cp /root/sminspect/.env .env
+              else
+                touch .env
+              fi
+            fi
+            docker compose up -d --remove-orphans
             docker image prune -f
-            echo "✅ Deployment completed successfully!"
+            echo 'Health check:'
+            docker compose ps
+          "
+
+          echo "✅ Deploy completed successfully!"
