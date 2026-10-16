@@ -17,6 +17,15 @@ SERVER_DIR="${SERVER_DIR:-/var/www/smart-inspect}"
 IMAGE_NAME="smart-inspect:latest"
 TAR_FILE="/tmp/smart-inspect-build.tar.gz"
 
+SSH_KEY_OPT=()
+if [ -n "${SSH_KEY:-}" ]; then
+  SSH_KEY_OPT=("-i" "$SSH_KEY")
+elif [ -f "$HOME/.ssh/firstvds_deploy" ]; then
+  SSH_KEY_OPT=("-i" "$HOME/.ssh/firstvds_deploy")
+elif [ -f "$HOME/.ssh/github_actions" ]; then
+  SSH_KEY_OPT=("-i" "$HOME/.ssh/github_actions")
+fi
+
 echo "=========================================================="
 echo "🚀 Начало экстренного деплоя SmartInspect на $SERVER_USER@$SERVER_HOST"
 echo "=========================================================="
@@ -46,19 +55,19 @@ echo "    Размер архива: $ARCHIVE_SIZE"
 
 # 4. Передача файлов на сервер
 echo "🚚 [3/5] Передача архива и docker-compose.yml на сервер ($SERVER_DIR)..."
-ssh -p "$SERVER_PORT" "$SERVER_USER@$SERVER_HOST" "mkdir -p $SERVER_DIR /tmp"
-scp -P "$SERVER_PORT" "$TAR_FILE" "$SERVER_USER@$SERVER_HOST:/tmp/smart-inspect.tar.gz"
-scp -P "$SERVER_PORT" docker-compose.yml "$SERVER_USER@$SERVER_HOST:$SERVER_DIR/docker-compose.yml"
+ssh -p "$SERVER_PORT" ${SSH_KEY_OPT[@]+"${SSH_KEY_OPT[@]}"} "$SERVER_USER@$SERVER_HOST" "mkdir -p $SERVER_DIR /tmp"
+scp -P "$SERVER_PORT" ${SSH_KEY_OPT[@]+"${SSH_KEY_OPT[@]}"} "$TAR_FILE" "$SERVER_USER@$SERVER_HOST:/tmp/smart-inspect.tar.gz"
+scp -P "$SERVER_PORT" ${SSH_KEY_OPT[@]+"${SSH_KEY_OPT[@]}"} docker-compose.yml "$SERVER_USER@$SERVER_HOST:$SERVER_DIR/docker-compose.yml"
 
 # Копируем .env если его еще нет на сервере
 if [ -f .env ]; then
-  ssh -p "$SERVER_PORT" "$SERVER_USER@$SERVER_HOST" "[ -f $SERVER_DIR/.env ] || true"
-  scp -P "$SERVER_PORT" .env "$SERVER_USER@$SERVER_HOST:$SERVER_DIR/.env" || true
+  ssh -p "$SERVER_PORT" ${SSH_KEY_OPT[@]+"${SSH_KEY_OPT[@]}"} "$SERVER_USER@$SERVER_HOST" "[ -f $SERVER_DIR/.env ] || true"
+  scp -P "$SERVER_PORT" ${SSH_KEY_OPT[@]+"${SSH_KEY_OPT[@]}"} .env "$SERVER_USER@$SERVER_HOST:$SERVER_DIR/.env" || true
 fi
 
 # 5. Загрузка образа и перезапуск контейнера на сервере
 echo "🔄 [4/5] Загрузка образа на сервере и перезапуск контейнера..."
-ssh -p "$SERVER_PORT" "$SERVER_USER@$SERVER_HOST" "
+ssh -p "$SERVER_PORT" ${SSH_KEY_OPT[@]+"${SSH_KEY_OPT[@]}"} "$SERVER_USER@$SERVER_HOST" "
   set -e
   echo 'Loading docker image...'
   gunzip -c /tmp/smart-inspect.tar.gz | docker load
@@ -82,7 +91,7 @@ ssh -p "$SERVER_PORT" "$SERVER_USER@$SERVER_HOST" "
 
 # 6. Проверка работоспособности
 echo "🩺 [5/5] Проверка статуса контейнера..."
-ssh -p "$SERVER_PORT" "$SERVER_USER@$SERVER_HOST" "
+ssh -p "$SERVER_PORT" ${SSH_KEY_OPT[@]+"${SSH_KEY_OPT[@]}"} "$SERVER_USER@$SERVER_HOST" "
   cd $SERVER_DIR
   docker compose ps
   echo ''
