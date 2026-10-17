@@ -46,7 +46,7 @@ jobs:
           HOST: ${{ secrets.HOST }}
           USERNAME: ${{ secrets.USERNAME }}
           SSH_KEY: ${{ secrets.SSH_KEY }}
-          PORT: ${{ secrets.PORT || 22 }}
+          PORT: ${{ secrets.PORT || 2337 }}
           SERVER_DIR: /var/www/smart-inspect
         run: |
           mkdir -p ~/.ssh

@@ -12,7 +12,7 @@ set -euo pipefail
 # Конфигурация по умолчанию (можно переопределить через переменные окружения)
 SERVER_HOST="${SERVER_HOST:-149.154.67.173}"
 SERVER_USER="${SERVER_USER:-root}"
-SERVER_PORT="${SERVER_PORT:-22}"
+SERVER_PORT="${SERVER_PORT:-2337}"
 SERVER_DIR="${SERVER_DIR:-/var/www/smart-inspect}"
 IMAGE_NAME="smart-inspect:latest"
 TAR_FILE="/tmp/smart-inspect-build.tar.gz"
