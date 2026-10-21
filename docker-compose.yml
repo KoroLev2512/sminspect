@@ -10,8 +10,10 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
+    mem_limit: 150m
     logging:
       driver: "json-file"
       options:
         max-size: "10m"
         max-file: "3"
+
