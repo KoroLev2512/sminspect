@@ -81,6 +81,12 @@ jobs:
           echo "$GHCR_TOKEN" | remote "docker login ghcr.io -u $GHCR_USER --password-stdin >/dev/null"
           time remote "docker pull -q $IMAGE:$TAG && docker tag $IMAGE:$TAG smart-inspect:latest; status=\$?; docker logout ghcr.io >/dev/null; exit \$status"
 
+          # Drop the per-commit GHCR tags: the running image stays referenced as
+          # smart-inspect:latest, and previous versions become dangling so that
+          # `docker image prune` below can remove them (otherwise every deploy
+          # would leave ~350 MB behind).
+          remote "docker images --format '{{.Repository}}:{{.Tag}}' $IMAGE | xargs -r docker rmi >/dev/null"
+
           echo "🔄 [2/2] Restarting container and cleaning up old images..."
           remote "SERVER_DIR=$SERVER_DIR bash -s" <<'REMOTE'
           set -e
