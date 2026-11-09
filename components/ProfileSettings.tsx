@@ -1,12 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import { Icon } from "@/components/dash-icons";
 import { UserAvatar } from "@/components/dash-ui";
 import {
   MIN_PASSWORD_LENGTH,
+  avatarEmojis,
   defaultNotifications,
   formatPhone,
   isValidEmail,
@@ -16,7 +17,6 @@ import {
   type AuthUser,
   type NotificationId,
 } from "@/lib/auth";
-import { AVATAR_ACCEPT, fileToAvatar } from "@/lib/avatar";
 import styles from "@/components/Dashboard.module.css";
 
 /** Shows a "Сохранено" mark for a moment after a successful save. */
@@ -46,7 +46,7 @@ function SavedMark({ show, text = "Сохранено" }: { show: boolean; text?
 type ProfileForm = Pick<
   AuthUser,
   "name" | "email" | "company" | "role" | "segment"
-> & { phone: string; avatar: string };
+> & { phone: string; emoji: string };
 
 type ProfileErrors = Partial<Record<"name" | "email" | "phone", string>>;
 
@@ -58,7 +58,7 @@ function toForm(user: AuthUser): ProfileForm {
     company: user.company,
     role: user.role,
     segment: user.segment,
-    avatar: user.avatar ?? "",
+    emoji: user.emoji ?? "",
   };
 }
 
@@ -75,10 +75,7 @@ export function ProfileCard({ user }: { user: AuthUser }) {
   const [form, setForm] = useState<ProfileForm>(() => toForm(user));
   const [errors, setErrors] = useState<ProfileErrors>({});
   const [formError, setFormError] = useState("");
-  const [avatarError, setAvatarError] = useState("");
-  const [processing, setProcessing] = useState(false);
   const [saved, flashSaved] = useFlash();
-  const fileRef = useRef<HTMLInputElement>(null);
 
   const initial = toForm(user);
   const dirty = (Object.keys(initial) as (keyof ProfileForm)[]).some(
@@ -99,21 +96,6 @@ export function ProfileCard({ user }: { user: AuthUser }) {
     setFormError("");
   }
 
-  async function onAvatarPick(e: ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    e.target.value = "";
-    if (!file) return;
-    setAvatarError("");
-    setProcessing(true);
-    try {
-      set("avatar", await fileToAvatar(file));
-    } catch (err) {
-      setAvatarError(err instanceof Error ? err.message : "Не удалось загрузить фото");
-    } finally {
-      setProcessing(false);
-    }
-  }
-
   function submit(e: FormEvent) {
     e.preventDefault();
     const found = validateProfile(form);
@@ -127,7 +109,7 @@ export function ProfileCard({ user }: { user: AuthUser }) {
       company: form.company.trim(),
       role: form.role.trim(),
       segment: form.segment,
-      avatar: form.avatar || undefined,
+      emoji: form.emoji || undefined,
     });
     if (!result.ok) {
       if (result.error.includes("почт")) setErrors({ email: result.error });
@@ -142,7 +124,6 @@ export function ProfileCard({ user }: { user: AuthUser }) {
     setForm(toForm(user));
     setErrors({});
     setFormError("");
-    setAvatarError("");
   }
 
   return (
@@ -154,33 +135,37 @@ export function ProfileCard({ user }: { user: AuthUser }) {
 
       <form onSubmit={submit} noValidate>
         <div className={styles.avatarRow}>
-          <UserAvatar name={form.name || user.name} avatar={form.avatar} size={72} />
+          <UserAvatar name={form.name || user.name} emoji={form.emoji} size={72} />
           <div className={styles.avatarActions}>
-            <div className={styles.avatarButtons}>
+            <span className={styles.emojiLabel} id="emoji-label">
+              Аватар
+            </span>
+            <div className={styles.emojiGrid} role="radiogroup" aria-labelledby="emoji-label">
               <button
                 type="button"
-                className={styles.btnSecondary}
-                onClick={() => fileRef.current?.click()}
-                disabled={processing}
+                role="radio"
+                aria-checked={!form.emoji}
+                aria-label="Инициалы"
+                title="Инициалы"
+                className={`${styles.emojiOption} ${styles.emojiInitials} ${!form.emoji ? styles.emojiOptionActive : ""}`}
+                onClick={() => set("emoji", "")}
               >
-                {processing ? "Обработка…" : form.avatar ? "Заменить фото" : "Загрузить фото"}
+                Аа
               </button>
-              {form.avatar && (
-                <button type="button" className={styles.btnGhost} onClick={() => set("avatar", "")}>
-                  Удалить
+              {avatarEmojis.map((emoji) => (
+                <button
+                  key={emoji}
+                  type="button"
+                  role="radio"
+                  aria-checked={form.emoji === emoji}
+                  aria-label={`Эмодзи ${emoji}`}
+                  className={`${styles.emojiOption} ${form.emoji === emoji ? styles.emojiOptionActive : ""}`}
+                  onClick={() => set("emoji", emoji)}
+                >
+                  {emoji}
                 </button>
-              )}
+              ))}
             </div>
-            <span className={avatarError ? styles.hint : styles.fieldNote} role={avatarError ? "alert" : undefined}>
-              {avatarError || "JPG, PNG или WebP до 5 МБ. Фото обрежется до квадрата."}
-            </span>
-            <input
-              ref={fileRef}
-              type="file"
-              accept={AVATAR_ACCEPT}
-              onChange={onAvatarPick}
-              hidden
-            />
           </div>
         </div>
 
@@ -262,7 +247,7 @@ export function ProfileCard({ user }: { user: AuthUser }) {
         )}
 
         <div className={styles.formActions}>
-          <button type="submit" className="btnPrimary" disabled={!dirty || processing}>
+          <button type="submit" className="btnPrimary" disabled={!dirty}>
             Сохранить изменения
           </button>
           {dirty && (

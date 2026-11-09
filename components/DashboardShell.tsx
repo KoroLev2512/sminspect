@@ -118,7 +118,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
 
         <div className={styles.sidebarFooter}>
           <Link href="/dashboard/settings" className={styles.userChip}>
-            <UserAvatar name={user.name} avatar={user.avatar} />
+            <UserAvatar name={user.name} emoji={user.emoji} />
             <span className={styles.userChipMeta}>
               <span className={styles.userChipName}>{user.name}</span>
               <span className={styles.userChipRole}>{user.company}</span>

@@ -276,23 +276,33 @@ export function initials(name: string) {
     .join("");
 }
 
-/** Profile photo if the user uploaded one, otherwise initials on the brand gradient. */
+/** Emoji avatar if the user picked one, otherwise initials on the brand gradient. */
 export function UserAvatar({
   name,
-  avatar,
+  emoji,
   size = 36,
 }: {
   name: string;
-  avatar?: string;
+  emoji?: string;
   size?: number;
 }) {
-  const style: CSSProperties = { width: size, height: size, fontSize: Math.round(size * 0.38) };
-  if (avatar) {
-    // eslint-disable-next-line @next/next/no-img-element
-    return <img src={avatar} alt="" className={styles.avatar} style={{ ...style, objectFit: "cover" }} />;
+  if (emoji) {
+    return (
+      <span
+        className={`${styles.avatar} ${styles.avatarEmoji}`}
+        style={{ width: size, height: size, fontSize: Math.round(size * 0.56) }}
+        aria-hidden="true"
+      >
+        {emoji}
+      </span>
+    );
   }
   return (
-    <span className={styles.avatar} style={style} aria-hidden="true">
+    <span
+      className={styles.avatar}
+      style={{ width: size, height: size, fontSize: Math.round(size * 0.38) }}
+      aria-hidden="true"
+    >
       {initials(name)}
     </span>
   );

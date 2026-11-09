@@ -14,10 +14,37 @@ export interface AuthUser {
   role: string;
   segment: string;
   plan: PlanId;
-  /** Фото профиля как data URL (уменьшено до 256×256), отсутствует — инициалы */
-  avatar?: string;
+  /** Эмодзи-аватар; отсутствует — показываются инициалы */
+  emoji?: string;
   notifications?: NotificationPrefs;
 }
+
+/** Набор эмодзи для аватара: профессии отрасли и нейтральные варианты. */
+export const avatarEmojis = [
+  "👷",
+  "👷‍♀️",
+  "🧑‍🔧",
+  "👩‍🔧",
+  "🧑‍💼",
+  "👩‍💼",
+  "🧑‍💻",
+  "👩‍💻",
+  "🧑‍🔬",
+  "👩‍🔬",
+  "🦺",
+  "🚧",
+  "🌉",
+  "🛣️",
+  "🏗️",
+  "🚁",
+  "🛰️",
+  "🗺️",
+  "📐",
+  "🔍",
+  "🦉",
+  "🦊",
+  "🐻",
+];
 
 export const defaultNotifications: NotificationPrefs = {
   critical: true,

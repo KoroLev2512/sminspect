@@ -50,7 +50,7 @@ interface AuthContextValue {
   setPlan: (plan: PlanId) => void;
 }
 
-const QUOTA_ERROR = "Не хватает места в хранилище браузера. Попробуйте фото меньшего размера.";
+const QUOTA_ERROR = "Не хватает места в хранилище браузера, изменения не сохранены.";
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
@@ -67,6 +67,27 @@ function writeAccounts(accounts: StoredAccount[]) {
   localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(accounts));
 }
 
+/**
+ * Profile photos (an `avatar` data URL) were briefly supported before emoji
+ * avatars replaced them. Strip them from the session and accounts so they
+ * stop taking up localStorage space.
+ */
+function dropLegacyPhotoAvatars(session: AuthUser | null) {
+  if (session && "avatar" in session) {
+    delete (session as AuthUser & { avatar?: string }).avatar;
+    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(session));
+  }
+  const accounts = readAccounts();
+  let changed = false;
+  for (const account of accounts) {
+    if ("avatar" in account.user) {
+      delete (account.user as AuthUser & { avatar?: string }).avatar;
+      changed = true;
+    }
+  }
+  if (changed) writeAccounts(accounts);
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [status, setStatus] = useState<"loading" | "ready">("loading");
@@ -77,6 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const raw = localStorage.getItem(AUTH_STORAGE_KEY);
       if (raw) restored = JSON.parse(raw) as AuthUser;
+      dropLegacyPhotoAvatars(restored);
     } catch {
       /* ignore corrupted session */
     }
