@@ -13,7 +13,7 @@ concurrency:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
 
     steps:
       - name: 📥 Checkout repository
@@ -54,31 +54,44 @@ jobs:
           chmod 600 ~/.ssh/id_deploy
           ssh-keyscan -p "$PORT" "$HOST" >> ~/.ssh/known_hosts 2>/dev/null
 
+          SSH_OPTS=(-i ~/.ssh/id_deploy -o ServerAliveInterval=30 -o ServerAliveCountMax=6)
+          remote() { ssh "${SSH_OPTS[@]}" -p "$PORT" "$USERNAME@$HOST" "$@"; }
+
           echo "📁 Ensuring target directory exists on server: $SERVER_DIR..."
-          ssh -i ~/.ssh/id_deploy -p "$PORT" "$USERNAME@$HOST" "mkdir -p $SERVER_DIR"
+          remote "mkdir -p $SERVER_DIR"
 
           echo "📄 Syncing docker-compose.yml to server..."
-          scp -i ~/.ssh/id_deploy -P "$PORT" docker-compose.yml "$USERNAME@$HOST:$SERVER_DIR/docker-compose.yml"
+          scp "${SSH_OPTS[@]}" -P "$PORT" docker-compose.yml "$USERNAME@$HOST:$SERVER_DIR/docker-compose.yml"
 
-          echo "🚚 Transferring and loading pre-built Docker image into server dockerd..."
-          cat /tmp/smart-inspect.tar.gz | ssh -i ~/.ssh/id_deploy -p "$PORT" "$USERNAME@$HOST" "gunzip -c | docker load"
+          # Upload first, load second: the server has little RAM, so streaming
+          # straight into `docker load` can stall with no visible progress.
+          echo "🚚 [1/3] Uploading image archive..."
+          time scp "${SSH_OPTS[@]}" -P "$PORT" /tmp/smart-inspect.tar.gz "$USERNAME@$HOST:/tmp/smart-inspect.tar.gz"
 
-          echo "🔄 Restarting container and cleaning up old images..."
-          ssh -i ~/.ssh/id_deploy -p "$PORT" "$USERNAME@$HOST" "
-            set -e
-            cd $SERVER_DIR
-            if [ ! -f .env ]; then
-              if [ -f /root/sminspect/.env ]; then
-                echo 'Copying existing .env from /root/sminspect/.env...'
-                cp /root/sminspect/.env .env
-              else
-                touch .env
-              fi
+          echo "📦 [2/3] Loading image into server dockerd..."
+          time remote "docker load -i /tmp/smart-inspect.tar.gz && rm -f /tmp/smart-inspect.tar.gz"
+
+          echo "🔄 [3/3] Restarting container and cleaning up old images..."
+          remote "SERVER_DIR=$SERVER_DIR bash -s" <<'REMOTE'
+          set -e
+          cd "$SERVER_DIR"
+          [ -f .env ] || touch .env
+
+          # A container named smart-inspect may be left over from another
+          # compose project (it was once started from /root/sminspect).
+          # Compose cannot reuse the name, so remove it before `up`.
+          if docker inspect smart-inspect >/dev/null 2>&1; then
+            OLD_DIR=$(docker inspect -f '{{ index .Config.Labels "com.docker.compose.project.working_dir" }}' smart-inspect 2>/dev/null || true)
+            if [ "$OLD_DIR" != "$SERVER_DIR" ]; then
+              echo "Removing stale smart-inspect container (from '${OLD_DIR:-unknown}')..."
+              docker rm -f smart-inspect
             fi
-            docker compose up -d --remove-orphans
-            docker image prune -f
-            echo 'Health check:'
-            docker compose ps
-          "
+          fi
+
+          docker compose up -d --remove-orphans
+          docker image prune -f
+          echo 'Health check:'
+          docker compose ps
+          REMOTE
 
           echo "✅ Deploy completed successfully!"
