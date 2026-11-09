@@ -2,6 +2,9 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useState } from "react";
+import { DefectPhoto } from "@/components/DefectPhoto";
+import { DefectViewer } from "@/components/DefectViewer";
 import { Icon } from "@/components/dash-icons";
 import {
   ConditionMeter,
@@ -23,6 +26,7 @@ import styles from "@/components/Dashboard.module.css";
 export default function ObjectDetailPage() {
   const params = useParams<{ id: string }>();
   const object = getObject(params.id);
+  const [openId, setOpenId] = useState<string | null>(null);
 
   if (!object) {
     return (
@@ -92,6 +96,7 @@ export default function ObjectDetailPage() {
               <table className={styles.table}>
                 <thead>
                   <tr>
+                    <th className={styles.thumbCell}>Кадр</th>
                     <th>Тип</th>
                     <th>Расположение</th>
                     <th>ИИ</th>
@@ -101,7 +106,10 @@ export default function ObjectDetailPage() {
                 </thead>
                 <tbody>
                   {defects.map((d) => (
-                    <tr key={d.id}>
+                    <tr key={d.id} className={styles.rowLink} onClick={() => setOpenId(d.id)}>
+                      <td className={styles.thumbCell}>
+                        <DefectPhoto defect={d} className={styles.defectThumb} />
+                      </td>
                       <td className={styles.cellStrong}>{d.type}</td>
                       <td className={styles.cellMuted}>{d.location}</td>
                       <td className={styles.cellMuted}>{d.confidence}%</td>
@@ -165,6 +173,8 @@ export default function ObjectDetailPage() {
           </div>
         </div>
       </div>
+
+      <DefectViewer defects={defects} openId={openId} onChange={setOpenId} />
     </div>
   );
 }

@@ -27,6 +27,14 @@ export interface InfraObject {
   image: string;
 }
 
+/** Прямоугольник детекции ИИ: координаты и размеры в % от кадра */
+export interface BBox {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
 export interface Defect {
   id: string;
   objectId: string;
@@ -39,7 +47,10 @@ export interface Defect {
   confidence: number;
   source: InspectionSource;
   recommendation: string;
+  /** Кадр инспекции, на котором ИИ обнаружил дефект */
   image: string;
+  /** Область детекции на кадре, в процентах от ширины/высоты */
+  bbox: BBox;
 }
 
 export interface Inspection {
@@ -117,7 +128,7 @@ export const objects: InfraObject[] = [
     defects: 14,
     criticalDefects: 3,
     forecastMonths: 2,
-    image: "/images/dashboard-obj-1.jpg",
+    image: "/images/inspect/obj-1.jpg",
   },
   {
     id: "obj-2",
@@ -133,7 +144,7 @@ export const objects: InfraObject[] = [
     defects: 22,
     criticalDefects: 1,
     forecastMonths: 7,
-    image: "/images/dashboard-obj-2.jpg",
+    image: "/images/inspect/obj-2.jpg",
   },
   {
     id: "obj-3",
@@ -149,7 +160,7 @@ export const objects: InfraObject[] = [
     defects: 6,
     criticalDefects: 0,
     forecastMonths: 16,
-    image: "/images/dashboard-obj-3.jpg",
+    image: "/images/inspect/obj-3.jpg",
   },
   {
     id: "obj-4",
@@ -165,7 +176,7 @@ export const objects: InfraObject[] = [
     defects: 18,
     criticalDefects: 1,
     forecastMonths: 9,
-    image: "/images/dashboard-obj-4.jpg",
+    image: "/images/inspect/obj-4.jpg",
   },
   {
     id: "obj-5",
@@ -181,7 +192,7 @@ export const objects: InfraObject[] = [
     defects: 11,
     criticalDefects: 2,
     forecastMonths: 4,
-    image: "/images/dashboard-obj-5.jpg",
+    image: "/images/inspect/obj-5.jpg",
   },
   {
     id: "obj-6",
@@ -197,7 +208,7 @@ export const objects: InfraObject[] = [
     defects: 4,
     criticalDefects: 0,
     forecastMonths: 21,
-    image: "/images/dashboard-obj-6.jpg",
+    image: "/images/inspect/obj-6.jpg",
   },
   {
     id: "obj-7",
@@ -213,7 +224,7 @@ export const objects: InfraObject[] = [
     defects: 9,
     criticalDefects: 1,
     forecastMonths: 6,
-    image: "/images/dashboard-obj-7.jpg",
+    image: "/images/inspect/obj-7.jpg",
   },
   {
     id: "obj-8",
@@ -229,11 +240,9 @@ export const objects: InfraObject[] = [
     defects: 3,
     criticalDefects: 0,
     forecastMonths: 24,
-    image: "/images/dashboard-obj-8.jpg",
+    image: "/images/inspect/obj-8.jpg",
   },
 ];
-
-const defectImage = "/images/defect-default.jpg";
 
 export const defects: Defect[] = [
   {
@@ -247,7 +256,8 @@ export const defects: Defect[] = [
     confidence: 96,
     source: "drone",
     recommendation: "Немедленное обследование опоры, ограничение нагрузки.",
-    image: defectImage,
+    image: "/images/inspect/def-1.jpg",
+    bbox: { x: 12, y: 14, w: 76, h: 58 },
   },
   {
     id: "def-2",
@@ -260,7 +270,8 @@ export const defects: Defect[] = [
     confidence: 92,
     source: "drone",
     recommendation: "Установка маяков, мониторинг раскрытия, ремонт в течение 30 дней.",
-    image: defectImage,
+    image: "/images/inspect/def-2.jpg",
+    bbox: { x: 38, y: 18, w: 32, h: 40 },
   },
   {
     id: "def-3",
@@ -273,7 +284,8 @@ export const defects: Defect[] = [
     confidence: 88,
     source: "sensor",
     recommendation: "Плановая замена шва при ближайшем ремонте.",
-    image: defectImage,
+    image: "/images/inspect/def-3.jpg",
+    bbox: { x: 22, y: 38, w: 76, h: 30 },
   },
   {
     id: "def-4",
@@ -286,20 +298,22 @@ export const defects: Defect[] = [
     confidence: 94,
     source: "mobile",
     recommendation: "Аварийная заделка, риск повреждения ТС.",
-    image: defectImage,
+    image: "/images/inspect/def-4.jpg",
+    bbox: { x: 24, y: 32, w: 50, h: 52 },
   },
   {
     id: "def-5",
     objectId: "obj-2",
-    type: "Колейность",
+    type: "Выбоина с разрушением кромок",
     severity: "medium",
     status: "in_progress",
     detectedAt: "2026-07-05",
     location: "км 341–345",
     confidence: 90,
     source: "mobile",
-    recommendation: "Фрезерование и укладка нового слоя износа.",
-    image: defectImage,
+    recommendation: "Вырубка, подгрунтовка и заполнение горячей асфальтобетонной смесью.",
+    image: "/images/inspect/def-5.jpg",
+    bbox: { x: 0, y: 15, w: 45, h: 58 },
   },
   {
     id: "def-6",
@@ -312,7 +326,8 @@ export const defects: Defect[] = [
     confidence: 83,
     source: "mobile",
     recommendation: "Поверхностная обработка, наблюдение.",
-    image: defectImage,
+    image: "/images/inspect/def-6.jpg",
+    bbox: { x: 2, y: 14, w: 94, h: 56 },
   },
   {
     id: "def-7",
@@ -325,7 +340,8 @@ export const defects: Defect[] = [
     confidence: 91,
     source: "drone",
     recommendation: "Аварийная заделка в течение 48 часов.",
-    image: defectImage,
+    image: "/images/inspect/def-7.jpg",
+    bbox: { x: 30, y: 40, w: 45, h: 44 },
   },
   {
     id: "def-8",
@@ -338,20 +354,22 @@ export const defects: Defect[] = [
     confidence: 87,
     source: "mobile",
     recommendation: "Устранено: герметизация трещины.",
-    image: defectImage,
+    image: "/images/inspect/def-8.jpg",
+    bbox: { x: 22, y: 10, w: 62, h: 78 },
   },
   {
     id: "def-9",
     objectId: "obj-5",
-    type: "Коррозия арматуры",
+    type: "Коррозия металлоконструкций",
     severity: "critical",
     status: "new",
     detectedAt: "2026-07-06",
     location: "Опора №2",
     confidence: 95,
     source: "drone",
-    recommendation: "Дефектоскопия опоры, оценка несущей способности.",
-    image: defectImage,
+    recommendation: "Зачистка, оценка потери сечения, антикоррозийная защита.",
+    image: "/images/inspect/def-9.jpg",
+    bbox: { x: 8, y: 8, w: 84, h: 80 },
   },
   {
     id: "def-10",
@@ -364,7 +382,8 @@ export const defects: Defect[] = [
     confidence: 89,
     source: "sensor",
     recommendation: "Геодезический мониторинг, ограничение движения большегрузов.",
-    image: defectImage,
+    image: "/images/inspect/def-10.jpg",
+    bbox: { x: 22, y: 14, w: 54, h: 74 },
   },
   {
     id: "def-11",
@@ -377,7 +396,8 @@ export const defects: Defect[] = [
     confidence: 85,
     source: "drone",
     recommendation: "Ремонт защитного слоя бетона.",
-    image: defectImage,
+    image: "/images/inspect/def-11.jpg",
+    bbox: { x: 36, y: 5, w: 28, h: 90 },
   },
   {
     id: "def-12",
@@ -390,7 +410,8 @@ export const defects: Defect[] = [
     confidence: 90,
     source: "sensor",
     recommendation: "Инструментальное обследование фундамента.",
-    image: defectImage,
+    image: "/images/inspect/def-12.jpg",
+    bbox: { x: 20, y: 8, w: 30, h: 80 },
   },
   {
     id: "def-13",
@@ -403,7 +424,8 @@ export const defects: Defect[] = [
     confidence: 86,
     source: "drone",
     recommendation: "Мониторинг, ремонт при плановом обслуживании.",
-    image: defectImage,
+    image: "/images/inspect/def-13.jpg",
+    bbox: { x: 20, y: 10, w: 46, h: 76 },
   },
   {
     id: "def-14",
@@ -416,33 +438,36 @@ export const defects: Defect[] = [
     confidence: 82,
     source: "drone",
     recommendation: "Косметический ремонт.",
-    image: defectImage,
+    image: "/images/inspect/def-14.jpg",
+    bbox: { x: 2, y: 45, w: 96, h: 50 },
   },
   {
     id: "def-15",
     objectId: "obj-3",
-    type: "Загрязнение водоотвода",
+    type: "Коррозия перильного ограждения",
     severity: "low",
     status: "resolved",
     detectedAt: "2026-06-10",
     location: "Пролёт 2",
     confidence: 79,
     source: "mobile",
-    recommendation: "Устранено: очистка системы водоотвода.",
-    image: defectImage,
+    recommendation: "Устранено: зачистка и антикоррозийная окраска ограждения.",
+    image: "/images/inspect/def-15.jpg",
+    bbox: { x: 2, y: 26, w: 96, h: 34 },
   },
   {
     id: "def-16",
     objectId: "obj-6",
-    type: "Сетка трещин",
+    type: "Выкрашивание асфальтобетона",
     severity: "low",
     status: "new",
     detectedAt: "2026-06-24",
     location: "км 40",
     confidence: 80,
     source: "mobile",
-    recommendation: "Наблюдение, поверхностная обработка.",
-    image: defectImage,
+    recommendation: "Поверхностная обработка до образования выбоины.",
+    image: "/images/inspect/def-16.jpg",
+    bbox: { x: 14, y: 16, w: 72, h: 66 },
   },
   {
     id: "def-17",
@@ -455,7 +480,8 @@ export const defects: Defect[] = [
     confidence: 84,
     source: "mobile",
     recommendation: "Локальный ремонт покрытия.",
-    image: defectImage,
+    image: "/images/inspect/def-17.jpg",
+    bbox: { x: 2, y: 56, w: 96, h: 42 },
   },
   {
     id: "def-18",
@@ -468,7 +494,8 @@ export const defects: Defect[] = [
     confidence: 77,
     source: "mobile",
     recommendation: "Устранено: нанесение разметки.",
-    image: defectImage,
+    image: "/images/inspect/def-18.jpg",
+    bbox: { x: 16, y: 6, w: 70, h: 58 },
   },
 ];
 
