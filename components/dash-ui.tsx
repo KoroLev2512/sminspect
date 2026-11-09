@@ -1,11 +1,14 @@
+import Link from "next/link";
 import type { CSSProperties, ReactNode } from "react";
 import styles from "./Dashboard.module.css";
 import { Icon, type IconName } from "./dash-icons";
 import {
   defectStatusLabels,
+  inspectionStatusLabels,
   severityLabels,
   statusLabels,
   type DefectStatus,
+  type InspectionStatus,
   type ObjectStatus,
   type Severity,
 } from "@/lib/dashboard";
@@ -62,15 +65,18 @@ export function StatCard({
   icon,
   meta,
   danger,
+  href,
 }: {
   label: string;
   value: ReactNode;
   icon: IconName;
   meta?: ReactNode;
   danger?: boolean;
+  /** Makes the whole card a link to the related section. */
+  href?: string;
 }) {
-  return (
-    <div className={styles.stat}>
+  const body = (
+    <>
       <div className={styles.statTop}>
         <span className={styles.statLabel}>{label}</span>
         <span className={`${styles.statIcon} ${danger ? styles.statIconDanger : ""}`}>
@@ -79,8 +85,16 @@ export function StatCard({
       </div>
       <div className={styles.statValue}>{value}</div>
       {meta ? <div className={styles.statMeta}>{meta}</div> : null}
-    </div>
+    </>
   );
+  if (href) {
+    return (
+      <Link href={href} className={`${styles.stat} ${styles.statLink}`}>
+        {body}
+      </Link>
+    );
+  }
+  return <div className={styles.stat}>{body}</div>;
 }
 
 const severityClass: Record<Severity, string> = {
@@ -205,6 +219,7 @@ export function Bars({
     <div className={styles.bars}>
       {data.map((d) => (
         <div key={d.month} className={styles.barCol}>
+          <span className={styles.barValue}>{d.value}</span>
           <div className={styles.barTrack}>
             <div className={styles.barFill} style={{ height: `${(d.value / max) * 100}%` }} />
           </div>
@@ -304,6 +319,23 @@ export function UserAvatar({
       aria-hidden="true"
     >
       {initials(name)}
+    </span>
+  );
+}
+
+const inspectionStatusClass: Record<InspectionStatus, string> = {
+  created: styles.badgeNeutral,
+  queued: styles.badgeInfo,
+  processing: styles.badgeInfo,
+  completed: styles.badgeGood,
+  failed: styles.badgeCritical,
+};
+
+export function InspectionStatusBadge({ status }: { status: InspectionStatus }) {
+  return (
+    <span className={`${styles.badge} ${inspectionStatusClass[status]}`}>
+      {status === "processing" && <span className={styles.badgeSpinner} />}
+      {inspectionStatusLabels[status]}
     </span>
   );
 }

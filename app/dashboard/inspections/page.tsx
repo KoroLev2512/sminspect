@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import { useDemoData } from "@/components/DemoDataProvider";
 import { Icon } from "@/components/dash-icons";
-import { StatCard } from "@/components/dash-ui";
+import { InspectionStatusBadge, StatCard } from "@/components/dash-ui";
 import {
   formatDate,
   getObjectName,
-  inspections,
   sourceLabels,
   type InspectionSource,
 } from "@/lib/dashboard";
@@ -20,43 +21,62 @@ const sourceBadge: Record<InspectionSource, string> = {
 };
 
 export default function InspectionsPage() {
+  const router = useRouter();
+  const { state, processing } = useDemoData();
   const [source, setSource] = useState<InspectionSource | "all">("all");
 
-  const filtered = useMemo(
-    () => inspections.filter((i) => source === "all" || i.source === source),
-    [source],
+  const all = useMemo(
+    () =>
+      [...state.inspections].sort(
+        (a, b) => b.date.localeCompare(a.date) || b.createdAt.localeCompare(a.createdAt),
+      ),
+    [state.inspections],
   );
+  const filtered = all.filter((i) => source === "all" || i.source === source);
 
-  const totalDefects = inspections.reduce((s, i) => s + i.defectsFound, 0);
+  const completed = all.filter((i) => i.status === "completed");
+  const withFindings = completed.filter((i) => i.savedDefectIds.length > 0).length;
+  const analyzed = all.reduce(
+    (s, i) => s + i.materials.filter((m) => m.analysis?.state === "matched").length,
+    0,
+  );
 
   return (
     <div className={styles.page}>
-      <div className={styles.pageHead}>
-        <h2 className={styles.pageTitle}>Инспекции</h2>
-        <p className={styles.pageSubtitle}>
-          История обследований объектов с помощью дронов, мобильных камер и
-          стационарных сенсоров.
-        </p>
+      <div className={styles.pageHeadRow}>
+        <div className={styles.pageHead} style={{ marginBottom: 0 }}>
+          <h2 className={styles.pageTitle}>Инспекции</h2>
+          <p className={styles.pageSubtitle}>
+            Обследования объектов дронами, мобильными камерами и стационарными сенсорами. Создайте
+            инспекцию, загрузите снимки — демонстрационный модуль разметит повреждения.
+          </p>
+        </div>
+        <Link href="/dashboard/inspections/new" className="btnPrimary">
+          <Icon name="plus" size={16} />
+          Новая инспекция
+        </Link>
       </div>
 
-      <div className={styles.statGrid}>
-        <StatCard label="Всего инспекций" value={inspections.length} icon="inspections" />
+      <div className={styles.statGrid} style={{ marginTop: 24 }}>
+        <StatCard label="Всего инспекций" value={all.length} icon="inspections" />
         <StatCard
-          label="Дефектов выявлено"
-          value={totalDefects}
+          label="Завершено"
+          value={completed.length}
+          icon="check"
+          meta={`с выявленными дефектами: ${withFindings}`}
+        />
+        <StatCard
+          label="Дефектов в реестре"
+          value={state.defects.length}
           icon="defects"
-          meta="за период"
+          meta="уникальные дефекты из инспекций"
+          href="/dashboard/defects"
         />
         <StatCard
-          label="Съёмка дронами"
-          value={inspections.filter((i) => i.source === "drone").length}
-          icon="map"
-        />
-        <StatCard
-          label="Сенсорный мониторинг"
-          value={inspections.filter((i) => i.source === "sensor").length}
-          icon="shield"
-          meta="непрерывно"
+          label="Размеченных снимков"
+          value={analyzed}
+          icon="analytics"
+          meta={<><span className={styles.demoTag}>Демо</span> подготовленная разметка</>}
         />
       </div>
 
@@ -79,36 +99,59 @@ export default function InspectionsPage() {
             <thead>
               <tr>
                 <th>Дата</th>
-                <th>Объект</th>
+                <th>Инспекция</th>
                 <th>Источник</th>
-                <th>Покрытие</th>
-                <th>Дефектов</th>
-                <th>Оператор</th>
+                <th>Снимков</th>
+                <th>Дефектов в реестре</th>
+                <th>Статус</th>
               </tr>
             </thead>
             <tbody>
-              {filtered.map((ins) => (
-                <tr key={ins.id}>
-                  <td className={styles.cellStrong}>{formatDate(ins.date)}</td>
-                  <td className={styles.cellMuted}>
-                    <Link href={`/dashboard/objects/${ins.objectId}`}>
-                      {getObjectName(ins.objectId)}
-                    </Link>
-                  </td>
-                  <td>
-                    <span className={`${styles.badge} ${sourceBadge[ins.source]}`}>
-                      <Icon name="inspections" size={14} />
-                      {sourceLabels[ins.source]}
-                    </span>
-                  </td>
-                  <td className={styles.cellMuted}>{ins.coverage}</td>
-                  <td className={styles.cellStrong}>{ins.defectsFound}</td>
-                  <td className={styles.cellMuted}>{ins.operator}</td>
-                </tr>
-              ))}
+              {filtered.map((i) => {
+                const progress = processing[i.id];
+                return (
+                  <tr
+                    key={i.id}
+                    className={styles.rowLink}
+                    onClick={() => router.push(`/dashboard/inspections/${i.id}`)}
+                  >
+                    <td className={styles.cellMuted} style={{ whiteSpace: "nowrap" }}>
+                      {formatDate(i.date)}
+                    </td>
+                    <td>
+                      <Link
+                        href={`/dashboard/inspections/${i.id}`}
+                        className={styles.cellStrong}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {i.title}
+                      </Link>
+                      <div className={styles.cellMuted} style={{ fontSize: "var(--text-caption)" }}>
+                        {getObjectName(state, i.objectId)} · {i.operator}
+                      </div>
+                    </td>
+                    <td>
+                      <span className={`${styles.badge} ${sourceBadge[i.source]}`}>
+                        {sourceLabels[i.source]}
+                      </span>
+                    </td>
+                    <td className={styles.cellMuted}>{i.materials.length || "архив"}</td>
+                    <td className={styles.cellStrong}>{i.savedDefectIds.length}</td>
+                    <td>
+                      <InspectionStatusBadge status={i.status} />
+                      {progress && (
+                        <div className={styles.cellMuted} style={{ fontSize: "var(--text-caption)", marginTop: 4 }}>
+                          {progress.done} из {progress.total}
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
+        {filtered.length === 0 && <p className={styles.empty}>Инспекций с этим источником нет</p>}
       </div>
     </div>
   );

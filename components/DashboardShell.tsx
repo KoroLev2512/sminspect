@@ -5,9 +5,10 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, type ReactNode } from "react";
 import { useAuth } from "./AuthProvider";
+import { useDemoData } from "./DemoDataProvider";
 import { Icon, type IconName } from "./dash-icons";
 import { UserAvatar } from "./dash-ui";
-import { dashboardStats } from "@/lib/dashboard";
+import { DEMO_AS_OF, dashboardStats, formatDate } from "@/lib/dashboard";
 import styles from "./Dashboard.module.css";
 
 interface NavLink {
@@ -52,7 +53,19 @@ export function DashboardShell({ children }: { children: ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
-  const stats = dashboardStats();
+  const { state, resetDemo, storageError } = useDemoData();
+  const stats = dashboardStats(state);
+
+  function confirmReset() {
+    if (
+      window.confirm(
+        "Сбросить демо-данные к исходному состоянию? Созданные инспекции, изменения статусов и сформированные отчёты будут удалены.",
+      )
+    ) {
+      resetDemo();
+      router.push("/dashboard");
+    }
+  }
 
   useEffect(() => {
     if (status === "ready" && !user) router.replace("/login");
@@ -80,7 +93,13 @@ export function DashboardShell({ children }: { children: ReactNode }) {
 
   const title =
     titles[pathname] ??
-    (pathname.startsWith("/dashboard/objects/") ? "Объект" : "Личный кабинет");
+    (pathname === "/dashboard/inspections/new"
+      ? "Новая инспекция"
+      : pathname.startsWith("/dashboard/inspections/")
+        ? "Инспекция"
+        : pathname.startsWith("/dashboard/objects/")
+          ? "Объект"
+          : "Личный кабинет");
 
   return (
     <div className={styles.shell}>
@@ -149,6 +168,13 @@ export function DashboardShell({ children }: { children: ReactNode }) {
           </button>
           <h1 className={styles.topbarTitle}>{title}</h1>
           <div className={styles.topbarActions}>
+            <span className={styles.demoBadge} title="Все данные кабинета демонстрационные">
+              <span className={styles.demoDot} />
+              Демо-данные · срез на {formatDate(DEMO_AS_OF)}
+            </span>
+            <button type="button" className={styles.demoReset} onClick={confirmReset}>
+              Сбросить демо
+            </button>
             <Link href="/dashboard/alerts" className={styles.iconBtn} aria-label="Оповещения">
               <Icon name="bell" size={20} />
               {stats.unreadAlerts > 0 && <span className={styles.iconBtnDot} />}
@@ -158,6 +184,12 @@ export function DashboardShell({ children }: { children: ReactNode }) {
             </Link>
           </div>
         </header>
+
+        {storageError && (
+          <div className={styles.storageWarning} role="alert">
+            {storageError}
+          </div>
+        )}
 
         {children}
       </div>
