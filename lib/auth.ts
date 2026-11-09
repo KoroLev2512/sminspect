@@ -1,14 +1,35 @@
 export type PlanId = "basic" | "extended" | "corporate";
 
+export type NotificationId = "critical" | "weekly" | "forecast";
+
+export type NotificationPrefs = Record<NotificationId, boolean>;
+
 export interface AuthUser {
   id: string;
   name: string;
   email: string;
+  /** Телефон в формате +7 (XXX) XXX-XX-XX, пустая строка — не указан */
+  phone?: string;
   company: string;
   role: string;
   segment: string;
   plan: PlanId;
+  /** Фото профиля как data URL (уменьшено до 256×256), отсутствует — инициалы */
+  avatar?: string;
+  notifications?: NotificationPrefs;
 }
+
+export const defaultNotifications: NotificationPrefs = {
+  critical: true,
+  weekly: true,
+  forecast: false,
+};
+
+export const notificationOptions: { id: NotificationId; label: string; desc: string }[] = [
+  { id: "critical", label: "Критические дефекты", desc: "Мгновенные оповещения" },
+  { id: "weekly", label: "Еженедельная сводка", desc: "Отчёт по состоянию объектов" },
+  { id: "forecast", label: "Прогноз ремонтов", desc: "Уведомления о приближении сроков" },
+];
 
 /** Persisted account record (mock — password stored in localStorage only). */
 export interface StoredAccount {
@@ -57,4 +78,31 @@ export const planPrices: Record<PlanId, string> = {
 
 export function isValidEmail(email: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+export const MIN_PASSWORD_LENGTH = 6;
+
+/**
+ * Formats Russian phone input as "+7 (XXX) XXX-XX-XX" while typing.
+ * A leading 8 or 7 is treated as the country code.
+ */
+export function formatPhone(input: string) {
+  let digits = input.replace(/\D/g, "");
+  if (!digits) return "";
+  if (digits[0] === "8" || digits[0] === "7") digits = digits.slice(1);
+  digits = digits.slice(0, 10);
+
+  let out = "+7";
+  if (digits.length > 0) out += ` (${digits.slice(0, 3)}`;
+  if (digits.length >= 3) out += ")";
+  if (digits.length > 3) out += ` ${digits.slice(3, 6)}`;
+  if (digits.length > 6) out += `-${digits.slice(6, 8)}`;
+  if (digits.length > 8) out += `-${digits.slice(8, 10)}`;
+  return out;
+}
+
+/** Empty is allowed (phone is optional); otherwise 10 digits after +7. */
+export function isValidPhone(phone: string) {
+  if (!phone) return true;
+  return phone.replace(/\D/g, "").length === 11;
 }

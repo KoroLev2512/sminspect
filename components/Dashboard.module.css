@@ -1717,3 +1717,121 @@
     overflow: visible;
   }
 }
+
+/* ---- Profile settings ----------------------------------------------------- */
+
+.avatarRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-20);
+  margin-bottom: var(--spacing-24);
+}
+
+.avatarActions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+  min-width: 0;
+}
+
+.avatarButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-8);
+}
+
+.fieldNote {
+  margin: 0;
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  color: var(--color-slate-whisper);
+}
+
+.formGrid3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-20);
+}
+
+.formError {
+  margin: var(--spacing-16) 0 0;
+  padding: var(--spacing-12) var(--spacing-16);
+  border-radius: var(--radius-buttons);
+  background: color-mix(in srgb, #c0392b 8%, transparent);
+  color: #c0392b;
+  font-size: var(--text-body-sm);
+}
+
+.formActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-12);
+  margin-top: var(--spacing-20);
+}
+
+.formActions :global(.btnPrimary):disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btnGhost {
+  padding: 12px var(--spacing-16);
+  border: 0;
+  border-radius: var(--radius-buttons);
+  background: transparent;
+  font: inherit;
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-graphite-dim);
+  cursor: pointer;
+}
+
+.btnGhost:hover {
+  background: var(--color-hailstone);
+  color: var(--color-horizon-navy);
+}
+
+.btnDanger {
+  padding: 12px var(--spacing-16);
+  border: 1px solid #c0392b;
+  border-radius: var(--radius-buttons);
+  background: var(--color-paper-white);
+  font: inherit;
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-medium);
+  color: #c0392b;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.btnDanger:hover:not(:disabled) {
+  background: #c0392b;
+  color: var(--color-paper-white);
+}
+
+.btnDanger:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.dangerCard {
+  border-color: color-mix(in srgb, #c0392b 30%, var(--color-mist));
+}
+
+.dangerConfirm {
+  max-width: 420px;
+  margin-top: var(--spacing-16);
+}
+
+@media (max-width: 768px) {
+  .formGrid3 {
+    grid-template-columns: 1fr;
+  }
+  .avatarRow {
+    align-items: flex-start;
+  }
+}

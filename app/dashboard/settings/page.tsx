@@ -1,9 +1,14 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import { Icon } from "@/components/dash-icons";
-import { planLabels, planPrices, segments, type PlanId } from "@/lib/auth";
+import {
+  DeleteAccountCard,
+  NotificationsCard,
+  PasswordCard,
+  ProfileCard,
+} from "@/components/ProfileSettings";
+import { planLabels, planPrices, type PlanId } from "@/lib/auth";
 import styles from "@/components/Dashboard.module.css";
 
 const planFeatures: Record<PlanId, string[]> = {
@@ -28,104 +33,24 @@ const planFeatures: Record<PlanId, string[]> = {
 
 const planOrder: PlanId[] = ["basic", "extended", "corporate"];
 
-const notificationOptions = [
-  { id: "critical", label: "Критические дефекты", desc: "Мгновенные оповещения" },
-  { id: "weekly", label: "Еженедельная сводка", desc: "Отчёт по состоянию объектов" },
-  { id: "forecast", label: "Прогноз ремонтов", desc: "Уведомления о приближении сроков" },
-];
-
 export default function SettingsPage() {
-  const { user, updateProfile, setPlan } = useAuth();
-  const [saved, setSaved] = useState(false);
-  const [toggles, setToggles] = useState<Record<string, boolean>>({
-    critical: true,
-    weekly: true,
-    forecast: false,
-  });
-  const [form, setForm] = useState({
-    name: user?.name ?? "",
-    company: user?.company ?? "",
-    role: user?.role ?? "",
-    segment: user?.segment ?? segments[0],
-  });
+  const { user, setPlan } = useAuth();
 
   if (!user) return null;
-
-  function saveProfile(e: FormEvent) {
-    e.preventDefault();
-    updateProfile(form);
-    setSaved(true);
-    window.setTimeout(() => setSaved(false), 2500);
-  }
 
   return (
     <div className={styles.page}>
       <div className={styles.pageHead}>
         <h2 className={styles.pageTitle}>Настройки</h2>
         <p className={styles.pageSubtitle}>
-          Управление профилем, тарифным планом и уведомлениями.
+          Профиль, безопасность, тарифный план и уведомления.
         </p>
       </div>
 
       <div className={styles.stackGap}>
-        <div className={styles.card}>
-          <div className={styles.cardHead}>
-            <h3 className={styles.cardTitle}>Профиль</h3>
-            {saved && (
-              <span className={styles.saved}>
-                <Icon name="check" size={16} /> Сохранено
-              </span>
-            )}
-          </div>
-          <form onSubmit={saveProfile}>
-            <div className={styles.formGrid}>
-              <label className={styles.field}>
-                <span>Имя и фамилия</span>
-                <input
-                  type="text"
-                  value={form.name}
-                  onChange={(e) => setForm({ ...form, name: e.target.value })}
-                />
-              </label>
-              <label className={styles.field}>
-                <span>Почта</span>
-                <input type="email" value={user.email} disabled />
-              </label>
-              <label className={styles.field}>
-                <span>Компания</span>
-                <input
-                  type="text"
-                  value={form.company}
-                  onChange={(e) => setForm({ ...form, company: e.target.value })}
-                />
-              </label>
-              <label className={styles.field}>
-                <span>Должность</span>
-                <input
-                  type="text"
-                  value={form.role}
-                  onChange={(e) => setForm({ ...form, role: e.target.value })}
-                />
-              </label>
-              <label className={styles.field}>
-                <span>Сегмент</span>
-                <select
-                  value={form.segment}
-                  onChange={(e) => setForm({ ...form, segment: e.target.value })}
-                >
-                  {segments.map((s) => (
-                    <option key={s} value={s}>
-                      {s}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
-            <button type="submit" className="btnPrimary" style={{ marginTop: 20 }}>
-              Сохранить изменения
-            </button>
-          </form>
-        </div>
+        <ProfileCard key={user.id} user={user} />
+
+        <PasswordCard />
 
         <div className={styles.card}>
           <div className={styles.cardHead}>
@@ -167,33 +92,9 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        <div className={styles.card}>
-          <div className={styles.cardHead}>
-            <h3 className={styles.cardTitle}>Уведомления</h3>
-          </div>
-          {notificationOptions.map((opt) => (
-            <div key={opt.id} className={styles.toggleRow}>
-              <div>
-                <div className={styles.cellStrong}>{opt.label}</div>
-                <div className={styles.cellMuted} style={{ fontSize: "var(--text-caption)" }}>
-                  {opt.desc}
-                </div>
-              </div>
-              <button
-                type="button"
-                role="switch"
-                aria-checked={toggles[opt.id]}
-                aria-label={opt.label}
-                className={`${styles.toggle} ${toggles[opt.id] ? styles.toggleOn : ""}`}
-                onClick={() =>
-                  setToggles((t) => ({ ...t, [opt.id]: !t[opt.id] }))
-                }
-              >
-                <span className={styles.toggleKnob} />
-              </button>
-            </div>
-          ))}
-        </div>
+        <NotificationsCard user={user} />
+
+        <DeleteAccountCard />
       </div>
     </div>
   );

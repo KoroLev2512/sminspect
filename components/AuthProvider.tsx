@@ -12,9 +12,11 @@ import {
 import {
   AUTH_STORAGE_KEY,
   DEMO_CREDENTIALS,
+  MIN_PASSWORD_LENGTH,
   USERS_STORAGE_KEY,
   demoUser,
   isValidEmail,
+  isValidPhone,
   type AuthUser,
   type PlanId,
   type StoredAccount,
@@ -29,17 +31,26 @@ interface RegisterInput {
   segment: string;
 }
 
-type Result = { ok: true } | { ok: false; error: string };
+export type Result = { ok: true } | { ok: false; error: string };
+
+/** Fields that can be changed from the profile screen. */
+export type ProfilePatch = Partial<Omit<AuthUser, "id">>;
 
 interface AuthContextValue {
   user: AuthUser | null;
   status: "loading" | "ready";
+  /** True for the shared demo login: its password and account are read-only. */
+  isDemo: boolean;
   login: (email: string, password: string) => Result;
   register: (input: RegisterInput) => Result;
   logout: () => void;
-  updateProfile: (patch: Partial<AuthUser>) => void;
+  updateProfile: (patch: ProfilePatch) => Result;
+  changePassword: (current: string, next: string) => Result;
+  deleteAccount: (password: string) => Result;
   setPlan: (plan: PlanId) => void;
 }
+
+const QUOTA_ERROR = "Не хватает места в хранилище браузера. Попробуйте фото меньшего размера.";
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
@@ -111,8 +122,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const email = input.email.trim().toLowerCase();
       if (!input.name.trim()) return { ok: false, error: "Укажите имя" };
       if (!isValidEmail(email)) return { ok: false, error: "Некорректный адрес почты" };
-      if (input.password.length < 6) {
-        return { ok: false, error: "Пароль должен быть не короче 6 символов" };
+      if (input.password.length < MIN_PASSWORD_LENGTH) {
+        return { ok: false, error: `Пароль должен быть не короче ${MIN_PASSWORD_LENGTH} символов` };
       }
       if (email === DEMO_CREDENTIALS.email) {
         return { ok: false, error: "Эта почта зарезервирована под демо-доступ" };
@@ -124,7 +135,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       const newUser: AuthUser = {
-        id: `u-${accounts.length + 1}-${email.length}`,
+        id: `u-${crypto.randomUUID()}`,
         name: input.name.trim(),
         email,
         company: input.company.trim() || "—",
@@ -142,36 +153,136 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = useCallback(() => persist(null), [persist]);
 
-  const syncAccount = useCallback((next: AuthUser) => {
-    const accounts = readAccounts();
-    const idx = accounts.findIndex((a) => a.user.id === next.id);
-    if (idx >= 0) {
-      accounts[idx] = { ...accounts[idx], user: next };
-      writeAccounts(accounts);
-    }
-  }, []);
+  const isDemo = user?.id === demoUser.id;
 
   const updateProfile = useCallback<AuthContextValue["updateProfile"]>(
     (patch) => {
-      setUser((prev) => {
-        if (!prev) return prev;
-        const next = { ...prev, ...patch };
+      if (!user) return { ok: false, error: "Сессия истекла, войдите заново" };
+
+      const next: AuthUser = { ...user, ...patch, id: user.id };
+      next.name = next.name.trim();
+      next.email = next.email.trim().toLowerCase();
+
+      if (!next.name) return { ok: false, error: "Укажите имя" };
+      if (!isValidEmail(next.email)) return { ok: false, error: "Некорректный адрес почты" };
+      if (next.phone && !isValidPhone(next.phone)) {
+        return { ok: false, error: "Телефон должен содержать 10 цифр после +7" };
+      }
+
+      const accounts = readAccounts();
+      if (next.email !== user.email) {
+        if (user.id === demoUser.id) {
+          return { ok: false, error: "У демо-доступа почту изменить нельзя" };
+        }
+        if (next.email === DEMO_CREDENTIALS.email) {
+          return { ok: false, error: "Эта почта зарезервирована под демо-доступ" };
+        }
+        if (accounts.some((a) => a.user.id !== user.id && a.user.email === next.email)) {
+          return { ok: false, error: "Эта почта уже занята другим аккаунтом" };
+        }
+      }
+
+      // Write the session first, then the accounts list; if storage is full,
+      // roll the session back so the two never disagree.
+      try {
         localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(next));
-        syncAccount(next);
-        return next;
-      });
+        const idx = accounts.findIndex((a) => a.user.id === user.id);
+        if (idx >= 0) {
+          accounts[idx] = { ...accounts[idx], user: next };
+          writeAccounts(accounts);
+        }
+      } catch {
+        try {
+          localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
+        } catch {
+          /* previous value still fits or was never replaced */
+        }
+        return { ok: false, error: QUOTA_ERROR };
+      }
+      setUser(next);
+      return { ok: true };
     },
-    [syncAccount],
+    [user],
+  );
+
+  const changePassword = useCallback<AuthContextValue["changePassword"]>(
+    (current, nextPassword) => {
+      if (!user) return { ok: false, error: "Сессия истекла, войдите заново" };
+      if (user.id === demoUser.id) {
+        return { ok: false, error: "У демо-доступа пароль изменить нельзя" };
+      }
+      const accounts = readAccounts();
+      const idx = accounts.findIndex((a) => a.user.id === user.id);
+      if (idx < 0) return { ok: false, error: "Аккаунт не найден" };
+      if (accounts[idx].password !== current) {
+        return { ok: false, error: "Текущий пароль указан неверно" };
+      }
+      if (nextPassword.length < MIN_PASSWORD_LENGTH) {
+        return {
+          ok: false,
+          error: `Новый пароль должен быть не короче ${MIN_PASSWORD_LENGTH} символов`,
+        };
+      }
+      if (nextPassword === current) {
+        return { ok: false, error: "Новый пароль совпадает с текущим" };
+      }
+      accounts[idx] = { ...accounts[idx], password: nextPassword };
+      writeAccounts(accounts);
+      return { ok: true };
+    },
+    [user],
+  );
+
+  const deleteAccount = useCallback<AuthContextValue["deleteAccount"]>(
+    (password) => {
+      if (!user) return { ok: false, error: "Сессия истекла, войдите заново" };
+      if (user.id === demoUser.id) {
+        return { ok: false, error: "Демо-доступ удалить нельзя" };
+      }
+      const accounts = readAccounts();
+      const account = accounts.find((a) => a.user.id === user.id);
+      if (!account || account.password !== password) {
+        return { ok: false, error: "Пароль указан неверно" };
+      }
+      writeAccounts(accounts.filter((a) => a.user.id !== user.id));
+      persist(null);
+      return { ok: true };
+    },
+    [user, persist],
   );
 
   const setPlan = useCallback<AuthContextValue["setPlan"]>(
-    (plan) => updateProfile({ plan }),
+    (plan) => {
+      updateProfile({ plan });
+    },
     [updateProfile],
   );
 
   const value = useMemo<AuthContextValue>(
-    () => ({ user, status, login, register, logout, updateProfile, setPlan }),
-    [user, status, login, register, logout, updateProfile, setPlan],
+    () => ({
+      user,
+      status,
+      isDemo,
+      login,
+      register,
+      logout,
+      updateProfile,
+      changePassword,
+      deleteAccount,
+      setPlan,
+    }),
+    [
+      user,
+      status,
+      isDemo,
+      login,
+      register,
+      logout,
+      updateProfile,
+      changePassword,
+      deleteAccount,
+      setPlan,
+    ],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

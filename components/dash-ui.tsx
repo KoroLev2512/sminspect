@@ -266,3 +266,34 @@ export function TrendLine({
     </svg>
   );
 }
+
+export function initials(name: string) {
+  return name
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((p) => p[0]?.toUpperCase() ?? "")
+    .join("");
+}
+
+/** Profile photo if the user uploaded one, otherwise initials on the brand gradient. */
+export function UserAvatar({
+  name,
+  avatar,
+  size = 36,
+}: {
+  name: string;
+  avatar?: string;
+  size?: number;
+}) {
+  const style: CSSProperties = { width: size, height: size, fontSize: Math.round(size * 0.38) };
+  if (avatar) {
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src={avatar} alt="" className={styles.avatar} style={{ ...style, objectFit: "cover" }} />;
+  }
+  return (
+    <span className={styles.avatar} style={style} aria-hidden="true">
+      {initials(name)}
+    </span>
+  );
+}

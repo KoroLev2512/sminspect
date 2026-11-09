@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, type ReactNode } from "react";
 import { useAuth } from "./AuthProvider";
 import { Icon, type IconName } from "./dash-icons";
+import { UserAvatar } from "./dash-ui";
 import { dashboardStats } from "@/lib/dashboard";
 import styles from "./Dashboard.module.css";
 
@@ -40,14 +41,6 @@ const titles: Record<string, string> = {
   "/dashboard/leads": "Заявки на демо",
   "/dashboard/settings": "Настройки",
 };
-
-function initials(name: string) {
-  return name
-    .split(" ")
-    .slice(0, 2)
-    .map((p) => p[0]?.toUpperCase() ?? "")
-    .join("");
-}
 
 function isActive(pathname: string, href: string) {
   if (href === "/dashboard") return pathname === href;
@@ -125,7 +118,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
 
         <div className={styles.sidebarFooter}>
           <Link href="/dashboard/settings" className={styles.userChip}>
-            <span className={styles.avatar}>{initials(user.name)}</span>
+            <UserAvatar name={user.name} avatar={user.avatar} />
             <span className={styles.userChipMeta}>
               <span className={styles.userChipName}>{user.name}</span>
               <span className={styles.userChipRole}>{user.company}</span>
