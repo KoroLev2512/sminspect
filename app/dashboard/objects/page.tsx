@@ -2,17 +2,21 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { useDemoData } from "@/components/DemoDataProvider";
 import { Icon } from "@/components/dash-icons";
 import { ConditionMeter, ObjectStatusBadge } from "@/components/dash-ui";
 import {
   formatDate,
-  objects,
+  objectMetrics,
+  plural,
   typeLabels,
   type ObjectType,
 } from "@/lib/dashboard";
 import styles from "@/components/Dashboard.module.css";
 
 export default function ObjectsPage() {
+  const { state } = useDemoData();
+  const objects = state.objects;
   const [query, setQuery] = useState("");
   const [type, setType] = useState<ObjectType | "all">("all");
 
@@ -25,14 +29,16 @@ export default function ObjectsPage() {
         o.name.toLowerCase().includes(q) || o.region.toLowerCase().includes(q)
       );
     });
-  }, [query, type]);
+  }, [objects, query, type]);
 
   return (
     <div className={styles.page}>
       <div className={styles.pageHead}>
         <h2 className={styles.pageTitle}>Объекты инфраструктуры</h2>
         <p className={styles.pageSubtitle}>
-          {objects.length} объектов на мониторинге. Дороги, мосты и путепроводы.
+          {objects.length} {plural(objects.length, ["объект", "объекта", "объектов"])} на мониторинге:
+          дороги, мосты и путепроводы. Индекс состояния и статус рассчитываются по открытым
+          дефектам реестра.
         </p>
       </div>
 
@@ -63,7 +69,9 @@ export default function ObjectsPage() {
         </div>
       ) : (
         <div className={styles.cols3}>
-          {filtered.map((o) => (
+          {filtered.map((o) => {
+            const m = objectMetrics(state, o.id);
+            return (
             <Link
               key={o.id}
               href={`/dashboard/objects/${o.id}`}
@@ -84,21 +92,26 @@ export default function ObjectsPage() {
                     <Icon name={o.type === "bridge" ? "bridge" : "road"} size={16} />
                     {typeLabels[o.type]}
                   </span>
-                  <ObjectStatusBadge status={o.status} />
+                  <ObjectStatusBadge status={m.status} />
                 </div>
                 <h3 className={styles.objectName}>{o.name}</h3>
                 <p className={styles.cellMuted} style={{ fontSize: "var(--text-body-sm)" }}>
                   {o.region} · {o.length}
                 </p>
                 <div style={{ marginTop: "auto" }}>
-                  <ConditionMeter value={o.condition} />
+                  <ConditionMeter value={m.condition} />
                 </div>
                 <p className={styles.statMeta}>
-                  Инспекция: {formatDate(o.lastInspection)} · дефектов: {o.defects}
+                  {m.lastInspection
+                    ? `Инспекция: ${formatDate(m.lastInspection.date)}`
+                    : "Инспекций нет"}{" "}
+                  · открытых дефектов: {m.open}
+                  {m.critical > 0 && `, критических: ${m.critical}`}
                 </p>
               </div>
             </Link>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>

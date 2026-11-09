@@ -2,18 +2,18 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { useDemoData } from "@/components/DemoDataProvider";
 import { Icon } from "@/components/dash-icons";
 import { SeverityBadge } from "@/components/dash-ui";
-import {
-  alerts as seedAlerts,
-  formatDateTime,
-  getObjectName,
-  type Alert,
-} from "@/lib/dashboard";
+import { formatDateTime, getObjectName } from "@/lib/dashboard";
 import styles from "@/components/Dashboard.module.css";
 
 export default function AlertsPage() {
-  const [rows, setRows] = useState<Alert[]>(seedAlerts);
+  const { state, markAlertRead, markAllAlertsRead } = useDemoData();
+  const rows = useMemo(
+    () => [...state.alerts].sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
+    [state.alerts],
+  );
   const [onlyUnread, setOnlyUnread] = useState(false);
 
   const visible = useMemo(
@@ -22,13 +22,8 @@ export default function AlertsPage() {
   );
   const unread = rows.filter((a) => !a.read).length;
 
-  function markRead(id: string) {
-    setRows((prev) => prev.map((a) => (a.id === id ? { ...a, read: true } : a)));
-  }
-
-  function markAll() {
-    setRows((prev) => prev.map((a) => ({ ...a, read: true })));
-  }
+  const markRead = markAlertRead;
+  const markAll = markAllAlertsRead;
 
   return (
     <div className={styles.page}>
@@ -90,9 +85,20 @@ export default function AlertsPage() {
               <p className={styles.alertMessage}>{a.message}</p>
               <p className={styles.alertMeta}>
                 <Link href={`/dashboard/objects/${a.objectId}`}>
-                  {getObjectName(a.objectId)}
+                  {getObjectName(state, a.objectId)}
                 </Link>{" "}
                 · {formatDateTime(a.createdAt)}
+                {a.defectId && (
+                  <>
+                    {" · "}
+                    <Link
+                      href={`/dashboard/defects?open=${a.defectId}`}
+                      onClick={() => markRead(a.id)}
+                    >
+                      Открыть дефект
+                    </Link>
+                  </>
+                )}
               </p>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -110,7 +116,9 @@ export default function AlertsPage() {
           </div>
         ))}
         {visible.length === 0 && (
-          <p className={styles.empty}>Непрочитанных оповещений нет</p>
+          <p className={styles.empty}>
+            {onlyUnread ? "Непрочитанных оповещений нет" : "Оповещений пока нет"}
+          </p>
         )}
       </div>
     </div>

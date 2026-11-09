@@ -20,8 +20,11 @@ const markerColor: Record<ObjectStatus, string> = {
 const RUSSIA_CENTER: [number, number] = [90, 63];
 const RUSSIA_ZOOM = 2.3;
 
+/** Object with its status computed from the demo state (lib/dashboard objectMetrics). */
+export type MapObject = InfraObject & { status: ObjectStatus };
+
 interface MapViewProps {
-  objects: InfraObject[];
+  objects: MapObject[];
   activeId: string | null;
   onSelect: (id: string) => void;
 }
@@ -30,9 +33,10 @@ export function MapView({ objects, activeId, onSelect }: MapViewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MlMap | null>(null);
   const markersRef = useRef<Record<string, { marker: MlMarker; el: HTMLButtonElement }>>({});
-  const makeMarkerRef = useRef<((o: InfraObject) => MlMarker) | null>(null);
+  const makeMarkerRef = useRef<((o: MapObject) => MlMarker) | null>(null);
   const onSelectRef = useRef(onSelect);
   const [ready, setReady] = useState(false);
+  const [failed, setFailed] = useState(false);
 
   useEffect(() => {
     onSelectRef.current = onSelect;
@@ -70,9 +74,25 @@ export function MapView({ objects, activeId, onSelect }: MapViewProps) {
       };
 
       mapRef.current = map;
+      // If the tile service is unreachable, "load" never fires: show a fallback.
+      const timeout = window.setTimeout(() => {
+        if (!cancelled && !map.loaded()) setFailed(true);
+      }, 12000);
       map.on("load", () => {
-        if (!cancelled) setReady(true);
+        window.clearTimeout(timeout);
+        if (!cancelled) {
+          setFailed(false);
+          setReady(true);
+        }
       });
+      map.on("error", (e) => {
+        // Style or source failures before the first render mean no basemap.
+        if (!cancelled && !map.loaded() && /style|fetch|network|401|403/i.test(String(e.error?.message ?? ""))) {
+          setFailed(true);
+        }
+      });
+    }).catch(() => {
+      if (!cancelled) setFailed(true);
     });
 
     return () => {
@@ -96,12 +116,14 @@ export function MapView({ objects, activeId, onSelect }: MapViewProps) {
         delete markersRef.current[id];
       }
     }
-    // добавить новые
+    // добавить новые и обновить цвет существующих (статус мог измениться)
     for (const o of objects) {
       if (!markersRef.current[o.id]) {
         const marker = makeMarkerRef.current(o);
         const el = marker.getElement() as HTMLButtonElement;
         markersRef.current[o.id] = { marker, el };
+      } else {
+        markersRef.current[o.id].el.style.background = markerColor[o.status];
       }
     }
   }, [ready, objects]);
@@ -130,5 +152,18 @@ export function MapView({ objects, activeId, onSelect }: MapViewProps) {
     );
   }
 
-  return <div ref={containerRef} className={styles.mapCanvas} />;
+  return (
+    <>
+      <div ref={containerRef} className={styles.mapCanvas} />
+      {failed && (
+        <div className={`${styles.mapMissing} ${styles.mapFailed}`} role="alert">
+          <p>
+            Не удалось загрузить картографическую подложку MapTiler.
+            <br />
+            Проверьте подключение к интернету. Список объектов справа доступен.
+          </p>
+        </div>
+      )}
+    </>
+  );
 }

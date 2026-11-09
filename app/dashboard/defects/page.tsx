@@ -1,22 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { DefectPhoto } from "@/components/DefectPhoto";
+import { useDemoData } from "@/components/DemoDataProvider";
 import { DefectViewer } from "@/components/DefectViewer";
 import { Icon } from "@/components/dash-icons";
 import { DefectStatusBadge, SeverityBadge } from "@/components/dash-ui";
 import {
   defectStatusLabels,
-  defects as seedDefects,
   formatDate,
   getObjectName,
+  plural,
   severityLabels,
   sourceLabels,
-  type Defect,
   type DefectStatus,
   type Severity,
 } from "@/lib/dashboard";
+import { useInitialQuery } from "@/lib/use-query-params";
 import styles from "@/components/Dashboard.module.css";
 
 const severityRank: Record<Severity, number> = { critical: 0, medium: 1, low: 2 };
@@ -24,23 +25,42 @@ const severityRank: Record<Severity, number> = { critical: 0, medium: 1, low: 2 
 type View = "gallery" | "table";
 
 export default function DefectsPage() {
-  const [rows, setRows] = useState<Defect[]>(seedDefects);
+  const { state, setDefectStatus } = useDemoData();
+  const rows = state.defects;
   const [query, setQuery] = useState("");
   const [severity, setSeverity] = useState<Severity | "all">("all");
-  const [status, setStatus] = useState<DefectStatus | "all">("all");
+  const [status, setStatus] = useState<DefectStatus | "all" | "open">("all");
+  const [objectId, setObjectId] = useState<string>("all");
   const [view, setView] = useState<View>("gallery");
   const [openId, setOpenId] = useState<string | null>(null);
+
+  // Filters can be pre-set from links: ?severity=critical&status=open&object=obj-1&open=def-1
+  const initial = useInitialQuery();
+  useEffect(() => {
+    if (!initial) return;
+    const sev = initial.get("severity");
+    const st = initial.get("status");
+    const obj = initial.get("object");
+    /* eslint-disable react-hooks/set-state-in-effect -- applying URL filters once */
+    if (sev === "critical" || sev === "medium" || sev === "low") setSeverity(sev);
+    if (st === "open" || st === "new" || st === "in_progress" || st === "resolved") setStatus(st);
+    if (obj) setObjectId(obj);
+    if (initial.get("open")) setOpenId(initial.get("open"));
+    /* eslint-enable react-hooks/set-state-in-effect */
+  }, [initial]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return rows
       .filter((d) => {
         if (severity !== "all" && d.severity !== severity) return false;
-        if (status !== "all" && d.status !== status) return false;
+        if (status === "open" && d.status === "resolved") return false;
+        if (status !== "all" && status !== "open" && d.status !== status) return false;
+        if (objectId !== "all" && d.objectId !== objectId) return false;
         if (!q) return true;
         return (
           d.type.toLowerCase().includes(q) ||
-          getObjectName(d.objectId).toLowerCase().includes(q) ||
+          getObjectName(state, d.objectId).toLowerCase().includes(q) ||
           d.location.toLowerCase().includes(q)
         );
       })
@@ -49,13 +69,13 @@ export default function DefectsPage() {
           severityRank[a.severity] - severityRank[b.severity] ||
           b.detectedAt.localeCompare(a.detectedAt),
       );
-  }, [rows, query, severity, status]);
+  }, [rows, state, query, severity, status, objectId]);
 
-  function changeStatus(id: string, next: DefectStatus) {
-    setRows((prev) => prev.map((d) => (d.id === id ? { ...d, status: next } : d)));
-  }
+  const changeStatus = setDefectStatus;
 
-  const open = rows.filter((d) => d.status !== "resolved").length;
+  const newCount = rows.filter((d) => d.status === "new").length;
+  const inProgress = rows.filter((d) => d.status === "in_progress").length;
+  const resolved = rows.filter((d) => d.status === "resolved").length;
   const critical = rows.filter((d) => d.severity === "critical" && d.status !== "resolved").length;
 
   return (
@@ -63,8 +83,10 @@ export default function DefectsPage() {
       <div className={styles.pageHead}>
         <h2 className={styles.pageTitle}>Дефекты</h2>
         <p className={styles.pageSubtitle}>
-          Выявлено {rows.length} дефектов, {open} в работе, из них {critical} критических.
-          Классификация и разметка кадров выполнены модулем «Зрение ИИ».
+          В реестре {rows.length} {plural(rows.length, ["дефект", "дефекта", "дефектов"])}: {newCount}{" "}
+          {plural(newCount, ["новый", "новых", "новых"])}, {inProgress} в работе, {resolved} устранено.
+          Открытых критических — {critical}. Разметка кадров выполнена демонстрационным модулем
+          анализа и требует подтверждения инженером.
         </p>
       </div>
 
@@ -93,12 +115,26 @@ export default function DefectsPage() {
         <select
           className={styles.select}
           value={status}
-          onChange={(e) => setStatus(e.target.value as DefectStatus | "all")}
+          onChange={(e) => setStatus(e.target.value as DefectStatus | "all" | "open")}
         >
           <option value="all">Любой статус</option>
+          <option value="open">Открытые (новые и в работе)</option>
           {(Object.keys(defectStatusLabels) as DefectStatus[]).map((s) => (
             <option key={s} value={s}>
               {defectStatusLabels[s]}
+            </option>
+          ))}
+        </select>
+        <select
+          className={styles.select}
+          value={objectId}
+          onChange={(e) => setObjectId(e.target.value)}
+          aria-label="Объект"
+        >
+          <option value="all">Все объекты</option>
+          {state.objects.map((o) => (
+            <option key={o.id} value={o.id}>
+              {o.name}
             </option>
           ))}
         </select>
@@ -139,7 +175,7 @@ export default function DefectsPage() {
                 </div>
                 <h3 className={styles.defectCardTitle}>{d.type}</h3>
                 <p className={styles.defectCardMeta}>
-                  {getObjectName(d.objectId)}
+                  {getObjectName(state, d.objectId)}
                   <br />
                   {d.location} · {formatDate(d.detectedAt)} · {sourceLabels[d.source]}
                 </p>
@@ -157,7 +193,7 @@ export default function DefectsPage() {
                   <th>Дефект</th>
                   <th>Объект</th>
                   <th>Источник</th>
-                  <th>ИИ</th>
+                  <th>Демо-оценка</th>
                   <th>Критичность</th>
                   <th>Статус</th>
                   <th>Действие</th>
@@ -180,7 +216,7 @@ export default function DefectsPage() {
                         href={`/dashboard/objects/${d.objectId}`}
                         onClick={(e) => e.stopPropagation()}
                       >
-                        {getObjectName(d.objectId)}
+                        {getObjectName(state, d.objectId)}
                       </Link>
                     </td>
                     <td className={styles.cellMuted}>{sourceLabels[d.source]}</td>

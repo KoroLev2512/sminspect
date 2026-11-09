@@ -3,11 +3,14 @@
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { DefectPhoto } from "@/components/DefectPhoto";
+import { useDemoData } from "@/components/DemoDataProvider";
 import { Icon } from "@/components/dash-icons";
 import { DefectStatusBadge, SeverityBadge } from "@/components/dash-ui";
 import {
   defectStatusLabels,
   formatDate,
+  formatDateTime,
+  getInspection,
   getObjectName,
   sourceLabels,
   type Defect,
@@ -26,6 +29,7 @@ interface DefectViewerProps {
 }
 
 export function DefectViewer({ defects, openId, onChange, onStatusChange }: DefectViewerProps) {
+  const { state } = useDemoData();
   const closeRef = useRef<HTMLButtonElement>(null);
   const index = defects.findIndex((d) => d.id === openId);
   const defect = index >= 0 ? defects[index] : null;
@@ -49,6 +53,7 @@ export function DefectViewer({ defects, openId, onChange, onStatusChange }: Defe
   }, [defect, index, defects, onChange]);
 
   if (!defect) return null;
+  const inspection = getInspection(state, defect.inspectionId);
 
   return (
     <div className={styles.viewerBackdrop} onClick={() => onChange(null)}>
@@ -89,7 +94,9 @@ export function DefectViewer({ defects, openId, onChange, onStatusChange }: Defe
         <div className={styles.viewerBody}>
           <div className={styles.viewerHead}>
             <div>
-              <p className={styles.viewerEyebrow}>Обнаружено ИИ · {defect.id.toUpperCase()}</p>
+              <p className={styles.viewerEyebrow}>
+                {defect.id.toUpperCase()} · <span className={styles.demoTag}>Демо-разметка</span>
+              </p>
               <h3 className={styles.viewerTitle}>{defect.type}</h3>
             </div>
             <button
@@ -113,7 +120,7 @@ export function DefectViewer({ defects, openId, onChange, onStatusChange }: Defe
               <dt>Объект</dt>
               <dd>
                 <Link href={`/dashboard/objects/${defect.objectId}`}>
-                  {getObjectName(defect.objectId)}
+                  {getObjectName(state, defect.objectId)}
                 </Link>
               </dd>
             </div>
@@ -129,11 +136,21 @@ export function DefectViewer({ defects, openId, onChange, onStatusChange }: Defe
               <dt>Источник данных</dt>
               <dd>{sourceLabels[defect.source]}</dd>
             </div>
+            <div style={{ gridColumn: "1 / -1" }}>
+              <dt>Инспекция</dt>
+              <dd>
+                {inspection ? (
+                  <Link href={`/dashboard/inspections/${inspection.id}`}>{inspection.title}</Link>
+                ) : (
+                  "—"
+                )}
+              </dd>
+            </div>
           </dl>
 
           <div>
             <div className={styles.viewerConfidenceHead}>
-              <span>Уверенность классификатора</span>
+              <span>Уверенность разметки (демо-оценка)</span>
               <strong>{defect.confidence}%</strong>
             </div>
             <div className={styles.meter}>
@@ -145,8 +162,24 @@ export function DefectViewer({ defects, openId, onChange, onStatusChange }: Defe
           </div>
 
           <div className={styles.viewerRecommendation}>
-            <p className={styles.viewerEyebrow}>Рекомендация</p>
+            <p className={styles.viewerEyebrow}>Рекомендация системы</p>
             <p>{defect.recommendation}</p>
+            <p className={styles.fieldNote} style={{ marginTop: 8 }}>
+              Требует подтверждения инженером перед планированием работ.
+            </p>
+          </div>
+
+          <div>
+            <p className={styles.viewerEyebrow}>История статусов</p>
+            <ol className={styles.historyList}>
+              {defect.history.map((h, idx) => (
+                <li key={`${h.status}-${idx}`}>
+                  <span className={styles.historyDot} data-status={h.status} />
+                  <span className={styles.cellStrong}>{defectStatusLabels[h.status]}</span>
+                  <span className={styles.cellMuted}>{formatDateTime(h.at)}</span>
+                </li>
+              ))}
+            </ol>
           </div>
 
           {onStatusChange && (

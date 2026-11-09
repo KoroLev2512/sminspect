@@ -1,50 +1,65 @@
+"use client";
+
 import Link from "next/link";
+import { SavingsCalculator } from "@/components/SavingsCalculator";
+import { useDemoData } from "@/components/DemoDataProvider";
 import { Bars, Donut, StatCard, TrendLine } from "@/components/dash-ui";
 import {
   conditionTrend,
-  defectDistribution,
+  dashboardStats,
   defectsByMonth,
-  objects,
+  defectsByType,
+  objectMetrics,
 } from "@/lib/dashboard";
 import styles from "@/components/Dashboard.module.css";
 
 export default function AnalyticsPage() {
-  const forecast = [...objects].sort((a, b) => a.forecastMonths - b.forecastMonths);
+  const { state } = useDemoData();
+  const stats = dashboardStats(state);
+  const resolved = state.defects.filter((d) => d.status === "resolved").length;
+  const forecast = state.objects
+    .map((o) => ({ o, m: objectMetrics(state, o.id) }))
+    .sort((a, b) => a.o.forecastMonths - b.o.forecastMonths);
 
   return (
     <div className={styles.page}>
       <div className={styles.pageHead}>
         <h2 className={styles.pageTitle}>Аналитика</h2>
         <p className={styles.pageSubtitle}>
-          Прогнозирование износа и распределение дефектов на основе истории
-          инспекций и моделей машинного обучения.
+          Показатели рассчитаны по демонстрационным данным кабинета. Прогноз сроков ремонта —
+          оценочный сценарий: верифицированной предиктивной модели в демо-версии нет.
         </p>
       </div>
 
       <div className={styles.statGrid}>
         <StatCard
-          label="Экономия на инспекциях"
-          value="14,2 млн ₽"
-          icon="shield"
-          meta="за 12 месяцев против ручного метода"
-        />
-        <StatCard
-          label="Предотвращено аварийных ремонтов"
-          value="7"
-          icon="check"
-          meta="по прогнозу критических дефектов"
-        />
-        <StatCard
-          label="Средняя точность ИИ"
-          value="93%"
+          label="Средний индекс состояния"
+          value={stats.avgCondition}
           icon="analytics"
-          meta="классификация дефектов"
+          meta={`по ${stats.objects} объектам, из 100`}
+          href="/dashboard/objects"
         />
         <StatCard
-          label="Обработано снимков"
-          value="128 400"
+          label="Открытых дефектов"
+          value={stats.openDefects}
+          icon="defects"
+          danger={stats.criticalDefects > 0}
+          meta={`критических: ${stats.criticalDefects}`}
+          href="/dashboard/defects?status=open"
+        />
+        <StatCard
+          label="Устранено дефектов"
+          value={resolved}
+          icon="check"
+          meta={`из ${state.defects.length} в реестре`}
+          href="/dashboard/defects?status=resolved"
+        />
+        <StatCard
+          label="Размеченных снимков"
+          value={stats.analyzedImages}
           icon="inspections"
-          meta="дроны, камеры, сенсоры"
+          meta={<><span className={styles.demoTag}>Демо</span> подготовленная разметка</>}
+          href="/dashboard/inspections"
         />
       </div>
 
@@ -52,31 +67,33 @@ export default function AnalyticsPage() {
         <div className={styles.card}>
           <div className={styles.cardHead}>
             <h3 className={styles.cardTitle}>Средний индекс состояния</h3>
-            <span className={styles.pill}>тренд, 8 мес.</span>
+            <span className={styles.pill}>
+              6 мес. · <span className={styles.demoTag}>Демо-история</span>
+            </span>
           </div>
-          <TrendLine data={conditionTrend} />
+          <TrendLine data={conditionTrend(state)} />
         </div>
-
         <div className={styles.card}>
           <div className={styles.cardHead}>
-            <h3 className={styles.cardTitle}>Распределение дефектов по типам</h3>
+            <h3 className={styles.cardTitle}>Дефекты реестра по типам</h3>
+            <span className={styles.pill}>{state.defects.length} всего</span>
           </div>
-          <Donut data={defectDistribution} />
+          <Donut data={defectsByType(state)} />
         </div>
       </div>
 
       <div className={styles.cols2} style={{ marginTop: 20 }}>
         <div className={styles.card}>
           <div className={styles.cardHead}>
-            <h3 className={styles.cardTitle}>Найдено дефектов по месяцам</h3>
+            <h3 className={styles.cardTitle}>Выявлено дефектов по месяцам</h3>
+            <span className={styles.pill}>по дате инспекции</span>
           </div>
-          <Bars data={defectsByMonth} />
+          <Bars data={defectsByMonth(state)} />
         </div>
-
         <div className={styles.card}>
           <div className={styles.cardHead}>
-            <h3 className={styles.cardTitle}>Прогноз ремонтов</h3>
-            <span className={styles.pill}>приоритет по срокам</span>
+            <h3 className={styles.cardTitle}>Приоритеты ремонта</h3>
+            <span className={styles.demoTag}>Оценка</span>
           </div>
           <div className={styles.tableWrap}>
             <table className={styles.table}>
@@ -84,16 +101,18 @@ export default function AnalyticsPage() {
                 <tr>
                   <th>Объект</th>
                   <th>Индекс</th>
+                  <th>Крит.</th>
                   <th>Ремонт через</th>
                 </tr>
               </thead>
               <tbody>
-                {forecast.map((o) => (
+                {forecast.map(({ o, m }) => (
                   <tr key={o.id}>
                     <td className={styles.cellStrong}>
                       <Link href={`/dashboard/objects/${o.id}`}>{o.name}</Link>
                     </td>
-                    <td className={styles.cellMuted}>{o.condition}</td>
+                    <td className={styles.cellMuted}>{m.condition}</td>
+                    <td className={styles.cellMuted}>{m.critical}</td>
                     <td>
                       <span
                         className={`${styles.badge} ${
@@ -104,7 +123,7 @@ export default function AnalyticsPage() {
                               : styles.badgeGood
                         }`}
                       >
-                        {o.forecastMonths} мес.
+                        ≈ {o.forecastMonths} мес.
                       </span>
                     </td>
                   </tr>
@@ -112,7 +131,15 @@ export default function AnalyticsPage() {
               </tbody>
             </table>
           </div>
+          <p className={styles.fieldNote} style={{ marginTop: 12 }}>
+            Срок — экспертная оценка демо-сценария по индексу и критическим дефектам, не результат
+            прогнозной модели.
+          </p>
         </div>
+      </div>
+
+      <div style={{ marginTop: 20 }}>
+        <SavingsCalculator />
       </div>
     </div>
   );

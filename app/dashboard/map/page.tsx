@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { MapView } from "@/components/MapView";
+import { useDemoData } from "@/components/DemoDataProvider";
+import { MapView, type MapObject } from "@/components/MapView";
 import { Icon } from "@/components/dash-icons";
 import { ConditionMeter, ObjectStatusBadge } from "@/components/dash-ui";
 import {
   formatDate,
-  objects,
+  objectMetrics,
   statusLabels,
   typeLabels,
   type ObjectStatus,
@@ -28,12 +29,22 @@ const dotClass: Record<ObjectStatus, string> = {
 };
 
 export default function MapPage() {
+  const { state } = useDemoData();
+  const enriched = useMemo(
+    () =>
+      state.objects.map((o) => {
+        const m = objectMetrics(state, o.id);
+        return { ...o, status: m.status, metrics: m } as MapObject & { metrics: typeof m };
+      }),
+    [state],
+  );
+  const objects = enriched;
   const [filter, setFilter] = useState<ObjectStatus | "all">("all");
-  const [activeId, setActiveId] = useState<string | null>(objects[0]?.id ?? null);
+  const [activeId, setActiveId] = useState<string | null>(state.objects[0]?.id ?? null);
 
   const visible = useMemo(
     () => objects.filter((o) => filter === "all" || o.status === filter),
-    [filter],
+    [objects, filter],
   );
 
   const active = objects.find((o) => o.id === activeId) ?? null;
@@ -43,8 +54,9 @@ export default function MapPage() {
       <div className={styles.pageHead}>
         <h2 className={styles.pageTitle}>Карта инфраструктуры</h2>
         <p className={styles.pageSubtitle}>
-          Состояние дорог и мостовых сооружений на единой карте. Выберите объект
-          на карте или в списке — карта приблизит его.
+          Состояние дорог и мостовых сооружений на единой карте. Выберите объект на карте или в
+          списке — карта приблизит его. Метки ставятся по условной точке объекта (демо-координаты,
+          не геодезическая привязка); протяжённые дороги показаны одной точкой.
         </p>
       </div>
 
@@ -77,6 +89,9 @@ export default function MapPage() {
             <span className={styles.mapLegendRow}>
               <span className={`${styles.dot} ${styles.dotGood}`} /> В норме
             </span>
+            <span className={styles.mapLegendNote}>
+              Индекс: &lt;50 — критическое, &lt;75 — внимание. Точки условные.
+            </span>
           </div>
         </div>
 
@@ -91,7 +106,7 @@ export default function MapPage() {
                 <ObjectStatusBadge status={active.status} />
               </div>
               <h3 className={styles.objectName}>{active.name}</h3>
-              <ConditionMeter value={active.condition} />
+              <ConditionMeter value={active.metrics.condition} />
               <dl className={styles.defList}>
                 <div>
                   <dt>Регион</dt>
@@ -102,19 +117,21 @@ export default function MapPage() {
                   <dd>{active.length}</dd>
                 </div>
                 <div>
-                  <dt>Дефектов</dt>
+                  <dt>Открытых дефектов</dt>
                   <dd>
-                    {active.defects}
-                    {active.criticalDefects > 0 ? ` (крит. ${active.criticalDefects})` : ""}
+                    {active.metrics.open}
+                    {active.metrics.critical > 0 ? ` (крит. ${active.metrics.critical})` : ""}
                   </dd>
                 </div>
                 <div>
-                  <dt>Ремонт через</dt>
+                  <dt>Ремонт через (оценка)</dt>
                   <dd>{active.forecastMonths} мес.</dd>
                 </div>
               </dl>
               <p className={styles.statMeta}>
-                Последняя инспекция: {formatDate(active.lastInspection)}
+                {active.metrics.lastInspection
+                  ? `Последняя инспекция: ${formatDate(active.metrics.lastInspection.date)}`
+                  : "Инспекций нет"}
               </p>
               <Link href={`/dashboard/objects/${active.id}`} className="btnPrimary">
                 Открыть объект
@@ -142,7 +159,7 @@ export default function MapPage() {
               <span className={styles.cellMuted} style={{ fontSize: "var(--text-caption)" }}>
                 {o.region} · {statusLabels[o.status]}
               </span>
-              <ConditionMeter value={o.condition} />
+              <ConditionMeter value={o.metrics.condition} />
             </button>
           ))}
 
