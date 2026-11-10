@@ -51,7 +51,9 @@ export function AnnotatedImage({
           return (
             <span key={idx} className={styles.bbox} style={style} aria-hidden="true">
               {labeled && (
-                <span className={`${styles.bboxLabel} ${d.bbox.y < 10 ? styles.bboxLabelInside : ""}`}>
+                <span
+                  className={`${styles.bboxLabel} ${d.bbox.y < 10 ? styles.bboxLabelInside : ""} ${d.bbox.x + d.bbox.w > 70 ? styles.bboxLabelRight : ""}`}
+                >
                   {idx + 1}. {d.type}
                 </span>
               )}

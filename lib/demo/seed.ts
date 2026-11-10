@@ -6,7 +6,7 @@
 
 import type { DemoState } from "@/lib/dashboard";
 
-export const DEMO_SEED_VERSION = 1;
+export const DEMO_SEED_VERSION = 2;
 
 const seed: Omit<DemoState, "version"> = {
   objects: [
@@ -212,7 +212,7 @@ const seed: Omit<DemoState, "version"> = {
         "value": 86
       }
     ],
-    "forecastMonths": 21
+    "forecastMonths": 9
   },
   {
     "id": "obj-7",
@@ -284,6 +284,196 @@ const seed: Omit<DemoState, "version"> = {
   }
 ],
   inspections: [
+  {
+    "id": "insp-22",
+    "title": "Видеообследование с БПЛА — А-121 «Сортавала»",
+    "objectId": "obj-6",
+    "date": "2026-10-31",
+    "source": "drone",
+    "operator": "БПЛА-бригада №1",
+    "coverage": "видео 38 с, км 40–42 · 4 кадра",
+    "description": "Облёт участка км 40–42 с видеозаписью (38 с, 1920×1080). Из видео извлечены 4 кадра с признаками повреждений; разметка кадров демонстрационная.",
+    "status": "completed",
+    "createdAt": "2026-10-31T10:00:00",
+    "statusLog": [
+      {
+        "status": "created",
+        "at": "2026-10-31T10:00:00"
+      },
+      {
+        "status": "queued",
+        "at": "2026-10-31T10:02:00"
+      },
+      {
+        "status": "processing",
+        "at": "2026-10-31T10:03:00"
+      },
+      {
+        "status": "completed",
+        "at": "2026-10-31T10:09:00"
+      }
+    ],
+    "materials": [
+      {
+        "id": "mat-a121-video-025",
+        "name": "Кадр видео 00:02.5.jpg",
+        "url": "/demo-samples/a121-video-025.jpg",
+        "analysis": {
+          "state": "matched",
+          "engine": "demo-annotations",
+          "detections": [
+            {
+              "type": "Лёд / вода в колее",
+              "severity": "low",
+              "bbox": {
+                "x": 36,
+                "y": 41,
+                "w": 7,
+                "h": 18
+              },
+              "confidence": 86,
+              "location": "км 40+350, левая колея",
+              "recommendation": "Наблюдение; противогололёдная обработка, при повторении — выравнивание колеи."
+            },
+            {
+              "type": "Лёд / вода в колее",
+              "severity": "low",
+              "bbox": {
+                "x": 57,
+                "y": 43,
+                "w": 3,
+                "h": 11
+              },
+              "confidence": 81,
+              "location": "км 40+350, правая колея",
+              "recommendation": "Наблюдение; противогололёдная обработка."
+            }
+          ]
+        }
+      },
+      {
+        "id": "mat-a121-video-125",
+        "name": "Кадр видео 00:12.5.jpg",
+        "url": "/demo-samples/a121-video-125.jpg",
+        "analysis": {
+          "state": "matched",
+          "engine": "demo-annotations",
+          "detections": [
+            {
+              "type": "Выбоина с водой",
+              "severity": "medium",
+              "bbox": {
+                "x": 50,
+                "y": 22,
+                "w": 6,
+                "h": 18
+              },
+              "confidence": 89,
+              "location": "км 40+900, ось проезжей части",
+              "recommendation": "Ямочный ремонт после схода воды; проверить водоотвод участка."
+            }
+          ]
+        }
+      },
+      {
+        "id": "mat-a121-video-225",
+        "name": "Кадр видео 00:22.5.jpg",
+        "url": "/demo-samples/a121-video-225.jpg",
+        "analysis": {
+          "state": "matched",
+          "engine": "demo-annotations",
+          "detections": [
+            {
+              "type": "Вода в колее",
+              "severity": "medium",
+              "bbox": {
+                "x": 55,
+                "y": 53,
+                "w": 13,
+                "h": 40
+              },
+              "confidence": 88,
+              "location": "км 41+400, правая полоса",
+              "recommendation": "Обследование колейности, восстановление поперечного профиля и водоотвода."
+            },
+            {
+              "type": "Выбоины",
+              "severity": "low",
+              "bbox": {
+                "x": 61,
+                "y": 37,
+                "w": 15,
+                "h": 8
+              },
+              "confidence": 79,
+              "location": "км 41+430, правая полоса",
+              "recommendation": "Включить в план ямочного ремонта."
+            }
+          ]
+        }
+      },
+      {
+        "id": "mat-a121-video-275",
+        "name": "Кадр видео 00:27.5.jpg",
+        "url": "/demo-samples/a121-video-275.jpg",
+        "analysis": {
+          "state": "matched",
+          "engine": "demo-annotations",
+          "detections": [
+            {
+              "type": "Разрушение кромки покрытия",
+              "severity": "medium",
+              "bbox": {
+                "x": 74,
+                "y": 27,
+                "w": 5,
+                "h": 31
+              },
+              "confidence": 87,
+              "location": "км 41+700, правая кромка",
+              "recommendation": "Восстановление кромки и укрепление обочины."
+            },
+            {
+              "type": "Выбоина",
+              "severity": "low",
+              "bbox": {
+                "x": 72.5,
+                "y": 43,
+                "w": 3,
+                "h": 3
+              },
+              "confidence": 77,
+              "location": "км 41+720, у правой кромки",
+              "recommendation": "Включить в план ямочного ремонта."
+            },
+            {
+              "type": "Выбоины",
+              "severity": "low",
+              "bbox": {
+                "x": 69,
+                "y": 80,
+                "w": 15,
+                "h": 8
+              },
+              "confidence": 80,
+              "location": "км 41+680, правая полоса",
+              "recommendation": "Включить в план ямочного ремонта."
+            }
+          ]
+        }
+      }
+    ],
+    "savedDefectIds": [
+      "def-19",
+      "def-20",
+      "def-21",
+      "def-22",
+      "def-23",
+      "def-24",
+      "def-25",
+      "def-26"
+    ]
+  },
   {
     "id": "insp-1",
     "title": "Плановое обследование — мост через р. Волга",
@@ -1831,9 +2021,226 @@ const seed: Omit<DemoState, "version"> = {
         "at": "2026-10-26T16:00:00"
       }
     ]
+  },
+  {
+    "id": "def-19",
+    "objectId": "obj-6",
+    "inspectionId": "insp-22",
+    "type": "Лёд / вода в колее",
+    "severity": "low",
+    "status": "new",
+    "detectedAt": "2026-10-31",
+    "location": "км 40+350, левая колея",
+    "confidence": 86,
+    "source": "drone",
+    "recommendation": "Наблюдение; противогололёдная обработка, при повторении — выравнивание колеи.",
+    "image": "/demo-samples/a121-video-025.jpg",
+    "bbox": {
+      "x": 36,
+      "y": 41,
+      "w": 7,
+      "h": 18
+    },
+    "history": [
+      {
+        "status": "new",
+        "at": "2026-10-31T10:30:00"
+      }
+    ]
+  },
+  {
+    "id": "def-20",
+    "objectId": "obj-6",
+    "inspectionId": "insp-22",
+    "type": "Лёд / вода в колее",
+    "severity": "low",
+    "status": "new",
+    "detectedAt": "2026-10-31",
+    "location": "км 40+350, правая колея",
+    "confidence": 81,
+    "source": "drone",
+    "recommendation": "Наблюдение; противогололёдная обработка.",
+    "image": "/demo-samples/a121-video-025.jpg",
+    "bbox": {
+      "x": 57,
+      "y": 43,
+      "w": 3,
+      "h": 11
+    },
+    "history": [
+      {
+        "status": "new",
+        "at": "2026-10-31T10:30:00"
+      }
+    ]
+  },
+  {
+    "id": "def-21",
+    "objectId": "obj-6",
+    "inspectionId": "insp-22",
+    "type": "Выбоина с водой",
+    "severity": "medium",
+    "status": "new",
+    "detectedAt": "2026-10-31",
+    "location": "км 40+900, ось проезжей части",
+    "confidence": 89,
+    "source": "drone",
+    "recommendation": "Ямочный ремонт после схода воды; проверить водоотвод участка.",
+    "image": "/demo-samples/a121-video-125.jpg",
+    "bbox": {
+      "x": 50,
+      "y": 22,
+      "w": 6,
+      "h": 18
+    },
+    "history": [
+      {
+        "status": "new",
+        "at": "2026-10-31T10:30:00"
+      }
+    ]
+  },
+  {
+    "id": "def-22",
+    "objectId": "obj-6",
+    "inspectionId": "insp-22",
+    "type": "Вода в колее",
+    "severity": "medium",
+    "status": "new",
+    "detectedAt": "2026-10-31",
+    "location": "км 41+400, правая полоса",
+    "confidence": 88,
+    "source": "drone",
+    "recommendation": "Обследование колейности, восстановление поперечного профиля и водоотвода.",
+    "image": "/demo-samples/a121-video-225.jpg",
+    "bbox": {
+      "x": 55,
+      "y": 53,
+      "w": 13,
+      "h": 40
+    },
+    "history": [
+      {
+        "status": "new",
+        "at": "2026-10-31T10:30:00"
+      }
+    ]
+  },
+  {
+    "id": "def-23",
+    "objectId": "obj-6",
+    "inspectionId": "insp-22",
+    "type": "Выбоины",
+    "severity": "low",
+    "status": "new",
+    "detectedAt": "2026-10-31",
+    "location": "км 41+430, правая полоса",
+    "confidence": 79,
+    "source": "drone",
+    "recommendation": "Включить в план ямочного ремонта.",
+    "image": "/demo-samples/a121-video-225.jpg",
+    "bbox": {
+      "x": 61,
+      "y": 37,
+      "w": 15,
+      "h": 8
+    },
+    "history": [
+      {
+        "status": "new",
+        "at": "2026-10-31T10:30:00"
+      }
+    ]
+  },
+  {
+    "id": "def-24",
+    "objectId": "obj-6",
+    "inspectionId": "insp-22",
+    "type": "Разрушение кромки покрытия",
+    "severity": "medium",
+    "status": "new",
+    "detectedAt": "2026-10-31",
+    "location": "км 41+700, правая кромка",
+    "confidence": 87,
+    "source": "drone",
+    "recommendation": "Восстановление кромки и укрепление обочины.",
+    "image": "/demo-samples/a121-video-275.jpg",
+    "bbox": {
+      "x": 74,
+      "y": 27,
+      "w": 5,
+      "h": 31
+    },
+    "history": [
+      {
+        "status": "new",
+        "at": "2026-10-31T10:30:00"
+      }
+    ]
+  },
+  {
+    "id": "def-25",
+    "objectId": "obj-6",
+    "inspectionId": "insp-22",
+    "type": "Выбоина",
+    "severity": "low",
+    "status": "new",
+    "detectedAt": "2026-10-31",
+    "location": "км 41+720, у правой кромки",
+    "confidence": 77,
+    "source": "drone",
+    "recommendation": "Включить в план ямочного ремонта.",
+    "image": "/demo-samples/a121-video-275.jpg",
+    "bbox": {
+      "x": 72.5,
+      "y": 43,
+      "w": 3,
+      "h": 3
+    },
+    "history": [
+      {
+        "status": "new",
+        "at": "2026-10-31T10:30:00"
+      }
+    ]
+  },
+  {
+    "id": "def-26",
+    "objectId": "obj-6",
+    "inspectionId": "insp-22",
+    "type": "Выбоины",
+    "severity": "low",
+    "status": "new",
+    "detectedAt": "2026-10-31",
+    "location": "км 41+680, правая полоса",
+    "confidence": 80,
+    "source": "drone",
+    "recommendation": "Включить в план ямочного ремонта.",
+    "image": "/demo-samples/a121-video-275.jpg",
+    "bbox": {
+      "x": 69,
+      "y": 80,
+      "w": 15,
+      "h": 8
+    },
+    "history": [
+      {
+        "status": "new",
+        "at": "2026-10-31T10:30:00"
+      }
+    ]
   }
 ],
   alerts: [
+  {
+    "id": "al-7",
+    "objectId": "obj-6",
+    "defectId": "def-21",
+    "message": "Видеообследование А-121 «Сортавала»: выявлено 8 повреждений покрытия, в том числе выбоина с водой на км 40+900",
+    "severity": "medium",
+    "createdAt": "2026-10-31T10:35:00",
+    "read": false
+  },
   {
     "id": "al-1",
     "objectId": "obj-1",

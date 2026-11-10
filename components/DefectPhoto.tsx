@@ -38,7 +38,9 @@ export function DefectPhoto({ defect, label, className }: DefectPhotoProps) {
       <img src={defect.image} alt={`${defect.type}: ${defect.location}`} loading="lazy" />
       <span className={styles.bbox} style={style} aria-hidden="true">
         {label && (
-          <span className={`${styles.bboxLabel} ${y < 10 ? styles.bboxLabelInside : ""}`}>
+          <span
+            className={`${styles.bboxLabel} ${y < 10 ? styles.bboxLabelInside : ""} ${x + w > 70 ? styles.bboxLabelRight : ""}`}
+          >
             {label === "full" ? defect.type : "ИИ"} · {defect.confidence}%
           </span>
         )}

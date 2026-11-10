@@ -3,8 +3,10 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useAuth } from "@/components/AuthProvider";
+import { useDemoData } from "@/components/DemoDataProvider";
 import { Icon } from "@/components/dash-icons";
 import { UserAvatar } from "@/components/dash-ui";
+import { DEMO_AS_OF, formatDate } from "@/lib/dashboard";
 import {
   MIN_PASSWORD_LENGTH,
   avatarEmojis,
@@ -463,6 +465,46 @@ export function DeleteAccountCard() {
           </div>
         </form>
       )}
+    </div>
+  );
+}
+
+/* ---- Demo data ------------------------------------------------------------- */
+
+export function DemoDataCard() {
+  const { resetDemo } = useDemoData();
+  const router = useRouter();
+  const [done, flashDone] = useFlash(3000);
+
+  function reset() {
+    if (
+      !window.confirm(
+        "Сбросить демо-данные к исходному состоянию? Созданные инспекции, изменения статусов и сформированные отчёты будут удалены.",
+      )
+    ) {
+      return;
+    }
+    resetDemo();
+    flashDone();
+    router.refresh();
+  }
+
+  return (
+    <div className={styles.card}>
+      <div className={styles.cardHead}>
+        <h3 className={styles.cardTitle}>Демо-данные</h3>
+        <SavedMark show={done} text="Данные сброшены" />
+      </div>
+      <p className={styles.fieldNote}>
+        Кабинет работает на демонстрационном наборе данных (срез на {formatDate(DEMO_AS_OF)}).
+        Изменения хранятся в этом браузере. Сброс возвращает исходные объекты, инспекции, дефекты
+        и отчёты — например, перед повторной демонстрацией.
+      </p>
+      <div className={styles.formActions}>
+        <button type="button" className={styles.btnSecondary} onClick={reset}>
+          Сбросить демо-данные
+        </button>
+      </div>
     </div>
   );
 }

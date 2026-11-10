@@ -4,6 +4,7 @@ import { useAuth } from "@/components/AuthProvider";
 import { Icon } from "@/components/dash-icons";
 import {
   DeleteAccountCard,
+  DemoDataCard,
   NotificationsCard,
   PasswordCard,
   ProfileCard,
@@ -93,6 +94,8 @@ export default function SettingsPage() {
         </div>
 
         <NotificationsCard user={user} />
+
+        <DemoDataCard />
 
         <DeleteAccountCard />
       </div>

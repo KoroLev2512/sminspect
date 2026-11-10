@@ -8,7 +8,7 @@ import { useAuth } from "./AuthProvider";
 import { useDemoData } from "./DemoDataProvider";
 import { Icon, type IconName } from "./dash-icons";
 import { UserAvatar } from "./dash-ui";
-import { DEMO_AS_OF, dashboardStats, formatDate } from "@/lib/dashboard";
+import { dashboardStats } from "@/lib/dashboard";
 import styles from "./Dashboard.module.css";
 
 interface NavLink {
@@ -53,19 +53,8 @@ export function DashboardShell({ children }: { children: ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
-  const { state, resetDemo, storageError } = useDemoData();
+  const { state, storageError } = useDemoData();
   const stats = dashboardStats(state);
-
-  function confirmReset() {
-    if (
-      window.confirm(
-        "Сбросить демо-данные к исходному состоянию? Созданные инспекции, изменения статусов и сформированные отчёты будут удалены.",
-      )
-    ) {
-      resetDemo();
-      router.push("/dashboard");
-    }
-  }
 
   useEffect(() => {
     if (status === "ready" && !user) router.replace("/login");
@@ -168,13 +157,6 @@ export function DashboardShell({ children }: { children: ReactNode }) {
           </button>
           <h1 className={styles.topbarTitle}>{title}</h1>
           <div className={styles.topbarActions}>
-            <span className={styles.demoBadge} title="Все данные кабинета демонстрационные">
-              <span className={styles.demoDot} />
-              Демо-данные · срез на {formatDate(DEMO_AS_OF)}
-            </span>
-            <button type="button" className={styles.demoReset} onClick={confirmReset}>
-              Сбросить демо
-            </button>
             <Link href="/dashboard/alerts" className={styles.iconBtn} aria-label="Оповещения">
               <Icon name="bell" size={20} />
               {stats.unreadAlerts > 0 && <span className={styles.iconBtnDot} />}

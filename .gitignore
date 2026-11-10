@@ -17,3 +17,6 @@ next-env.d.ts
 .vscode/*
 .idea/
 .DS_Store
+
+# Demo source videos (large; frames are in public/demo-samples)
+/*.mp4

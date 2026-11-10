@@ -13,6 +13,9 @@ export interface DemoSample {
   sha256: string;
   /** Object the sample is meant for in the demo script. */
   suggestedObjectId: string;
+  /** "video" — кадр, извлечённый из видеозаписи облёта (with its timestamp). */
+  kind?: "photo" | "video";
+  videoTime?: string;
   detections: Detection[];
 }
 
@@ -207,5 +210,154 @@ export const demoSamples: DemoSample[] = [
         recommendation: "Замена обоймы люка, восстановление покрытия.",
       },
     ],
+  },
+  // Frames from the drone video of А-121 (SmartInspect Demo Video.mp4), cropped to 4:3.
+  {
+    id: "a121-video-025",
+    title: "А-121 «Сортавала» — кадр видео 00:02.5",
+    url: "/demo-samples/a121-video-025.jpg",
+    sha256: "9ecd6e9f34f8de4f401d0ca88269e00d2fcf74f44647dafd90c77d1caa134f84",
+    suggestedObjectId: "obj-6",
+    kind: "video",
+    videoTime: "00:02.5",
+    detections: [
+      {
+        type: "Лёд / вода в колее",
+        severity: "low",
+        bbox: {
+          x: 36,
+          y: 41,
+          w: 7,
+          h: 18
+        },
+        confidence: 86,
+        location: "км 40+350, левая колея",
+        recommendation: "Наблюдение; противогололёдная обработка, при повторении — выравнивание колеи."
+      },
+      {
+        type: "Лёд / вода в колее",
+        severity: "low",
+        bbox: {
+          x: 57,
+          y: 43,
+          w: 3,
+          h: 11
+        },
+        confidence: 81,
+        location: "км 40+350, правая колея",
+        recommendation: "Наблюдение; противогололёдная обработка."
+      }
+    ]
+  },
+  {
+    id: "a121-video-125",
+    title: "А-121 «Сортавала» — кадр видео 00:12.5",
+    url: "/demo-samples/a121-video-125.jpg",
+    sha256: "1919f3a0ff1dd3ea344c28ad5c43fec2e235965f369f34dd4e9269f92c6cca8b",
+    suggestedObjectId: "obj-6",
+    kind: "video",
+    videoTime: "00:12.5",
+    detections: [
+      {
+        type: "Выбоина с водой",
+        severity: "medium",
+        bbox: {
+          x: 50,
+          y: 22,
+          w: 6,
+          h: 18
+        },
+        confidence: 89,
+        location: "км 40+900, ось проезжей части",
+        recommendation: "Ямочный ремонт после схода воды; проверить водоотвод участка."
+      }
+    ]
+  },
+  {
+    id: "a121-video-225",
+    title: "А-121 «Сортавала» — кадр видео 00:22.5",
+    url: "/demo-samples/a121-video-225.jpg",
+    sha256: "ed7e49b2ff2af6b608cffc8212216be5300d38cf0fe711b7a9272e773227db88",
+    suggestedObjectId: "obj-6",
+    kind: "video",
+    videoTime: "00:22.5",
+    detections: [
+      {
+        type: "Вода в колее",
+        severity: "medium",
+        bbox: {
+          x: 55,
+          y: 53,
+          w: 13,
+          h: 40
+        },
+        confidence: 88,
+        location: "км 41+400, правая полоса",
+        recommendation: "Обследование колейности, восстановление поперечного профиля и водоотвода."
+      },
+      {
+        type: "Выбоины",
+        severity: "low",
+        bbox: {
+          x: 61,
+          y: 37,
+          w: 15,
+          h: 8
+        },
+        confidence: 79,
+        location: "км 41+430, правая полоса",
+        recommendation: "Включить в план ямочного ремонта."
+      }
+    ]
+  },
+  {
+    id: "a121-video-275",
+    title: "А-121 «Сортавала» — кадр видео 00:27.5",
+    url: "/demo-samples/a121-video-275.jpg",
+    sha256: "53df547a08b766f3c50e21e6dfd6812f4b1e2e56fa5e1848b2f62000bde54307",
+    suggestedObjectId: "obj-6",
+    kind: "video",
+    videoTime: "00:27.5",
+    detections: [
+      {
+        type: "Разрушение кромки покрытия",
+        severity: "medium",
+        bbox: {
+          x: 74,
+          y: 27,
+          w: 5,
+          h: 31
+        },
+        confidence: 87,
+        location: "км 41+700, правая кромка",
+        recommendation: "Восстановление кромки и укрепление обочины."
+      },
+      {
+        type: "Выбоина",
+        severity: "low",
+        bbox: {
+          x: 72.5,
+          y: 43,
+          w: 3,
+          h: 3
+        },
+        confidence: 77,
+        location: "км 41+720, у правой кромки",
+        recommendation: "Включить в план ямочного ремонта."
+      },
+      {
+        type: "Выбоины",
+        severity: "low",
+        bbox: {
+          x: 69,
+          y: 80,
+          w: 15,
+          h: 8
+        },
+        confidence: 80,
+        location: "км 41+680, правая полоса",
+        recommendation: "Включить в план ямочного ремонта."
+      }
+    ]
   },
 ];

@@ -405,25 +405,42 @@ export default function NewInspectionPage() {
               Обученной модели в демо-версии нет. Разметка заранее подготовлена для этих снимков;
               для других изображений модуль честно сообщит, что разметки нет.
             </p>
-            <div className={styles.sampleGrid}>
-              {demoSamples.map((s) => {
-                const added = items.some((i) => i.sampleId === s.id);
-                return (
-                  <button
-                    key={s.id}
-                    type="button"
-                    className={`${styles.sampleItem} ${added ? styles.sampleAdded : ""}`}
-                    onClick={() => addSample(s.id)}
-                    disabled={added || loadingSample !== null}
-                    title={s.title}
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={s.url} alt="" loading="lazy" />
-                    <span>{loadingSample === s.id ? "Загрузка…" : added ? "Добавлен" : s.title}</span>
-                  </button>
-                );
-              })}
-            </div>
+            {(["photo", "video"] as const).map((kind) => (
+              <div key={kind} style={{ marginTop: kind === "video" ? 16 : 0 }}>
+                <p className={styles.sampleGroupTitle}>
+                  {kind === "photo" ? "Фотоснимки" : "Кадры видео облёта А-121 (38 с)"}
+                </p>
+                <div className={styles.sampleGrid}>
+                  {demoSamples
+                    .filter((s) => (s.kind ?? "photo") === kind)
+                    .map((s) => {
+                      const added = items.some((i) => i.sampleId === s.id);
+                      return (
+                        <button
+                          key={s.id}
+                          type="button"
+                          className={`${styles.sampleItem} ${added ? styles.sampleAdded : ""}`}
+                          onClick={() => addSample(s.id)}
+                          disabled={added || loadingSample !== null}
+                          title={s.title}
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={s.url} alt="" loading="lazy" />
+                          <span>
+                            {loadingSample === s.id
+                              ? "Загрузка…"
+                              : added
+                                ? "Добавлен"
+                                : s.videoTime
+                                  ? `Кадр ${s.videoTime}`
+                                  : s.title}
+                          </span>
+                        </button>
+                      );
+                    })}
+                </div>
+              </div>
+            ))}
           </div>
 
           <div className={styles.card}>

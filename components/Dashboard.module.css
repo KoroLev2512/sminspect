@@ -1390,7 +1390,8 @@
   position: absolute;
   left: -2px;
   bottom: 100%;
-  max-width: calc(100% + 4px);
+  /* Labels may be wider than narrow boxes; the frame clips at its edge. */
+  max-width: 260px;
   padding: 2px 8px;
   border-radius: 2px 2px 0 0;
   background: var(--bbox-color);
@@ -1890,43 +1891,9 @@
 
 /* ---- Demo mode ------------------------------------------------------------ */
 
-.demoBadge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 12px;
-  border-radius: 9999px;
-  background: color-mix(in srgb, #f5a623 14%, transparent);
-  color: #8a5a00;
-  font-size: var(--text-caption);
-  font-weight: var(--font-weight-medium);
-  white-space: nowrap;
-}
 
-.demoDot {
-  width: 6px;
-  height: 6px;
-  border-radius: 9999px;
-  background: #f5a623;
-}
 
-.demoReset {
-  padding: 6px 12px;
-  border: 1px solid var(--color-mist);
-  border-radius: var(--radius-buttons);
-  background: var(--color-paper-white);
-  font: inherit;
-  font-size: var(--text-caption);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-graphite-dim);
-  cursor: pointer;
-  white-space: nowrap;
-}
 
-.demoReset:hover {
-  background: var(--color-hailstone);
-  color: var(--color-horizon-navy);
-}
 
 .storageWarning {
   margin: var(--spacing-16) var(--spacing-32) 0;
@@ -1952,11 +1919,6 @@
   vertical-align: middle;
 }
 
-@media (max-width: 900px) {
-  .demoBadge {
-    display: none;
-  }
-}
 
 .historyList {
   display: flex;
@@ -2562,4 +2524,24 @@
 
 .alertRow > .badge {
   align-self: center;
+}
+
+.sampleGroupTitle {
+  margin: 0 0 8px;
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-graphite-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Boxes near the right edge: grow the label leftwards to stay inside the frame. */
+.bboxLabelRight {
+  left: auto;
+  right: -2px;
+}
+
+.bboxLabelInside.bboxLabelRight {
+  right: 0;
+  border-radius: 0 0 0 2px;
 }

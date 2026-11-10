@@ -10,3 +10,4 @@
 | city-street.jpg | [Реальность - panoramio.jpg](https://commons.wikimedia.org/wiki/File:%D0%A0%D0%B5%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D1%81%D1%82%D1%8C_-_panoramio.jpg) | Arzy Arzamas | CC BY 3.0 |
 | pothole-cracks.jpg | [Pothole in Potomac after rain.jpg](https://commons.wikimedia.org/wiki/File:Pothole_in_Potomac_after_rain.jpg) | Ser Amantio di Nicolao | CC BY-SA 4.0 |
 | pothole-manhole.jpg | [A photo of a pothole 2021-07-11.jpg](https://commons.wikimedia.org/wiki/File:A_photo_of_a_pothole_2021-07-11.jpg) | Thomas Booker (CoderThomasB) | CC BY-SA 4.0 |
+| a121-video-*.jpg | Кадры из видеозаписи облёта «SmartInspect Demo Video.mp4» | материалы проекта | — |
