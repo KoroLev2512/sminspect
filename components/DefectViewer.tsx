@@ -95,7 +95,7 @@ export function DefectViewer({ defects, openId, onChange, onStatusChange }: Defe
           <div className={styles.viewerHead}>
             <div>
               <p className={styles.viewerEyebrow}>
-                {defect.id.toUpperCase()} · <span className={styles.demoTag}>Демо-разметка</span>
+                {defect.id.toUpperCase()}
               </p>
               <h3 className={styles.viewerTitle}>{defect.type}</h3>
             </div>
@@ -150,7 +150,7 @@ export function DefectViewer({ defects, openId, onChange, onStatusChange }: Defe
 
           <div>
             <div className={styles.viewerConfidenceHead}>
-              <span>Уверенность разметки (демо-оценка)</span>
+              <span>Уверенность разметки</span>
               <strong>{defect.confidence}%</strong>
             </div>
             <div className={styles.meter}>

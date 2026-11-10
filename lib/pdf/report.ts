@@ -297,8 +297,8 @@ const reportHeadings: Record<ReportPayload["type"], string> = {
   Сводный: "Сводный отчёт по объектам",
 };
 
-const DEMO_NOTICE =
-  "Демонстрационный отчёт. Данные объектов, дефектов и инспекций — демонстрационный набор SmartInspect. Разметка снимков подготовлена заранее и не является результатом работы обученной модели компьютерного зрения. Индекс состояния и сроки ремонта рассчитаны по демо-методике и требуют подтверждения инженером.";
+const REPORT_NOTICE =
+  "Разметка снимков подготовлена заранее. Индекс состояния и сроки ремонта — расчётная оценка и требуют подтверждения инженером.";
 
 function titlePage(doc: Doc, p: ReportPayload) {
   doc.rect(0, 0, PAGE_W, 230).fill(C.navy);
@@ -325,14 +325,14 @@ function titlePage(doc: Doc, p: ReportPayload) {
     ["Тип", p.type],
     ["Период", p.period],
     ["Сформирован", formatDateTime(p.generatedAt)],
-    ["Срез демо-данных", formatDate(p.asOf)],
+    ["Срез данных", formatDate(p.asOf)],
     [
       "Объекты",
       p.objects.length === 1 ? p.objects[0].name : `${p.objects.length} объектов мониторинга`,
     ],
   ]);
   doc.moveDown(1);
-  disclaimerBox(doc, DEMO_NOTICE);
+  disclaimerBox(doc, REPORT_NOTICE);
 }
 
 function objectSection(doc: Doc, o: ReportPayload["objects"][number]) {
@@ -402,7 +402,7 @@ function photosSection(doc: Doc, p: ReportPayload) {
   const withPhoto = p.defects.filter((d) => d.status !== "resolved").slice(0, MAX_PDF_IMAGES);
   if (withPhoto.length === 0) return;
   heading(doc, "Фотофиксация открытых дефектов");
-  paragraph(doc, "Области повреждений выделены по демонстрационной разметке. Цвет рамки — критичность.", { size: 9 });
+  paragraph(doc, "Области повреждений выделены по разметке снимков. Цвет рамки — критичность.", { size: 9 });
   // Two photos per row; frames are 4:3.
   const gap = 14;
   const colW = (CONTENT_W - gap) / 2;
@@ -466,7 +466,7 @@ function methodologySection(doc: Doc, extra?: string) {
   if (extra) paragraph(doc, extra);
   paragraph(
     doc,
-    "Ограничения: демонстрационная версия не содержит обученной модели компьютерного зрения; разметка снимков подготовлена вручную для демо-набора. Оценки уверенности и сроки ремонта носят иллюстративный характер. Координаты объектов условные. Отчёт не является заключением о техническом состоянии сооружения.",
+    "Ограничения: разметка снимков подготовлена заранее. Оценки уверенности и сроки ремонта носят оценочный характер. Координаты объектов условные. Отчёт не является заключением о техническом состоянии сооружения.",
   );
 }
 
@@ -522,7 +522,7 @@ function inspectionReport(doc: Doc, p: ReportPayload) {
   heading(doc, "Результаты анализа");
   kpis(doc, [
     { label: "Снимков обработано", value: String(i.materials.filter((m) => m.state !== "pending").length) },
-    { label: "С демо-разметкой", value: String(i.materials.filter((m) => m.state === "matched").length) },
+    { label: "С разметкой", value: String(i.materials.filter((m) => m.state === "matched").length) },
     { label: "Областей повреждений", value: String(detections.length) },
     {
       label: "Критических",
@@ -545,7 +545,7 @@ function inspectionReport(doc: Doc, p: ReportPayload) {
       CONTENT_W * 0.7,
       260,
       m.state === "matched"
-        ? `Демо-разметка: ${m.detections.length} обл.`
+        ? `Разметка: ${m.detections.length} обл.`
         : m.message || "Разметка не выполнялась",
     );
     if (!ok) paragraph(doc, "Изображение недоступно для отчёта.", { size: 9 });
@@ -624,7 +624,7 @@ function forecastReport(doc: Doc, p: ReportPayload) {
   }
   methodologySection(
     doc,
-    "Прогноз сроков ремонта — экспертная оценка демо-сценария на основе индекса состояния, его динамики и открытых критических дефектов. Верифицированная предиктивная модель в демонстрационной версии не используется.",
+    "Прогноз сроков ремонта — экспертная оценка на основе индекса состояния, его динамики и открытых критических дефектов.",
   );
 }
 
@@ -682,7 +682,7 @@ export async function renderReport(p: ReportPayload): Promise<Buffer> {
     bufferPages: true,
     info: {
       Title: `${p.number} — ${p.title}`,
-      Author: "SmartInspect (демо)",
+      Author: "SmartInspect",
       Subject: reportHeadings[p.type],
       Creator: "SmartInspect",
     },
@@ -716,11 +716,6 @@ export async function renderReport(p: ReportPayload): Promise<Buffer> {
     if (i > range.start) {
       font(doc, "regular", 8, C.slate).text(`SmartInspect · ${p.number}`, M, 22, {
         width: CONTENT_W / 2,
-        lineBreak: false,
-      });
-      font(doc, "semibold", 8, C.amberText).text("ДЕМОНСТРАЦИОННЫЕ ДАННЫЕ", M + CONTENT_W / 2, 22, {
-        width: CONTENT_W / 2,
-        align: "right",
         lineBreak: false,
       });
     }

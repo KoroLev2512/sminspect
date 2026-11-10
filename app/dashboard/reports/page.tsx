@@ -212,7 +212,6 @@ export default function ReportsPage() {
       <div className={styles.card} style={{ marginBottom: 20 }}>
         <div className={styles.cardHead}>
           <h3 className={styles.cardTitle}>Сформировать отчёт</h3>
-          <span className={styles.demoTag}>Демо-данные</span>
         </div>
         <div className={styles.toolbar} style={{ marginBottom: 8 }}>
           <select

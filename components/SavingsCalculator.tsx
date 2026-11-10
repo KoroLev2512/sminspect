@@ -54,7 +54,7 @@ export function SavingsCalculator() {
         <span className={styles.demoTag}>Сценарий</span>
       </div>
       <p className={styles.fieldNote} style={{ marginBottom: 16 }}>
-        Значения по умолчанию — условные допущения для демонстрации, а не подтверждённые результаты.
+        Значения по умолчанию — условные допущения, а не подтверждённые результаты.
         Подставьте свои тарифы и объёмы.
       </p>
       <div className={styles.calcGrid}>

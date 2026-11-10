@@ -137,7 +137,7 @@ export function DemoDataProvider({ children }: { children: ReactNode }) {
       setStorageError("");
     } catch {
       setStorageError(
-        "Хранилище браузера переполнено: последние изменения не сохранятся после перезагрузки. Сбросьте демо или удалите лишние снимки.",
+        "Хранилище браузера переполнено: последние изменения не сохранятся после перезагрузки. Сбросьте данные в профиле или удалите лишние снимки.",
       );
     }
     /* eslint-enable react-hooks/set-state-in-effect */

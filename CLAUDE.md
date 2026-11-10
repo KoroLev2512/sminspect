@@ -83,6 +83,6 @@ The site is self-hosted in Docker on a FirstVDS server, **not Vercel**. Some com
 
 - `next.config.ts` sets `images.unoptimized: true`, so there is no remote-image whitelist and no image optimizer at runtime.
 - `public/fonts/inter.woff2` has no Cyrillic; `inter-cyrillic*.woff2` subsets are added in `app/globals.css` via `unicode-range`.
-- Demo honesty is a product requirement: label demo/scenario figures (`.demoTag`, «Демо-данные»), do not present annotations as model output or invent accuracy/economic results. See `MVP_AUDIT.md`, `DEMO_SETUP.md`, `DEMO_SCRIPT.md`.
+- The dashboard UI deliberately avoids the word «демо» (no demo badges), but stay honest: do not present prepared annotations as trained-model output or invent accuracy/economic results; use neutral wording («подготовленная разметка», «экспертная оценка»). See `MVP_AUDIT.md`, `DEMO_SETUP.md`, `DEMO_SCRIPT.md`.
 - `src/index.ts` is a leftover scaffold, and `scripts/remove-logo-bg.py` is a one-off asset script. Neither belongs to the app.
 - Do not add Tailwind or a `tailwind.config`.

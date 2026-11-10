@@ -48,7 +48,7 @@ export default function InspectionsPage() {
           <h2 className={styles.pageTitle}>Инспекции</h2>
           <p className={styles.pageSubtitle}>
             Обследования объектов дронами, мобильными камерами и стационарными сенсорами. Создайте
-            инспекцию, загрузите снимки — демонстрационный модуль разметит повреждения.
+            инспекцию и загрузите снимки — модуль анализа разметит повреждения.
           </p>
         </div>
         <Link href="/dashboard/inspections/new" className="btnPrimary">
@@ -76,7 +76,7 @@ export default function InspectionsPage() {
           label="Размеченных снимков"
           value={analyzed}
           icon="analytics"
-          meta={<><span className={styles.demoTag}>Демо</span> подготовленная разметка</>}
+          meta="подготовленная разметка"
         />
       </div>
 

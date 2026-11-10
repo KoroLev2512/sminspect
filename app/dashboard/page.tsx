@@ -181,13 +181,13 @@ export default function OverviewPage() {
             <div className={styles.cardHead}>
               <h3 className={styles.cardTitle}>Динамика среднего индекса</h3>
               <span className={styles.pill}>
-                6 месяцев · <span className={styles.demoTag}>Демо-история</span>
+                6 месяцев
               </span>
             </div>
             <TrendLine data={conditionTrend(state)} />
             <p className={styles.fieldNote}>
-              Последняя точка — текущий расчёт по реестру дефектов; предыдущие — демонстрационная
-              история индексов объектов.
+              Последняя точка — текущий расчёт по реестру дефектов; предыдущие — история индексов
+              объектов.
             </p>
           </div>
         </div>

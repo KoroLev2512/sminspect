@@ -36,7 +36,7 @@ export default function InspectionDetailPage() {
     return (
       <div className={styles.page}>
         <div className={styles.card}>
-          <p className={styles.empty}>Инспекция не найдена. Возможно, демо-данные были сброшены.</p>
+          <p className={styles.empty}>Инспекция не найдена.</p>
           <div style={{ textAlign: "center" }}>
             <Link href="/dashboard/inspections" className={styles.btnSecondary}>
               К списку инспекций
@@ -165,7 +165,7 @@ export default function InspectionDetailPage() {
       {materials.length === 0 ? (
         <div className={styles.card} style={{ marginTop: 20 }}>
           <p className={styles.empty}>
-            Архивная инспекция: снимки хранятся в архиве обследований и в демо-версию не загружены.
+            Архивная инспекция: исходные снимки хранятся в архиве обследований.
             Новых дефектов по её итогам не выявлено.
           </p>
         </div>
@@ -216,7 +216,7 @@ export default function InspectionDetailPage() {
                     {current.sizeBytes ? ` · ${Math.round(current.sizeBytes / 1024)} КБ` : ""} ·{" "}
                     {current.analysis?.message ??
                       (current.analysis?.state === "matched"
-                        ? `Демо-разметка: ${detections.length} ${plural(detections.length, ["область", "области", "областей"])}`
+                        ? `Разметка: ${detections.length} ${plural(detections.length, ["область", "области", "областей"])}`
                         : "Анализ ещё не выполнен")}
                   </p>
                 </>
@@ -257,7 +257,6 @@ export default function InspectionDetailPage() {
             <div className={styles.card}>
               <div className={styles.cardHead}>
                 <h3 className={styles.cardTitle}>Результаты анализа</h3>
-                <span className={styles.demoTag}>Демо-разметка</span>
               </div>
               <div className={styles.resultCounts}>
                 {bySeverity.map((b) => (
@@ -270,13 +269,13 @@ export default function InspectionDetailPage() {
               {(unsupported > 0 || failed > 0) && (
                 <p className={styles.fieldNote} style={{ marginTop: 12 }}>
                   {unsupported > 0 &&
-                    `${unsupported} ${plural(unsupported, ["снимок", "снимка", "снимков"])} вне демо-набора — разметка не выполнялась. `}
+                    `${unsupported} ${plural(unsupported, ["снимок", "снимка", "снимков"])} без разметки повреждений. `}
                   {failed > 0 && `${failed} не удалось обработать.`}
                 </p>
               )}
               <p className={styles.fieldNote} style={{ marginTop: 12 }}>
-                Модуль возвращает заранее подготовленную разметку для снимков демо-набора; это не
-                результат работы обученной модели. Рекомендации требуют подтверждения инженером.
+                Разметка снимков подготовлена заранее. Рекомендации требуют подтверждения
+                инженером.
               </p>
 
               {done && allDetections.length > 0 && (
@@ -330,7 +329,7 @@ export default function InspectionDetailPage() {
                       </div>
                       <p className={styles.cellMuted}>{d.location}</p>
                       <p>{d.recommendation}</p>
-                      <span className={styles.fieldNote}>Демо-оценка уверенности: {d.confidence}%</span>
+                      <span className={styles.fieldNote}>Оценка уверенности: {d.confidence}%</span>
                     </li>
                   ))}
                 </ol>

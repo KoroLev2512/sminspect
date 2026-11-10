@@ -148,7 +148,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return { ok: false, error: `Пароль должен быть не короче ${MIN_PASSWORD_LENGTH} символов` };
       }
       if (email === DEMO_CREDENTIALS.email) {
-        return { ok: false, error: "Эта почта зарезервирована под демо-доступ" };
+        return { ok: false, error: "Эта почта зарезервирована под гостевой доступ" };
       }
 
       const accounts = readAccounts();
@@ -194,10 +194,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const accounts = readAccounts();
       if (next.email !== user.email) {
         if (user.id === demoUser.id) {
-          return { ok: false, error: "У демо-доступа почту изменить нельзя" };
+          return { ok: false, error: "У гостевого доступа почту изменить нельзя" };
         }
         if (next.email === DEMO_CREDENTIALS.email) {
-          return { ok: false, error: "Эта почта зарезервирована под демо-доступ" };
+          return { ok: false, error: "Эта почта зарезервирована под гостевой доступ" };
         }
         if (accounts.some((a) => a.user.id !== user.id && a.user.email === next.email)) {
           return { ok: false, error: "Эта почта уже занята другим аккаунтом" };
@@ -231,7 +231,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     (current, nextPassword) => {
       if (!user) return { ok: false, error: "Сессия истекла, войдите заново" };
       if (user.id === demoUser.id) {
-        return { ok: false, error: "У демо-доступа пароль изменить нельзя" };
+        return { ok: false, error: "У гостевого доступа пароль изменить нельзя" };
       }
       const accounts = readAccounts();
       const idx = accounts.findIndex((a) => a.user.id === user.id);
@@ -259,7 +259,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     (password) => {
       if (!user) return { ok: false, error: "Сессия истекла, войдите заново" };
       if (user.id === demoUser.id) {
-        return { ok: false, error: "Демо-доступ удалить нельзя" };
+        return { ok: false, error: "Гостевой доступ удалить нельзя" };
       }
       const accounts = readAccounts();
       const account = accounts.find((a) => a.user.id === user.id);

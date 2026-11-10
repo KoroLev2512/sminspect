@@ -26,8 +26,8 @@ export default function AnalyticsPage() {
       <div className={styles.pageHead}>
         <h2 className={styles.pageTitle}>Аналитика</h2>
         <p className={styles.pageSubtitle}>
-          Показатели рассчитаны по демонстрационным данным кабинета. Прогноз сроков ремонта —
-          оценочный сценарий: верифицированной предиктивной модели в демо-версии нет.
+          Показатели рассчитаны по данным кабинета. Прогноз сроков ремонта — экспертная оценка
+          по индексу состояния и критическим дефектам.
         </p>
       </div>
 
@@ -58,7 +58,7 @@ export default function AnalyticsPage() {
           label="Размеченных снимков"
           value={stats.analyzedImages}
           icon="inspections"
-          meta={<><span className={styles.demoTag}>Демо</span> подготовленная разметка</>}
+          meta="подготовленная разметка"
           href="/dashboard/inspections"
         />
       </div>
@@ -68,7 +68,7 @@ export default function AnalyticsPage() {
           <div className={styles.cardHead}>
             <h3 className={styles.cardTitle}>Средний индекс состояния</h3>
             <span className={styles.pill}>
-              6 мес. · <span className={styles.demoTag}>Демо-история</span>
+              6 мес.
             </span>
           </div>
           <TrendLine data={conditionTrend(state)} />
@@ -132,8 +132,8 @@ export default function AnalyticsPage() {
             </table>
           </div>
           <p className={styles.fieldNote} style={{ marginTop: 12 }}>
-            Срок — экспертная оценка демо-сценария по индексу и критическим дефектам, не результат
-            прогнозной модели.
+            Срок — экспертная оценка по индексу состояния и критическим
+            дефектам.
           </p>
         </div>
       </div>

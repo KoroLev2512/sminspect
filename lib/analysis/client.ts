@@ -61,7 +61,7 @@ export async function toStoredPreview(file: File, maxSide = 960): Promise<string
 /** Loads a prepared demo sample as a File, exactly as served (hash must match). */
 export async function fetchSampleFile(url: string, name: string): Promise<File> {
   const res = await fetch(url, { cache: "force-cache" });
-  if (!res.ok) throw new Error("Не удалось загрузить демо-снимок");
+  if (!res.ok) throw new Error("Не удалось загрузить снимок");
   const blob = await res.blob();
   return new File([blob], name, { type: "image/jpeg" });
 }

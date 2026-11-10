@@ -13,7 +13,7 @@ export const demoEngine: AnalysisEngine = {
     id: "demo-annotations",
     version: "1.0",
     kind: "demo",
-    title: "Демонстрационный модуль (заранее подготовленная разметка)",
+    title: "Модуль разметки повреждений",
   },
 
   async analyze(input: AnalysisInput): Promise<AnalysisResult> {
@@ -28,7 +28,7 @@ export const demoEngine: AnalysisEngine = {
         sampleId: null,
         detections: [],
         message:
-          "Снимок не входит в демонстрационный набор, поэтому разметка не выполнялась. В демо-версии нет обученной модели: дефекты показываются только для подготовленных снимков.",
+          "Для этого снимка разметка повреждений не выполнялась.",
         processedAt,
       };
     }
@@ -39,7 +39,7 @@ export const demoEngine: AnalysisEngine = {
       matched: true,
       sampleId: sample.id,
       detections: sample.detections,
-      message: `Найдена демонстрационная разметка: ${n} ${n === 1 ? "область" : n < 5 ? "области" : "областей"} повреждений.`,
+      message: `Разметка: ${n} ${n === 1 ? "область" : n < 5 ? "области" : "областей"} повреждений.`,
       processedAt,
     };
   },

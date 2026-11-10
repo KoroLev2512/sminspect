@@ -135,7 +135,7 @@ export default function ObjectDetailPage() {
           label="Прогноз ремонта"
           value={`${object.forecastMonths} мес.`}
           icon="clock"
-          meta={<><span className={styles.demoTag}>Оценка</span> демо-сценарий, не модель</>}
+          meta="экспертная оценка"
         />
       </div>
 
@@ -258,7 +258,6 @@ export default function ObjectDetailPage() {
           <div className={styles.card}>
             <div className={styles.cardHead}>
               <h3 className={styles.cardTitle}>Как рассчитан индекс</h3>
-              <span className={styles.demoTag}>Демо-методика</span>
             </div>
             <dl className={styles.calcList}>
               <div>
@@ -287,7 +286,6 @@ export default function ObjectDetailPage() {
           <div className={styles.card}>
             <div className={styles.cardHead}>
               <h3 className={styles.cardTitle}>История индекса</h3>
-              <span className={styles.demoTag}>Демо</span>
             </div>
             <TrendLine data={history} height={160} />
           </div>

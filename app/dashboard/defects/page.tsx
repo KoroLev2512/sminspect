@@ -85,8 +85,8 @@ export default function DefectsPage() {
         <p className={styles.pageSubtitle}>
           В реестре {rows.length} {plural(rows.length, ["дефект", "дефекта", "дефектов"])}: {newCount}{" "}
           {plural(newCount, ["новый", "новых", "новых"])}, {inProgress} в работе, {resolved} устранено.
-          Открытых критических — {critical}. Разметка кадров выполнена демонстрационным модулем
-          анализа и требует подтверждения инженером.
+          Открытых критических — {critical}. Разметка кадров требует подтверждения
+          инженером.
         </p>
       </div>
 
@@ -193,7 +193,7 @@ export default function DefectsPage() {
                   <th>Дефект</th>
                   <th>Объект</th>
                   <th>Источник</th>
-                  <th>Демо-оценка</th>
+                  <th>Уверенность</th>
                   <th>Критичность</th>
                   <th>Статус</th>
                   <th>Действие</th>

@@ -144,7 +144,7 @@ export default function NewInspectionPage() {
       addFiles([file], sample.id);
       if (!objectId) chooseObject(sample.suggestedObjectId);
     } catch (err) {
-      setFileErrors([err instanceof Error ? err.message : "Не удалось загрузить демо-снимок"]);
+      setFileErrors([err instanceof Error ? err.message : "Не удалось загрузить снимок"]);
     } finally {
       setLoadingSample(null);
     }
@@ -214,7 +214,7 @@ export default function NewInspectionPage() {
         <h2 className={styles.pageTitle}>Новая инспекция</h2>
         <p className={styles.pageSubtitle}>
           Заполните данные обследования и загрузите снимки. После создания снимки будут переданы
-          демонстрационному модулю анализа.
+          модулю анализа.
         </p>
       </div>
 
@@ -372,12 +372,6 @@ export default function NewInspectionPage() {
                       </span>
                       <span className={styles.cellMuted}>
                         {formatBytes(item.file.size)}
-                        {item.sampleId && (
-                          <>
-                            {" "}
-                            · <span className={styles.demoTag}>Демо-набор</span>
-                          </>
-                        )}
                       </span>
                     </div>
                     <button
@@ -398,12 +392,11 @@ export default function NewInspectionPage() {
         <div className={styles.stackGap}>
           <div className={styles.card}>
             <div className={styles.cardHead}>
-              <h3 className={styles.cardTitle}>Демо-набор снимков</h3>
-              <span className={styles.demoTag}>Демо</span>
+              <h3 className={styles.cardTitle}>Набор снимков</h3>
             </div>
             <p className={styles.fieldNote} style={{ marginBottom: 12 }}>
-              Обученной модели в демо-версии нет. Разметка заранее подготовлена для этих снимков;
-              для других изображений модуль честно сообщит, что разметки нет.
+              Для этих снимков разметка подготовлена заранее; для других изображений модуль
+              сообщит, что разметки нет.
             </p>
             {(["photo", "video"] as const).map((kind) => (
               <div key={kind} style={{ marginTop: kind === "video" ? 16 : 0 }}>

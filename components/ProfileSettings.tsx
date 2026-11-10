@@ -196,7 +196,7 @@ export function ProfileCard({ user }: { user: AuthUser }) {
             {errors.email ? (
               <span className={styles.hint}>{errors.email}</span>
             ) : (
-              isDemo && <span className={styles.fieldNote}>У демо-доступа почта фиксирована</span>
+              isDemo && <span className={styles.fieldNote}>У гостевого доступа почта фиксирована</span>
             )}
           </label>
           <label className={styles.field}>
@@ -300,7 +300,7 @@ export function PasswordCard() {
       </div>
       {isDemo ? (
         <p className={styles.fieldNote}>
-          Вы вошли в демо-доступ: его пароль общий и не меняется. Зарегистрируйте свой аккаунт,
+          Вы вошли в гостевой доступ: его пароль общий и не меняется. Зарегистрируйте свой аккаунт,
           чтобы управлять паролем.
         </p>
       ) : (
@@ -426,7 +426,7 @@ export function DeleteAccountCard() {
 
       {isDemo ? (
         <p className={styles.fieldNote} style={{ marginTop: 8 }}>
-          Демо-доступ удалить нельзя.
+          Гостевой доступ удалить нельзя.
         </p>
       ) : !confirming ? (
         <div className={styles.formActions}>
@@ -479,7 +479,7 @@ export function DemoDataCard() {
   function reset() {
     if (
       !window.confirm(
-        "Сбросить демо-данные к исходному состоянию? Созданные инспекции, изменения статусов и сформированные отчёты будут удалены.",
+        "Сбросить данные кабинета к исходному состоянию? Созданные инспекции, изменения статусов и сформированные отчёты будут удалены.",
       )
     ) {
       return;
@@ -492,17 +492,16 @@ export function DemoDataCard() {
   return (
     <div className={styles.card}>
       <div className={styles.cardHead}>
-        <h3 className={styles.cardTitle}>Демо-данные</h3>
+        <h3 className={styles.cardTitle}>Данные кабинета</h3>
         <SavedMark show={done} text="Данные сброшены" />
       </div>
       <p className={styles.fieldNote}>
-        Кабинет работает на демонстрационном наборе данных (срез на {formatDate(DEMO_AS_OF)}).
-        Изменения хранятся в этом браузере. Сброс возвращает исходные объекты, инспекции, дефекты
-        и отчёты — например, перед повторной демонстрацией.
+        Данные кабинета — срез на {formatDate(DEMO_AS_OF)}. Изменения хранятся в этом браузере.
+        Сброс возвращает исходные объекты, инспекции, дефекты и отчёты.
       </p>
       <div className={styles.formActions}>
         <button type="button" className={styles.btnSecondary} onClick={reset}>
-          Сбросить демо-данные
+          Сбросить данные
         </button>
       </div>
     </div>
